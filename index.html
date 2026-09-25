@@ -72,6 +72,12 @@
             display: block;
         }
 
+        /* Rule pemicu pemotongan halaman PDF yang rapi */
+        .pdf-block {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
         /* Custom UI Scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
@@ -92,9 +98,11 @@
                 box-shadow: none !important;
                 margin: 0 !important;
                 width: 100% !important;
+                padding: 10mm !important;
             }
-            .photo-wrapper, .signature-block {
-                page-break-inside: avoid;
+            .pdf-block, .signature-block {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
     </style>
@@ -185,9 +193,19 @@
 
                     <!-- 3. Uraian Kegiatan Patroli -->
                     <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                            <i data-lucide="activity" class="w-3.5 h-3.5 text-slate-700"></i> 3. Uraian Kegiatan Patroli
+                        </label>
+                        <div class="bg-slate-100/90 p-3 rounded-2xl border border-slate-300/80 shadow-inner">
+                            <textarea id="inputKegiatan" rows="3" placeholder="Deskripsikan rincian pelaksanaan tugas pengawasan dan penertiban..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 4. Hasil Kegiatan Patroli -->
+                    <div>
                         <div class="flex justify-between items-center mb-1.5">
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-                                <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-600"></i> 3. Uraian Kegiatan Patroli
+                                <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-600"></i> 4. Hasil Kegiatan Patroli
                             </label>
                             <button type="button" id="btnAddHasil" class="text-xs font-bold text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-emerald-300">
                                 <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Tambah Poin
@@ -197,16 +215,6 @@
                             <div id="hasilList" class="space-y-2">
                                 <!-- Dynamic Point Inputs -->
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- 4. Hasil Kegiatan Patroli -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                            <i data-lucide="activity" class="w-3.5 h-3.5 text-slate-700"></i> 4. Hasil Kegiatan Patroli
-                        </label>
-                        <div class="bg-slate-100/90 p-3 rounded-2xl border border-slate-300/80 shadow-inner">
-                            <textarea id="inputKegiatan" rows="3" placeholder="Deskripsikan rincian pelaksanaan tugas pengawasan dan penertiban..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
                         </div>
                     </div>
 
@@ -279,7 +287,7 @@
                 <div id="pdfContent" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
                     <div>
                         <!-- Official Dual Logo KOP Surat -->
-                        <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
+                        <div class="pdf-block flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
                             <div class="w-16 h-20 flex-shrink-0 flex items-center justify-center">
                                 <img id="previewLogoLeft" src="" alt="Logo Indragiri Hulu" class="max-w-full max-h-full object-contain">
                             </div>
@@ -297,7 +305,7 @@
                         </div>
 
                         <!-- Officer Profile Summary Card -->
-                        <div class="grid grid-cols-2 gap-2 text-[11px] mb-4 bg-slate-50 p-3 rounded-xl border border-slate-300 shadow-sm">
+                        <div class="pdf-block grid grid-cols-2 gap-2 text-[11px] mb-4 bg-slate-50 p-3 rounded-xl border border-slate-300 shadow-sm">
                             <div>
                                 <span class="font-semibold text-slate-500 block text-[10px]">Nama Lengkap:</span>
                                 <span id="viewNama" class="font-bold text-slate-900 text-xs">-</span>
@@ -315,14 +323,14 @@
                         <!-- Report Main Content Fields -->
                         <div class="space-y-3">
                             <!-- Tanggal -->
-                            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+                            <div class="pdf-block flex items-center gap-2 border-b border-slate-200 pb-2">
                                 <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span>
                                 <span class="text-slate-400">:</span>
                                 <span id="viewTanggal" class="font-bold text-slate-950 text-xs"></span>
                             </div>
 
                             <!-- 1. Dasar Pelaksanaan -->
-                            <div>
+                            <div class="pdf-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">1. Dasar Pelaksanaan</label>
                                 <div id="viewDasar" class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[38px] text-slate-800 whitespace-pre-line leading-relaxed">
                                     -
@@ -330,45 +338,48 @@
                             </div>
 
                             <!-- 2. Tempat Pelaksanaan (Multi-Lokasi) -->
-                            <div>
+                            <div class="pdf-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">2. Tempat Pelaksanaan</label>
                                 <div class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[38px]">
-                                    <ol id="viewTempat" class="list-decimal list-inside space-y-1 text-slate-800 leading-relaxed font-medium">
+                                    <!-- Menggunakan pl-5 (bukan list-inside) agar nomor angka 1 2 3 rapi sejajar diluar teks -->
+                                    <ol id="viewTempat" class="list-decimal pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
                                         <li class="text-slate-400 italic">Belum ada lokasi diisi.</li>
                                     </ol>
                                 </div>
                             </div>
 
-                            <!-- 3. Hasil Kegiatan Patroli -->
-                            <div>
-                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">3. Hasil Kegiatan Patroli</label>
-                                <div class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[50px]">
-                                    <ol id="viewHasil" class="list-decimal list-inside space-y-1 text-slate-800 leading-relaxed font-medium">
-                                        <li class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</li>
-                                    </ol>
-                                </div>
-                            </div>
-
-                            <!-- 4. Uraian Kegiatan Patroli -->
-                            <div>
-                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">4. Uraian Kegiatan Patroli</label>
+                            <!-- 3. Uraian Kegiatan Patroli -->
+                            <div class="pdf-block">
+                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">3. Uraian Kegiatan Patroli</label>
                                 <div id="viewKegiatan" class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[50px] text-slate-800 whitespace-pre-line leading-relaxed">
                                     -
                                 </div>
                             </div>
 
+                            <!-- 4. Hasil Kegiatan Patroli -->
+                            <div class="pdf-block">
+                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">4. Hasil Kegiatan Patroli</label>
+                                <div class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[50px]">
+                                    <!-- Menggunakan pl-5 (bukan list-inside) agar nomor angka 1 2 3 rapi sejajar diluar teks -->
+                                    <ol id="viewHasil" class="list-decimal pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
+                                        <li class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</li>
+                                    </ol>
+                                </div>
+                            </div>
+
                             <!-- 5. Daftar Nama Anggota Satgas -->
-                            <div>
+                            <div class="pdf-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">5. Daftar Nama Anggota Satgas</label>
                                 <div class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[40px]">
-                                    <ol id="viewAnggota" class="list-decimal list-inside space-y-1 text-slate-800 leading-relaxed font-medium">
+                                    <!-- Menggunakan pl-5 (bukan list-inside) agar nomor angka 1 2 3 rapi sejajar diluar teks -->
+                                    <ol id="viewAnggota" class="list-decimal pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
                                         <li class="text-slate-400 italic">Belum ada anggota ditambahkan.</li>
                                     </ol>
                                 </div>
                             </div>
 
                             <!-- 6. Foto Dokumentasi Grid -->
-                            <div>
+                            <div class="pdf-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">6. Dokumentasi Foto Kegiatan</label>
                                 <div class="p-2.5 bg-slate-50 border border-slate-300 rounded-xl min-h-[100px]">
                                     <div id="viewDokumentasi" class="grid grid-cols-2 gap-3">
@@ -379,7 +390,7 @@
                         </div>
 
                         <!-- Blok Tanda Tangan (Sisi Kanan, Rata Kiri) -->
-                        <div class="signature-block mt-8 flex justify-end">
+                        <div class="pdf-block signature-block mt-8 flex justify-end">
                             <div class="text-left text-slate-900 text-[11px] leading-snug">
                                 <p>Mengetahui,</p>
                                 <p id="viewTanggalTtd" class="font-medium">Rengat, -</p>
@@ -621,7 +632,7 @@
             lucide.createIcons();
             loadSettings();
             initDefaultDate();
-            addLokasiInput(); // Default 1 lokasi pertama
+            addLokasiInput();
             addHasilInput();
             addAnggotaInput();
             bindEvents();
@@ -655,7 +666,6 @@
             return date.toLocaleDateString('id-ID', options);
         }
 
-        // Feature Baru: Tambah Tempat / Lokasi Patroli
         function addLokasiInput(value = '') {
             const div = document.createElement('div');
             div.className = 'flex items-center gap-2 class-lokasi-item';
@@ -840,9 +850,11 @@
                 viewTempat.innerHTML = '<li class="text-slate-400 italic">Belum ada lokasi diisi.</li>';
             }
 
+            // Render Uraian Kegiatan (Nomor 3)
             const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
             document.getElementById('viewKegiatan').textContent = kegiatanVal || '-';
 
+            // Render Hasil Kegiatan (Nomor 4)
             const viewHasil = document.getElementById('viewHasil');
             viewHasil.innerHTML = '';
             const hasilInputs = document.querySelectorAll('.input-hasil');
@@ -862,6 +874,7 @@
                 viewHasil.innerHTML = '<li class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</li>';
             }
 
+            // Render Daftar Anggota (Nomor 5)
             const viewAnggota = document.getElementById('viewAnggota');
             viewAnggota.innerHTML = '';
             const anggotaInputs = document.querySelectorAll('.input-anggota');
@@ -910,7 +923,7 @@
                 container.appendChild(thumb);
 
                 const pdfCard = document.createElement('div');
-                pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm';
+                pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm pdf-block';
                 pdfCard.innerHTML = `
                     <div class="photo-wrapper">
                         <img src="${src}" alt="Dokumentasi ${idx + 1}">
@@ -979,11 +992,12 @@
             const filename = generatePdfFilename();
             
             const opt = {
-                margin:       0,
+                margin:       [10, 10, 10, 10], // Margin atas, kanan, bawah, kiri (mm)
                 filename:     filename,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] } // Mencegah potongan seksi di tengah halaman
             };
 
             return html2pdf().set(opt).from(element).save();
