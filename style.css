@@ -25,12 +25,12 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Standard A4 Printable Canvas dengan tinggi fleksibel */
+/* Standar Kertas A4 dengan margin atas, bawah, kiri, dan kanan ala Microsoft Word (20mm) */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
-    padding: 10mm 14mm;
+    padding: 20mm 16mm !important;
     margin: 0 auto;
     background: #ffffff;
     box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
@@ -38,9 +38,9 @@ body {
     color: #0f172a;
 }
 
-/* Mengatur jarak antar blok section agar padat dan mengisi ruang kosong */
+/* Mengatur jarak antar blok section agar rapi dan tidak terlalu rapat */
 .preview-block {
-    margin-bottom: 0.35rem !important;
+    margin-bottom: 0.5rem !important;
     break-inside: auto !important;
     page-break-inside: auto !important;
 }
@@ -50,7 +50,7 @@ body {
     background-color: #f8fafc !important;
     border: 1px solid #cbd5e1 !important;
     border-radius: 0.5rem !important;
-    padding: 0.4rem 0.75rem !important;
+    padding: 0.5rem 0.75rem !important;
     color: #1e293b !important;
     box-sizing: border-box !important;
     width: 100% !important;
@@ -60,14 +60,14 @@ body {
     print-color-adjust: exact !important;
 }
 
-/* Jarak antar list kegiatan agar pas, rapi, dan bisa terdistribusi mulus */
+/* Jarak antar list kegiatan agar nyaman dibaca dan tidak menempel */
 .pdf-list-item {
     display: flex !important;
     align-items: flex-start !important;
     gap: 0.5rem !important;
-    margin-bottom: 0.25rem !important;
+    margin-bottom: 0.35rem !important;
     font-size: 0.75rem !important;
-    line-height: 1.35 !important;
+    line-height: 1.4 !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
 }
@@ -118,7 +118,7 @@ body {
 .signature-block {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
-    margin-top: 1.2rem !important;
+    margin-top: 1.5rem !important;
 }
 
 /* Custom UI Scrollbars */
@@ -141,5 +141,6 @@ body {
         box-shadow: none !important;
         margin: 0 !important;
         width: 100% !important;
+        padding: 20mm 16mm !important;
     }
 }
