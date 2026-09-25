@@ -11,17 +11,16 @@ let userProfile = {
     jabatan: 'Komandan Regu Satgas Patroli Trantibum'
 };
 
-// Array Objek Foto beserta Keterangan Manual: [{ src: '...', caption: '...' }]
 let uploadedPhotos = [];
 
 let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, anggotaListContainer, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // FORCE CLEAR LOCALSTORAGE UNTUK FITUR KETERANGAN FOTO MANUAL
+    // FORCE CLEAR LOCALSTORAGE LAMA AGAR LOGO GOOGLE DRIVE LANGSUNG AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v5_manual_captions') {
+    if (cacheVersion !== 'v2_drive_logo') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v5_manual_captions');
+        localStorage.setItem('satpol_app_version', 'v2_drive_logo');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -307,7 +306,6 @@ function updatePreview() {
     renderPhotoPreview();
 }
 
-/* Render Foto & Input Keterangan Manual */
 function renderPhotoPreview() {
     const container = document.getElementById('photoPreview');
     const viewContainer = document.getElementById('viewDokumentasi');
@@ -322,47 +320,30 @@ function renderPhotoPreview() {
         return;
     }
 
-    uploadedPhotos.forEach((item, idx) => {
-        // Form Input Thumbnail + Kolom Input Keterangan Manual
-        const formCard = document.createElement('div');
-        formCard.className = 'flex items-center gap-3 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm';
-        formCard.innerHTML = `
-            <div class="relative w-16 h-16 rounded-xl overflow-hidden border bg-slate-50 flex-shrink-0">
-                <img src="${item.src}" class="w-full h-full object-cover">
-                <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 opacity-90 hover:opacity-100 shadow">
-                    <i data-lucide="x" class="w-3 h-3"></i>
-                </button>
-            </div>
-            <div class="flex-1">
-                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Keterangan Foto ${idx + 1}</label>
-                <input type="text" value="${item.caption || ''}" oninput="updatePhotoCaption(${idx}, this.value)" placeholder="Tuliskan keterangan foto secara manual..." class="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:bg-white focus:ring-2 focus:ring-amber-500 outline-none transition">
-            </div>
+    uploadedPhotos.forEach((src, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
+        thumb.innerHTML = `
+            <img src="${src}" class="w-full h-full object-cover">
+            <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+            </button>
         `;
-        container.appendChild(formCard);
-
-        // Tampilan Kartu PDF A4
-        const displayCaption = item.caption && item.caption.trim() ? item.caption.trim() : `Dokumentasi ${idx + 1}`;
+        container.appendChild(thumb);
 
         const pdfCard = document.createElement('div');
-        pdfCard.className = 'photo-card-pdf';
+        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
         pdfCard.innerHTML = `
             <div class="photo-wrapper">
-                <img src="${item.src}" alt="${displayCaption}">
+                <img src="${src}" alt="Dokumentasi ${idx + 1}">
             </div>
-            <span class="text-[10px] text-slate-800 font-bold block mt-1.5 text-center leading-tight break-words">${displayCaption}</span>
+            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
         `;
         viewContainer.appendChild(pdfCard);
     });
 
     lucide.createIcons();
 }
-
-window.updatePhotoCaption = function(index, value) {
-    if (uploadedPhotos[index]) {
-        uploadedPhotos[index].caption = value;
-        updatePreview();
-    }
-};
 
 window.removePhoto = function(index) {
     uploadedPhotos.splice(index, 1);
@@ -381,10 +362,7 @@ function handlePhotoUpload(e) {
             const reader = new FileReader();
             reader.onload = (event) => {
                 if (uploadedPhotos.length < 4) {
-                    uploadedPhotos.push({
-                        src: event.target.result,
-                        caption: ''
-                    });
+                    uploadedPhotos.push(event.target.result);
                     renderPhotoPreview();
                 }
             };
@@ -418,7 +396,7 @@ function handleSettingLogoRight(e) {
     }
 }
 
-/* Download PDF Lengkap tanpa Menghapus Halaman Berisi dan Tanpa Kertas Kosong */
+/* Download PDF menggunakan Format Gambar PNG jernih */
 function downloadPDF() {
     const element = document.getElementById('pdfContent');
     const filename = generatePdfFilename();
@@ -427,18 +405,9 @@ function downloadPDF() {
         margin:       [0, 0, 0, 0],
         filename:     filename,
         image:        { type: 'png', quality: 1.0 },
-        html2canvas:  { 
-            scale: 2, 
-            useCORS: true, 
-            logging: false,
-            scrollY: 0,
-            scrollX: 0
-        },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-        pagebreak:    { 
-            mode: ['css', 'legacy'],
-            avoid: ['.preview-block', '.photo-card-pdf', '.signature-block', '.pdf-box']
-        }
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
     return html2pdf().set(opt).from(element).save();
