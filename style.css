@@ -30,7 +30,7 @@ body {
     width: 210mm;
     min-height: 297mm;
     height: auto;
-    padding: 12mm 14mm;
+    padding: 10mm 14mm;
     margin: 0 auto;
     background: #ffffff;
     box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
@@ -38,9 +38,11 @@ body {
     color: #0f172a;
 }
 
-/* Mengatur jarak antar blok section agar lebih rapat dan proporsional */
+/* Mengatur jarak antar blok section agar padat dan mengisi ruang kosong */
 .preview-block {
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 0.35rem !important;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
 }
 
 /* Explicit Box Style untuk preview dan PDF */
@@ -48,7 +50,7 @@ body {
     background-color: #f8fafc !important;
     border: 1px solid #cbd5e1 !important;
     border-radius: 0.5rem !important;
-    padding: 0.5rem 0.75rem !important;
+    padding: 0.4rem 0.75rem !important;
     color: #1e293b !important;
     box-sizing: border-box !important;
     width: 100% !important;
@@ -58,14 +60,16 @@ body {
     print-color-adjust: exact !important;
 }
 
-/* Jarak antar list kegiatan agar pas dan rapi */
+/* Jarak antar list kegiatan agar pas, rapi, dan bisa terdistribusi mulus */
 .pdf-list-item {
     display: flex !important;
     align-items: flex-start !important;
     gap: 0.5rem !important;
-    margin-bottom: 0.35rem !important;
+    margin-bottom: 0.25rem !important;
     font-size: 0.75rem !important;
-    line-height: 1.4 !important;
+    line-height: 1.35 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
 }
 
 .pdf-list-item:last-child {
@@ -89,7 +93,7 @@ body {
 /* Photo Wrapper inside PDF Boxes */
 .photo-wrapper {
     width: 100%;
-    height: 150px;
+    height: 135px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -99,6 +103,8 @@ body {
     overflow: hidden;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
 }
 
 .photo-wrapper img {
@@ -106,6 +112,13 @@ body {
     max-height: 100%;
     object-fit: contain;
     display: block;
+}
+
+/* Blok Tanda Tangan dijaga agar tidak terpotong */
+.signature-block {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-top: 1.2rem !important;
 }
 
 /* Custom UI Scrollbars */
@@ -128,10 +141,5 @@ body {
         box-shadow: none !important;
         margin: 0 !important;
         width: 100% !important;
-    }
-    /* Mencegah terpotong canggung pada baris atau foto, namun mengizinkan aliran teks secara alami */
-    .pdf-list-item, .photo-wrapper, .signature-block {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
     }
 }
