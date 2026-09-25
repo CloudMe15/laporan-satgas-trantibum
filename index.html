@@ -191,30 +191,30 @@
                         </div>
                     </div>
 
-                    <!-- 3. Uraian Kegiatan Patroli -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                            <i data-lucide="activity" class="w-3.5 h-3.5 text-slate-700"></i> 3. Uraian Kegiatan Patroli
-                        </label>
-                        <div class="bg-slate-100/90 p-3 rounded-2xl border border-slate-300/80 shadow-inner">
-                            <textarea id="inputKegiatan" rows="3" placeholder="Deskripsikan rincian pelaksanaan tugas pengawasan dan penertiban..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- 4. Hasil Kegiatan Patroli -->
+                    <!-- 3. Uraian Kegiatan Patroli (Fitur Tambah Poin Dipindahkan ke Sini) -->
                     <div>
                         <div class="flex justify-between items-center mb-1.5">
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-                                <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-600"></i> 4. Hasil Kegiatan Patroli
+                                <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-600"></i> 3. Uraian Kegiatan Patroli
                             </label>
-                            <button type="button" id="btnAddHasil" class="text-xs font-bold text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-emerald-300">
+                            <button type="button" id="btnAddKegiatanPoin" class="text-xs font-bold text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-emerald-300">
                                 <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Tambah Poin
                             </button>
                         </div>
                         <div class="bg-emerald-50/80 p-3 rounded-2xl border border-emerald-200/90 shadow-inner">
-                            <div id="hasilList" class="space-y-2">
-                                <!-- Dynamic Point Inputs -->
+                            <div id="kegiatanPoinList" class="space-y-2">
+                                <!-- Dynamic Point Inputs untuk Uraian Kegiatan -->
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Hasil Kegiatan Patroli (Menggunakan Deskripsi Textarea) -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                            <i data-lucide="check-square" class="w-3.5 h-3.5 text-slate-700"></i> 4. Hasil Kegiatan Patroli
+                        </label>
+                        <div class="bg-slate-100/90 p-3 rounded-2xl border border-slate-300/80 shadow-inner">
+                            <textarea id="inputHasilDeskripsi" rows="3" placeholder="Deskripsikan hasil pelaksanaan tugas, situasi kondisi akhir, penertiban, dll..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
                         </div>
                     </div>
 
@@ -341,29 +341,27 @@
                             <div class="pdf-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">2. Tempat Pelaksanaan</label>
                                 <div class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[38px]">
-                                    <!-- Menggunakan pl-5 (bukan list-inside) agar nomor angka 1 2 3 rapi sejajar diluar teks -->
                                     <ol id="viewTempat" class="list-decimal pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
                                         <li class="text-slate-400 italic">Belum ada lokasi diisi.</li>
                                     </ol>
                                 </div>
                             </div>
 
-                            <!-- 3. Uraian Kegiatan Patroli -->
+                            <!-- 3. Uraian Kegiatan Patroli (Kini Berupa Poin-Poin Rapi) -->
                             <div class="pdf-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">3. Uraian Kegiatan Patroli</label>
-                                <div id="viewKegiatan" class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[50px] text-slate-800 whitespace-pre-line leading-relaxed">
-                                    -
+                                <div class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[50px]">
+                                    <ol id="viewKegiatanPoin" class="list-decimal pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
+                                        <li class="text-slate-400 italic">Belum ada uraian kegiatan diketik.</li>
+                                    </ol>
                                 </div>
                             </div>
 
-                            <!-- 4. Hasil Kegiatan Patroli -->
+                            <!-- 4. Hasil Kegiatan Patroli (Kini Berupa Deskripsi Paragraf) -->
                             <div class="pdf-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">4. Hasil Kegiatan Patroli</label>
-                                <div class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[50px]">
-                                    <!-- Menggunakan pl-5 (bukan list-inside) agar nomor angka 1 2 3 rapi sejajar diluar teks -->
-                                    <ol id="viewHasil" class="list-decimal pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
-                                        <li class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</li>
-                                    </ol>
+                                <div id="viewHasilDeskripsi" class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[50px] text-slate-800 whitespace-pre-line leading-relaxed">
+                                    -
                                 </div>
                             </div>
 
@@ -371,7 +369,6 @@
                             <div class="pdf-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">5. Daftar Nama Anggota Satgas</label>
                                 <div class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[40px]">
-                                    <!-- Menggunakan pl-5 (bukan list-inside) agar nomor angka 1 2 3 rapi sejajar diluar teks -->
                                     <ol id="viewAnggota" class="list-decimal pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
                                         <li class="text-slate-400 italic">Belum ada anggota ditambahkan.</li>
                                     </ol>
@@ -624,7 +621,7 @@
         const settingsModal = document.getElementById('settingsModal');
         const driveNoticeModal = document.getElementById('driveNoticeModal');
         const lokasiListContainer = document.getElementById('lokasiList');
-        const hasilListContainer = document.getElementById('hasilList');
+        const kegiatanPoinListContainer = document.getElementById('kegiatanPoinList');
         const anggotaListContainer = document.getElementById('anggotaList');
         const inputNip = document.getElementById('inputSettingNip');
 
@@ -633,7 +630,7 @@
             loadSettings();
             initDefaultDate();
             addLokasiInput();
-            addHasilInput();
+            addKegiatanPoinInput();
             addAnggotaInput();
             bindEvents();
             updatePreview();
@@ -697,32 +694,33 @@
             });
         }
 
-        function addHasilInput(value = '') {
+        // Poin Input Dinamis khusus Nomor 3: Uraian Kegiatan Patroli
+        function addKegiatanPoinInput(value = '') {
             const div = document.createElement('div');
-            div.className = 'flex items-center gap-2 class-hasil-item';
+            div.className = 'flex items-center gap-2 class-kegiatan-item';
             div.innerHTML = `
                 <span class="text-xs font-bold text-slate-400 w-4 text-center item-index">1.</span>
-                <input type="text" value="${value}" placeholder="Tuliskan poin hasil patroli..." class="input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
-                <button type="button" class="btn-remove-hasil text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
+                <input type="text" value="${value}" placeholder="Tuliskan poin uraian kegiatan patroli..." class="input-kegiatan-poin flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
+                <button type="button" class="btn-remove-kegiatan-poin text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                 </button>
             `;
-            hasilListContainer.appendChild(div);
+            kegiatanPoinListContainer.appendChild(div);
             lucide.createIcons();
-            updateHasilIndexes();
+            updateKegiatanPoinIndexes();
 
-            div.querySelector('.input-hasil').addEventListener('input', updatePreview);
-            div.querySelector('.btn-remove-hasil').addEventListener('click', () => {
-                if (hasilListContainer.children.length > 1) {
+            div.querySelector('.input-kegiatan-poin').addEventListener('input', updatePreview);
+            div.querySelector('.btn-remove-kegiatan-poin').addEventListener('click', () => {
+                if (kegiatanPoinListContainer.children.length > 1) {
                     div.remove();
-                    updateHasilIndexes();
+                    updateKegiatanPoinIndexes();
                     updatePreview();
                 }
             });
         }
 
-        function updateHasilIndexes() {
-            const items = hasilListContainer.querySelectorAll('.class-hasil-item');
+        function updateKegiatanPoinIndexes() {
+            const items = kegiatanPoinListContainer.querySelectorAll('.class-kegiatan-item');
             items.forEach((item, index) => {
                 item.querySelector('.item-index').textContent = `${index + 1}.`;
             });
@@ -850,29 +848,29 @@
                 viewTempat.innerHTML = '<li class="text-slate-400 italic">Belum ada lokasi diisi.</li>';
             }
 
-            // Render Uraian Kegiatan (Nomor 3)
-            const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
-            document.getElementById('viewKegiatan').textContent = kegiatanVal || '-';
+            // Render Uraian Kegiatan Patroli Poin-Poin (Nomor 3)
+            const viewKegiatanPoin = document.getElementById('viewKegiatanPoin');
+            viewKegiatanPoin.innerHTML = '';
+            const kegiatanInputs = document.querySelectorAll('.input-kegiatan-poin');
+            let hasKegiatan = false;
 
-            // Render Hasil Kegiatan (Nomor 4)
-            const viewHasil = document.getElementById('viewHasil');
-            viewHasil.innerHTML = '';
-            const hasilInputs = document.querySelectorAll('.input-hasil');
-            let hasHasil = false;
-
-            hasilInputs.forEach(input => {
+            kegiatanInputs.forEach(input => {
                 const val = input.value.trim();
                 if (val) {
-                    hasHasil = true;
+                    hasKegiatan = true;
                     const li = document.createElement('li');
                     li.textContent = val;
-                    viewHasil.appendChild(li);
+                    viewKegiatanPoin.appendChild(li);
                 }
             });
 
-            if (!hasHasil) {
-                viewHasil.innerHTML = '<li class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</li>';
+            if (!hasKegiatan) {
+                viewKegiatanPoin.innerHTML = '<li class="text-slate-400 italic">Belum ada uraian kegiatan diketik.</li>';
             }
+
+            // Render Hasil Kegiatan Patroli Deskripsi Textarea (Nomor 4)
+            const hasilDeskripsiVal = document.getElementById('inputHasilDeskripsi').value.trim();
+            document.getElementById('viewHasilDeskripsi').textContent = hasilDeskripsiVal || '-';
 
             // Render Daftar Anggota (Nomor 5)
             const viewAnggota = document.getElementById('viewAnggota');
@@ -992,12 +990,12 @@
             const filename = generatePdfFilename();
             
             const opt = {
-                margin:       [10, 10, 10, 10], // Margin atas, kanan, bawah, kiri (mm)
+                margin:       [10, 10, 10, 10],
                 filename:     filename,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] } // Mencegah potongan seksi di tengah halaman
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
             return html2pdf().set(opt).from(element).save();
@@ -1016,8 +1014,8 @@
             document.getElementById('inputTanggal').addEventListener('input', updatePreview);
             document.getElementById('inputDasar').addEventListener('input', updatePreview);
             document.getElementById('btnAddLokasi').addEventListener('click', () => addLokasiInput());
-            document.getElementById('inputKegiatan').addEventListener('input', updatePreview);
-            document.getElementById('btnAddHasil').addEventListener('click', () => addHasilInput());
+            document.getElementById('btnAddKegiatanPoin').addEventListener('click', () => addKegiatanPoinInput());
+            document.getElementById('inputHasilDeskripsi').addEventListener('input', updatePreview);
             document.getElementById('btnAddAnggota').addEventListener('click', () => addAnggotaInput());
             document.getElementById('inputDokumentasi').addEventListener('change', handlePhotoUpload);
 
