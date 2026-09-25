@@ -17,9 +17,9 @@ let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, an
 document.addEventListener('DOMContentLoaded', () => {
     // FORCE CLEAR LOCALSTORAGE LAMA AGAR PROFIL & LOGO DEFAULT AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v5_speed_optimized') {
+    if (cacheVersion !== 'v6_page_flow_fix') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v5_speed_optimized');
+        localStorage.setItem('satpol_app_version', 'v6_page_flow_fix');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -411,7 +411,7 @@ function handleSettingLogoRight(e) {
     }
 }
 
-// Dipercepat dengan skala 1.5 dan kompresi optimal agar proses render instan
+// Dipercepat dengan skala 1.5 agar proses unduh instan dan mulus
 function downloadPDF() {
     const element = document.getElementById('pdfContent');
     const filename = generatePdfFilename();
