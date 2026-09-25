@@ -11,16 +11,17 @@ let userProfile = {
     jabatan: 'Komandan Regu Satgas Patroli Trantibum'
 };
 
+// Array Objek Foto beserta Keterangan Manual: [{ src: '...', caption: '...' }]
 let uploadedPhotos = [];
 
 let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, anggotaListContainer, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // PEMBERSIHAN CACHE AGAR FITUR BARU AKTIF SEPENUHNYA
+    // FORCE CLEAR LOCALSTORAGE UNTUK FITUR KETERANGAN FOTO MANUAL
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v4_full_pages') {
+    if (cacheVersion !== 'v5_manual_captions') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v4_full_pages');
+        localStorage.setItem('satpol_app_version', 'v5_manual_captions');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -306,6 +307,7 @@ function updatePreview() {
     renderPhotoPreview();
 }
 
+/* Render Foto & Input Keterangan Manual */
 function renderPhotoPreview() {
     const container = document.getElementById('photoPreview');
     const viewContainer = document.getElementById('viewDokumentasi');
@@ -320,30 +322,47 @@ function renderPhotoPreview() {
         return;
     }
 
-    uploadedPhotos.forEach((src, idx) => {
-        const thumb = document.createElement('div');
-        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
-        thumb.innerHTML = `
-            <img src="${src}" class="w-full h-full object-cover">
-            <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
-                <i data-lucide="x" class="w-3 h-3"></i>
-            </button>
+    uploadedPhotos.forEach((item, idx) => {
+        // Form Input Thumbnail + Kolom Input Keterangan Manual
+        const formCard = document.createElement('div');
+        formCard.className = 'flex items-center gap-3 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm';
+        formCard.innerHTML = `
+            <div class="relative w-16 h-16 rounded-xl overflow-hidden border bg-slate-50 flex-shrink-0">
+                <img src="${item.src}" class="w-full h-full object-cover">
+                <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 opacity-90 hover:opacity-100 shadow">
+                    <i data-lucide="x" class="w-3 h-3"></i>
+                </button>
+            </div>
+            <div class="flex-1">
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Keterangan Foto ${idx + 1}</label>
+                <input type="text" value="${item.caption || ''}" oninput="updatePhotoCaption(${idx}, this.value)" placeholder="Tuliskan keterangan foto secara manual..." class="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:bg-white focus:ring-2 focus:ring-amber-500 outline-none transition">
+            </div>
         `;
-        container.appendChild(thumb);
+        container.appendChild(formCard);
+
+        // Tampilan Kartu PDF A4
+        const displayCaption = item.caption && item.caption.trim() ? item.caption.trim() : `Dokumentasi ${idx + 1}`;
 
         const pdfCard = document.createElement('div');
-        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+        pdfCard.className = 'photo-card-pdf';
         pdfCard.innerHTML = `
             <div class="photo-wrapper">
-                <img src="${src}" alt="Dokumentasi ${idx + 1}">
+                <img src="${item.src}" alt="${displayCaption}">
             </div>
-            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
+            <span class="text-[10px] text-slate-800 font-bold block mt-1.5 text-center leading-tight break-words">${displayCaption}</span>
         `;
         viewContainer.appendChild(pdfCard);
     });
 
     lucide.createIcons();
 }
+
+window.updatePhotoCaption = function(index, value) {
+    if (uploadedPhotos[index]) {
+        uploadedPhotos[index].caption = value;
+        updatePreview();
+    }
+};
 
 window.removePhoto = function(index) {
     uploadedPhotos.splice(index, 1);
@@ -362,7 +381,10 @@ function handlePhotoUpload(e) {
             const reader = new FileReader();
             reader.onload = (event) => {
                 if (uploadedPhotos.length < 4) {
-                    uploadedPhotos.push(event.target.result);
+                    uploadedPhotos.push({
+                        src: event.target.result,
+                        caption: ''
+                    });
                     renderPhotoPreview();
                 }
             };
@@ -415,7 +437,7 @@ function downloadPDF() {
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
         pagebreak:    { 
             mode: ['css', 'legacy'],
-            avoid: ['.preview-block', '.photo-wrapper', '.signature-block', '.pdf-box']
+            avoid: ['.preview-block', '.photo-card-pdf', '.signature-block', '.pdf-box']
         }
     };
 
