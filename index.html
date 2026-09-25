@@ -52,14 +52,22 @@
             color: #0f172a;
         }
 
+        /* Container & Page Break rules for A4 / PDF Export */
+        .preview-block {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
         /* Box Deskripsi & Konten khusus A4 / PDF */
         .preview-box {
             background-color: #f8fafc !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: 0.75rem !important;
-            padding: 0.75rem !important;
+            padding: 0.75rem 0.875rem !important;
             color: #1e293b !important;
             box-sizing: border-box !important;
+            width: 100% !important;
+            overflow: hidden !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
@@ -107,8 +115,9 @@
                 margin: 0 !important;
                 width: 100% !important;
             }
-            .photo-wrapper, .signature-block, .preview-box {
-                page-break-inside: avoid;
+            .preview-block, .photo-wrapper, .signature-block, .preview-box {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
     </style>
@@ -311,7 +320,7 @@
                         </div>
 
                         <!-- Officer Profile Summary Card -->
-                        <div class="grid grid-cols-2 gap-2 text-[11px] mb-4 preview-box shadow-sm">
+                        <div class="preview-block grid grid-cols-2 gap-2 text-[11px] mb-4 preview-box shadow-sm">
                             <div>
                                 <span class="font-semibold text-slate-500 block text-[10px]">Nama Lengkap:</span>
                                 <span id="viewNama" class="font-bold text-slate-900 text-xs">-</span>
@@ -329,14 +338,14 @@
                         <!-- Report Main Content Fields -->
                         <div class="space-y-3">
                             <!-- Tanggal -->
-                            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+                            <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
                                 <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span>
                                 <span class="text-slate-400">:</span>
                                 <span id="viewTanggal" class="font-bold text-slate-950 text-xs"></span>
                             </div>
 
                             <!-- 1. Dasar Pelaksanaan -->
-                            <div>
+                            <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">1. Dasar Pelaksanaan</label>
                                 <div id="viewDasar" class="preview-box min-h-[38px] text-slate-800 whitespace-pre-line leading-relaxed">
                                     -
@@ -344,27 +353,27 @@
                             </div>
 
                             <!-- 2. Tempat Pelaksanaan (Multi-Lokasi) -->
-                            <div>
+                            <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">2. Tempat Pelaksanaan</label>
                                 <div class="preview-box min-h-[38px]">
-                                    <ol id="viewTempat" class="list-decimal list-inside space-y-1 text-slate-800 leading-relaxed font-medium">
-                                        <li class="text-slate-400 italic">Belum ada lokasi diisi.</li>
-                                    </ol>
+                                    <div id="viewTempat" class="space-y-1.5 text-slate-800 leading-relaxed font-medium">
+                                        <div class="text-slate-400 italic">Belum ada lokasi diisi.</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- 3. Hasil Kegiatan Patroli -->
-                            <div>
+                            <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">3. Hasil Kegiatan Patroli</label>
                                 <div class="preview-box min-h-[50px]">
-                                    <ol id="viewHasil" class="list-decimal list-inside space-y-1 text-slate-800 leading-relaxed font-medium">
-                                        <li class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</li>
-                                    </ol>
+                                    <div id="viewHasil" class="space-y-1.5 text-slate-800 leading-relaxed font-medium">
+                                        <div class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- 4. Uraian Kegiatan Patroli -->
-                            <div>
+                            <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">4. Uraian Kegiatan Patroli</label>
                                 <div id="viewKegiatan" class="preview-box min-h-[50px] text-slate-800 whitespace-pre-line leading-relaxed">
                                     -
@@ -372,17 +381,17 @@
                             </div>
 
                             <!-- 5. Daftar Nama Anggota Satgas -->
-                            <div>
+                            <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">5. Daftar Nama Anggota Satgas</label>
                                 <div class="preview-box min-h-[40px]">
-                                    <ol id="viewAnggota" class="list-decimal list-inside space-y-1 text-slate-800 leading-relaxed font-medium">
-                                        <li class="text-slate-400 italic">Belum ada anggota ditambahkan.</li>
-                                    </ol>
+                                    <div id="viewAnggota" class="space-y-1.5 text-slate-800 leading-relaxed font-medium">
+                                        <div class="text-slate-400 italic">Belum ada anggota ditambahkan.</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- 6. Foto Dokumentasi Grid -->
-                            <div>
+                            <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">6. Dokumentasi Foto Kegiatan</label>
                                 <div class="preview-box min-h-[100px]">
                                     <div id="viewDokumentasi" class="grid grid-cols-2 gap-3">
@@ -393,7 +402,7 @@
                         </div>
 
                         <!-- Blok Tanda Tangan (Sisi Kanan, Rata Kiri) -->
-                        <div class="signature-block mt-8 flex justify-end">
+                        <div class="preview-block signature-block mt-8 flex justify-end">
                             <div class="text-left text-slate-900 text-[11px] leading-snug">
                                 <p>Mengetahui,</p>
                                 <p id="viewTanggalTtd" class="font-medium">Rengat, -</p>
@@ -838,20 +847,21 @@
             const viewTempat = document.getElementById('viewTempat');
             viewTempat.innerHTML = '';
             const lokasiInputs = document.querySelectorAll('.input-lokasi');
-            let hasLokasi = false;
+            let lokasiIdx = 1;
 
             lokasiInputs.forEach(input => {
                 const val = input.value.trim();
                 if (val) {
-                    hasLokasi = true;
-                    const li = document.createElement('li');
-                    li.textContent = val;
-                    viewTempat.appendChild(li);
+                    const row = document.createElement('div');
+                    row.className = 'flex items-start gap-2';
+                    row.innerHTML = `<span class="font-bold text-slate-600 flex-shrink-0 min-w-[16px]">${lokasiIdx}.</span><span class="flex-1 break-words">${val}</span>`;
+                    viewTempat.appendChild(row);
+                    lokasiIdx++;
                 }
             });
 
-            if (!hasLokasi) {
-                viewTempat.innerHTML = '<li class="text-slate-400 italic">Belum ada lokasi diisi.</li>';
+            if (lokasiIdx === 1) {
+                viewTempat.innerHTML = '<div class="text-slate-400 italic">Belum ada lokasi diisi.</div>';
             }
 
             const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
@@ -860,39 +870,41 @@
             const viewHasil = document.getElementById('viewHasil');
             viewHasil.innerHTML = '';
             const hasilInputs = document.querySelectorAll('.input-hasil');
-            let hasHasil = false;
+            let hasilIdx = 1;
 
             hasilInputs.forEach(input => {
                 const val = input.value.trim();
                 if (val) {
-                    hasHasil = true;
-                    const li = document.createElement('li');
-                    li.textContent = val;
-                    viewHasil.appendChild(li);
+                    const row = document.createElement('div');
+                    row.className = 'flex items-start gap-2';
+                    row.innerHTML = `<span class="font-bold text-slate-600 flex-shrink-0 min-w-[16px]">${hasilIdx}.</span><span class="flex-1 break-words">${val}</span>`;
+                    viewHasil.appendChild(row);
+                    hasilIdx++;
                 }
             });
 
-            if (!hasHasil) {
-                viewHasil.innerHTML = '<li class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</li>';
+            if (hasilIdx === 1) {
+                viewHasil.innerHTML = '<div class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</div>';
             }
 
             const viewAnggota = document.getElementById('viewAnggota');
             viewAnggota.innerHTML = '';
             const anggotaInputs = document.querySelectorAll('.input-anggota');
-            let hasAnggota = false;
+            let anggotaIdx = 1;
 
             anggotaInputs.forEach(input => {
                 const val = input.value.trim();
                 if (val) {
-                    hasAnggota = true;
-                    const li = document.createElement('li');
-                    li.textContent = val;
-                    viewAnggota.appendChild(li);
+                    const row = document.createElement('div');
+                    row.className = 'flex items-start gap-2';
+                    row.innerHTML = `<span class="font-bold text-slate-600 flex-shrink-0 min-w-[16px]">${anggotaIdx}.</span><span class="flex-1 break-words">${val}</span>`;
+                    viewAnggota.appendChild(row);
+                    anggotaIdx++;
                 }
             });
 
-            if (!hasAnggota) {
-                viewAnggota.innerHTML = '<li class="text-slate-400 italic">Belum ada anggota ditambahkan.</li>';
+            if (anggotaIdx === 1) {
+                viewAnggota.innerHTML = '<div class="text-slate-400 italic">Belum ada anggota ditambahkan.</div>';
             }
 
             renderPhotoPreview();
@@ -924,7 +936,7 @@
                 container.appendChild(thumb);
 
                 const pdfCard = document.createElement('div');
-                pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm';
+                pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
                 pdfCard.innerHTML = `
                     <div class="photo-wrapper">
                         <img src="${src}" alt="Dokumentasi ${idx + 1}">
@@ -997,7 +1009,8 @@
                 filename:     filename,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
             return html2pdf().set(opt).from(element).save();
