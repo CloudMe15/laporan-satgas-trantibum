@@ -43,6 +43,17 @@ body {
     color: #0f172a;
 }
 
+/* Penyesuaian Judul KOP Dokumen A4 agar 1 Baris Presisi */
+.kop-doc-title {
+    font-size: 10.5px !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0.01em !important;
+    white-space: nowrap !important;
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
 /* Mengatur agar setiap blok section laporan mengalir rapi antar halaman */
 .preview-block {
     margin-bottom: 0.5rem !important;
@@ -149,5 +160,9 @@ body {
         margin: 0 !important;
         width: 100% !important;
         padding: 20mm 16mm !important;
+    }
+    .kop-doc-title {
+        font-size: 10.5px !important;
+        white-space: nowrap !important;
     }
 }
