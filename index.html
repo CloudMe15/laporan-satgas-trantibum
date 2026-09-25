@@ -52,7 +52,7 @@
             color: #0f172a;
         }
 
-        /* Wrapper Foto khusus untuk Pratinjau Dokumen A4 (Portrait & Landscape Responsif) */
+        /* Wrapper Foto khusus untuk Pratinjau Dokumen A4 */
         .photo-wrapper {
             width: 100%;
             height: 180px;
@@ -93,7 +93,7 @@
                 margin: 0 !important;
                 width: 100% !important;
             }
-            .photo-wrapper {
+            .photo-wrapper, .signature-block {
                 page-break-inside: avoid;
             }
         }
@@ -363,6 +363,22 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Blok Tanda Tangan (Sisi Kanan Bawah Dokumen A4) -->
+                        <div class="signature-block mt-8 flex justify-end">
+                            <div class="w-72 text-center text-slate-900 text-[11px] leading-snug">
+                                <p>Mengetahui,</p>
+                                <p id="viewTanggalTtd" class="font-medium">Rengat, -</p>
+                                <p class="font-bold mt-1">Kepala Bidang Operasi dan Pengamanan</p>
+                                
+                                <!-- Space Tanda Tangan -->
+                                <div class="h-20"></div>
+                                
+                                <!-- Nama Pejabat (Bolehan Bold & Garis Bawah) -->
+                                <p class="font-extrabold underline uppercase tracking-wide text-xs">JAWALTER SITUMORANG, S.Pd, M.Pd, M.I.Kom</p>
+                                <p class="font-semibold text-[10px] mt-0.5">NIP. 19700415 199702 1 002</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -480,7 +496,7 @@
         </div>
     </div>
 
-    <!-- COPYRIGHT FOOTER (Akan muncul sempurna saat scroll mentok ke paling bawah) -->
+    <!-- COPYRIGHT FOOTER -->
     <footer class="relative z-10 w-full py-4 text-center text-xs text-slate-200 font-semibold no-print bg-slate-950/90 backdrop-blur-md border-t border-slate-800/80 mt-auto shadow-2xl">
         <div class="max-w-7xl mx-auto px-4">
             CloudMe - Bag. Program Satuan Polisi Pamong Praja - 2026
@@ -568,7 +584,7 @@
         </svg>
         `);
 
-        const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=sharing';
+        const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
 
         let userProfile = {
             logoLeft: DEFAULT_INHU_SVG,
@@ -612,6 +628,13 @@
         function formatIndonesianDate(dateStr) {
             if (!dateStr) return '-';
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('id-ID', options);
+        }
+
+        function formatIndonesianDateShort(dateStr) {
+            if (!dateStr) return '-';
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
             const date = new Date(dateStr);
             return date.toLocaleDateString('id-ID', options);
         }
@@ -744,6 +767,7 @@
         function updatePreview() {
             const rawDate = document.getElementById('inputTanggal').value;
             document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
+            document.getElementById('viewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
 
             const dasarVal = document.getElementById('inputDasar').value.trim();
             document.getElementById('viewDasar').textContent = dasarVal || '-';
