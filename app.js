@@ -18,9 +18,9 @@ let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, an
 document.addEventListener('DOMContentLoaded', () => {
     // FORCE CLEAR LOCALSTORAGE LAMA AGAR LOGO GOOGLE DRIVE LANGSUNG AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v2_drive_logo') {
+    if (cacheVersion !== 'v3_clean_pdf') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v2_drive_logo');
+        localStorage.setItem('satpol_app_version', 'v3_clean_pdf');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -396,7 +396,7 @@ function handleSettingLogoRight(e) {
     }
 }
 
-/* Download PDF menggunakan Format Gambar PNG jernih */
+/* Download PDF Presisi & Otomatis Membuang Halaman Kosong di Akhir */
 function downloadPDF() {
     const element = document.getElementById('pdfContent');
     const filename = generatePdfFilename();
@@ -405,12 +405,28 @@ function downloadPDF() {
         margin:       [0, 0, 0, 0],
         filename:     filename,
         image:        { type: 'png', quality: 1.0 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+        html2canvas:  { 
+            scale: 2, 
+            useCORS: true, 
+            logging: false,
+            scrollY: 0,
+            scrollX: 0,
+            windowHeight: element.offsetHeight
+        },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+        pagebreak:    { 
+            mode: ['css', 'legacy'],
+            avoid: ['.preview-block', '.photo-wrapper', '.signature-block', '.pdf-box']
+        }
     };
 
-    return html2pdf().set(opt).from(element).save();
+    return html2pdf().set(opt).from(element).toPdf().get('pdf').then(function(pdf) {
+        const totalPages = pdf.internal.getNumberOfPages();
+        // Jika total halaman melebihi kebutuhan riil, hapus lembar kosong paling akhir
+        if (totalPages > 1) {
+            pdf.deletePage(totalPages);
+        }
+    }).save();
 }
 
 function uploadToGoogleDrive() {
