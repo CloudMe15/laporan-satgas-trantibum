@@ -985,19 +985,38 @@
         }
 
         function downloadPDF() {
+            const previewSection = document.getElementById('previewSection');
+            const isHiddenMobile = previewSection.classList.contains('hidden');
+            
+            // Memastikan kontainer pratinjau tidak tersembunyi agar tidak menghasilkan PDF kosong
+            if (isHiddenMobile) {
+                previewSection.classList.remove('hidden');
+            }
+
+            updatePreview();
+
             const element = document.getElementById('pdfContent');
             const filename = generatePdfFilename();
             
             const opt = {
-                margin:       [8, 8, 8, 8], // Margin simetris (atas, kanan, bawah, kiri)
+                margin:       [8, 8, 8, 8],
                 filename:     filename,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, scrollY: 0, windowWidth: 1024 },
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true, 
+                    scrollY: 0, 
+                    windowWidth: 1200 
+                },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            return html2pdf().set(opt).from(element).save();
+            return html2pdf().set(opt).from(element).save().then(() => {
+                if (isHiddenMobile) {
+                    previewSection.classList.add('hidden');
+                }
+            });
         }
 
         function uploadToGoogleDrive() {
