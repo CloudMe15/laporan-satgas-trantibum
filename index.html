@@ -160,14 +160,26 @@
                         <input type="date" id="inputTanggal" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none text-sm font-semibold transition shadow-sm">
                     </div>
 
-                    <!-- 2. Dasar Pelaksanaan -->
+                    <!-- 2. Dasar Pelaksanaan & Tambah Lokasi -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                            <i data-lucide="file-badge" class="w-3.5 h-3.5 text-amber-600"></i> 2. Dasar Pelaksanaan / Lokasi
-                        </label>
-                        <div class="bg-amber-50/80 p-3 rounded-2xl border border-amber-200/90 shadow-inner space-y-2">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
+                                <i data-lucide="file-badge" class="w-3.5 h-3.5 text-amber-600"></i> 2. Dasar Pelaksanaan & Lokasi
+                            </label>
+                            <button type="button" id="btnAddLokasi" class="text-xs font-bold text-amber-800 hover:text-amber-950 bg-amber-100 hover:bg-amber-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-amber-300">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Tambah Lokasi
+                            </button>
+                        </div>
+                        <div class="bg-amber-50/80 p-3 rounded-2xl border border-amber-200/90 shadow-inner space-y-3">
                             <textarea id="inputDasar" rows="2" placeholder="Dasar Pelaksanaan (Contoh: Surat Tugas Nomor: 094/123/ST-SATPOLPP/2026...)" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
-                            <input type="text" id="inputTempat" placeholder="Tempat / Lokasi Patroli..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400">
+                            
+                            <!-- Container Dinamis untuk Daftar Lokasi -->
+                            <div class="pt-1 border-t border-amber-200/80">
+                                <label class="block text-[11px] font-bold text-amber-900 uppercase tracking-wider mb-1.5">Daftar Tempat / Lokasi Patroli:</label>
+                                <div id="lokasiList" class="space-y-2">
+                                    <!-- Dynamic Lokasi Inputs -->
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -317,11 +329,13 @@
                                 </div>
                             </div>
 
-                            <!-- 2. Tempat Pelaksanaan -->
+                            <!-- 2. Tempat Pelaksanaan (Multi-Lokasi) -->
                             <div>
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">2. Tempat Pelaksanaan</label>
-                                <div id="viewTempat" class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[38px] text-slate-800">
-                                    -
+                                <div class="p-3 bg-slate-50 border border-slate-300 rounded-xl min-h-[38px]">
+                                    <ol id="viewTempat" class="list-decimal list-inside space-y-1 text-slate-800 leading-relaxed font-medium">
+                                        <li class="text-slate-400 italic">Belum ada lokasi diisi.</li>
+                                    </ol>
                                 </div>
                             </div>
 
@@ -364,7 +378,7 @@
                             </div>
                         </div>
 
-                        <!-- Blok Tanda Tangan (Sisi Kanan, Rata Kiri, Format Gelar Presisi) -->
+                        <!-- Blok Tanda Tangan (Sisi Kanan, Rata Kiri) -->
                         <div class="signature-block mt-8 flex justify-end">
                             <div class="text-left text-slate-900 text-[11px] leading-snug">
                                 <p>Mengetahui,</p>
@@ -374,7 +388,7 @@
                                 <!-- Space Tanda Tangan -->
                                 <div class="h-20"></div>
                                 
-                                <!-- Nama Pejabat & Gelar S.Pd, M.Pd, M.I.Kom -->
+                                <!-- Nama Pejabat -->
                                 <p class="font-extrabold underline tracking-wide text-xs whitespace-nowrap">JAWALTER SITUMORANG, S.Pd, M.Pd, M.I.Kom</p>
                                 <p class="font-semibold text-[10px] mt-0.5">NIP. 19700415 199702 1 002</p>
                             </div>
@@ -598,6 +612,7 @@
 
         const settingsModal = document.getElementById('settingsModal');
         const driveNoticeModal = document.getElementById('driveNoticeModal');
+        const lokasiListContainer = document.getElementById('lokasiList');
         const hasilListContainer = document.getElementById('hasilList');
         const anggotaListContainer = document.getElementById('anggotaList');
         const inputNip = document.getElementById('inputSettingNip');
@@ -606,6 +621,7 @@
             lucide.createIcons();
             loadSettings();
             initDefaultDate();
+            addLokasiInput(); // Default 1 lokasi pertama
             addHasilInput();
             addAnggotaInput();
             bindEvents();
@@ -637,6 +653,38 @@
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             const date = new Date(dateStr);
             return date.toLocaleDateString('id-ID', options);
+        }
+
+        // Feature Baru: Tambah Tempat / Lokasi Patroli
+        function addLokasiInput(value = '') {
+            const div = document.createElement('div');
+            div.className = 'flex items-center gap-2 class-lokasi-item';
+            div.innerHTML = `
+                <span class="text-xs font-bold text-slate-400 w-4 text-center lokasi-index">1.</span>
+                <input type="text" value="${value}" placeholder="Tempat / Lokasi Patroli..." class="input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
+                <button type="button" class="btn-remove-lokasi text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            `;
+            lokasiListContainer.appendChild(div);
+            lucide.createIcons();
+            updateLokasiIndexes();
+
+            div.querySelector('.input-lokasi').addEventListener('input', updatePreview);
+            div.querySelector('.btn-remove-lokasi').addEventListener('click', () => {
+                if (lokasiListContainer.children.length > 1) {
+                    div.remove();
+                    updateLokasiIndexes();
+                    updatePreview();
+                }
+            });
+        }
+
+        function updateLokasiIndexes() {
+            const items = lokasiListContainer.querySelectorAll('.class-lokasi-item');
+            items.forEach((item, index) => {
+                item.querySelector('.lokasi-index').textContent = `${index + 1}.`;
+            });
         }
 
         function addHasilInput(value = '') {
@@ -772,8 +820,25 @@
             const dasarVal = document.getElementById('inputDasar').value.trim();
             document.getElementById('viewDasar').textContent = dasarVal || '-';
 
-            const tempatVal = document.getElementById('inputTempat').value.trim();
-            document.getElementById('viewTempat').textContent = tempatVal || '-';
+            // Render Multi-Lokasi Patroli (Nomor 2)
+            const viewTempat = document.getElementById('viewTempat');
+            viewTempat.innerHTML = '';
+            const lokasiInputs = document.querySelectorAll('.input-lokasi');
+            let hasLokasi = false;
+
+            lokasiInputs.forEach(input => {
+                const val = input.value.trim();
+                if (val) {
+                    hasLokasi = true;
+                    const li = document.createElement('li');
+                    li.textContent = val;
+                    viewTempat.appendChild(li);
+                }
+            });
+
+            if (!hasLokasi) {
+                viewTempat.innerHTML = '<li class="text-slate-400 italic">Belum ada lokasi diisi.</li>';
+            }
 
             const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
             document.getElementById('viewKegiatan').textContent = kegiatanVal || '-';
@@ -936,7 +1001,7 @@
         function bindEvents() {
             document.getElementById('inputTanggal').addEventListener('input', updatePreview);
             document.getElementById('inputDasar').addEventListener('input', updatePreview);
-            document.getElementById('inputTempat').addEventListener('input', updatePreview);
+            document.getElementById('btnAddLokasi').addEventListener('click', () => addLokasiInput());
             document.getElementById('inputKegiatan').addEventListener('input', updatePreview);
             document.getElementById('btnAddHasil').addEventListener('click', () => addHasilInput());
             document.getElementById('btnAddAnggota').addEventListener('click', () => addAnggotaInput());
