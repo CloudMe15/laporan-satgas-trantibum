@@ -17,9 +17,9 @@ let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, an
 document.addEventListener('DOMContentLoaded', () => {
     // FORCE CLEAR LOCALSTORAGE LAMA AGAR PROFIL & LOGO DEFAULT AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v3_profile_fajar') {
+    if (cacheVersion !== 'v4_profile_fajar') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v3_profile_fajar');
+        localStorage.setItem('satpol_app_version', 'v4_profile_fajar');
     }
 
     settingsModal = document.getElementById('settingsModal');
