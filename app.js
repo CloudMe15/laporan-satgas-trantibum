@@ -16,11 +16,11 @@ let uploadedPhotos = [];
 let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, anggotaListContainer, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // FORCE CLEAR LOCALSTORAGE LAMA AGAR LOGO GOOGLE DRIVE LANGSUNG AKTIF
+    // PEMBERSIHAN CACHE AGAR FITUR BARU AKTIF SEPENUHNYA
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v3_clean_pdf') {
+    if (cacheVersion !== 'v4_full_pages') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v3_clean_pdf');
+        localStorage.setItem('satpol_app_version', 'v4_full_pages');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -396,7 +396,7 @@ function handleSettingLogoRight(e) {
     }
 }
 
-/* Download PDF Presisi & Otomatis Membuang Halaman Kosong di Akhir */
+/* Download PDF Lengkap tanpa Menghapus Halaman Berisi dan Tanpa Kertas Kosong */
 function downloadPDF() {
     const element = document.getElementById('pdfContent');
     const filename = generatePdfFilename();
@@ -410,8 +410,7 @@ function downloadPDF() {
             useCORS: true, 
             logging: false,
             scrollY: 0,
-            scrollX: 0,
-            windowHeight: element.offsetHeight
+            scrollX: 0
         },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
         pagebreak:    { 
@@ -420,13 +419,7 @@ function downloadPDF() {
         }
     };
 
-    return html2pdf().set(opt).from(element).toPdf().get('pdf').then(function(pdf) {
-        const totalPages = pdf.internal.getNumberOfPages();
-        // Jika total halaman melebihi kebutuhan riil, hapus lembar kosong paling akhir
-        if (totalPages > 1) {
-            pdf.deletePage(totalPages);
-        }
-    }).save();
+    return html2pdf().set(opt).from(element).save();
 }
 
 function uploadToGoogleDrive() {
