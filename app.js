@@ -6,21 +6,20 @@ const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrt
 let userProfile = {
     logoLeft: DEFAULT_INHU_DRIVE_URL,
     logoRight: DEFAULT_SATPOL_PP_DRIVE_URL,
-    nama: 'Rahmat Santoso, S.STP',
-    nip: '198506152008011002',
-    jabatan: 'Komandan Regu Satgas Patroli Trantibum'
+    nama: 'Fajar Ari Prakoso',
+    nip: '199507102025211095',
+    jabatan: 'Staff Program dan Keuangan'
 };
 
 let uploadedPhotos = [];
-
 let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, anggotaListContainer, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // FORCE CLEAR LOCALSTORAGE LAMA AGAR LOGO GOOGLE DRIVE LANGSUNG AKTIF
+    // FORCE CLEAR LOCALSTORAGE LAMA AGAR PROFIL & LOGO DEFAULT AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v2_drive_logo') {
+    if (cacheVersion !== 'v3_profile_fajar') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v2_drive_logo');
+        localStorage.setItem('satpol_app_version', 'v3_profile_fajar');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -33,9 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
     loadSettings();
     initDefaultDate();
+    
     addLokasiInput();
     addHasilInput();
     addAnggotaInput();
+    
     bindEvents();
     updatePreview();
 });
@@ -49,7 +50,6 @@ function generatePdfFilename() {
     const rawNama = userProfile.nama || 'Petugas';
     const cleanNama = rawNama.trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '');
     const rawDate = document.getElementById('inputTanggal').value || new Date().toISOString().split('T')[0];
-    
     return `Laporan_Satgas_Patroli_Trantibum_${cleanNama}_${rawDate}.pdf`;
 }
 
@@ -80,7 +80,6 @@ function addLokasiInput(value = '') {
     lokasiListContainer.appendChild(div);
     lucide.createIcons();
     updateLokasiIndexes();
-
     div.querySelector('.input-lokasi').addEventListener('input', updatePreview);
     div.querySelector('.btn-remove-lokasi').addEventListener('click', () => {
         if (lokasiListContainer.children.length > 1) {
@@ -111,7 +110,6 @@ function addHasilInput(value = '') {
     hasilListContainer.appendChild(div);
     lucide.createIcons();
     updateHasilIndexes();
-
     div.querySelector('.input-hasil').addEventListener('input', updatePreview);
     div.querySelector('.btn-remove-hasil').addEventListener('click', () => {
         if (hasilListContainer.children.length > 1) {
@@ -142,7 +140,6 @@ function addAnggotaInput(value = '') {
     anggotaListContainer.appendChild(div);
     lucide.createIcons();
     updateAnggotaIndexes();
-
     div.querySelector('.input-anggota').addEventListener('input', updatePreview);
     div.querySelector('.btn-remove-anggota').addEventListener('click', () => {
         if (anggotaListContainer.children.length > 1) {
@@ -182,10 +179,8 @@ function applyUserProfileUI() {
 
     document.getElementById('headerLogoLeft').src = DEFAULT_INHU_DRIVE_URL;
     document.getElementById('headerLogoRight').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-
     document.getElementById('previewLogoLeft').src = DEFAULT_INHU_DRIVE_URL;
     document.getElementById('previewLogoRight').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-
     document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_DRIVE_URL;
     document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_DRIVE_URL;
 
@@ -242,15 +237,22 @@ function updatePreview() {
     document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
     document.getElementById('viewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
 
+    // 1. Dasar Pelaksanaan
+    const blockDasar = document.getElementById('blockDasar');
     const dasarVal = document.getElementById('inputDasar').value.trim();
-    document.getElementById('viewDasar').textContent = dasarVal || '-';
+    if (dasarVal) {
+        blockDasar.style.display = 'block';
+        document.getElementById('viewDasar').textContent = dasarVal;
+    } else {
+        blockDasar.style.display = 'none';
+    }
 
     // 2. Multi-Lokasi
+    const blockLokasi = document.getElementById('blockLokasi');
     const viewTempat = document.getElementById('viewTempat');
     viewTempat.innerHTML = '';
     const lokasiInputs = document.querySelectorAll('.input-lokasi');
     let lokasiCount = 0;
-
     lokasiInputs.forEach(input => {
         const val = input.value.trim();
         if (val) {
@@ -258,17 +260,18 @@ function updatePreview() {
             viewTempat.appendChild(createPdfListItem(lokasiCount, val));
         }
     });
-
-    if (lokasiCount === 0) {
-        viewTempat.innerHTML = '<div class="text-slate-400 italic text-xs">Belum ada lokasi diisi.</div>';
+    if (lokasiCount > 0) {
+        blockLokasi.style.display = 'block';
+    } else {
+        blockLokasi.style.display = 'none';
     }
 
     // 3. Hasil Patroli
+    const blockHasil = document.getElementById('blockHasil');
     const viewHasil = document.getElementById('viewHasil');
     viewHasil.innerHTML = '';
     const hasilInputs = document.querySelectorAll('.input-hasil');
     let hasilCount = 0;
-
     hasilInputs.forEach(input => {
         const val = input.value.trim();
         if (val) {
@@ -276,21 +279,28 @@ function updatePreview() {
             viewHasil.appendChild(createPdfListItem(hasilCount, val));
         }
     });
-
-    if (hasilCount === 0) {
-        viewHasil.innerHTML = '<div class="text-slate-400 italic text-xs">Belum ada hasil kegiatan diketik.</div>';
+    if (hasilCount > 0) {
+        blockHasil.style.display = 'block';
+    } else {
+        blockHasil.style.display = 'none';
     }
 
     // 4. Uraian Kegiatan
+    const blockKegiatan = document.getElementById('blockKegiatan');
     const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
-    document.getElementById('viewKegiatan').textContent = kegiatanVal || '-';
+    if (kegiatanVal) {
+        blockKegiatan.style.display = 'block';
+        document.getElementById('viewKegiatan').textContent = kegiatanVal;
+    } else {
+        blockKegiatan.style.display = 'none';
+    }
 
     // 5. Anggota Satgas
+    const blockAnggota = document.getElementById('blockAnggota');
     const viewAnggota = document.getElementById('viewAnggota');
     viewAnggota.innerHTML = '';
     const anggotaInputs = document.querySelectorAll('.input-anggota');
     let anggotaCount = 0;
-
     anggotaInputs.forEach(input => {
         const val = input.value.trim();
         if (val) {
@@ -298,15 +308,18 @@ function updatePreview() {
             viewAnggota.appendChild(createPdfListItem(anggotaCount, val));
         }
     });
-
-    if (anggotaCount === 0) {
-        viewAnggota.innerHTML = '<div class="text-slate-400 italic text-xs">Belum ada anggota ditambahkan.</div>';
+    if (anggotaCount > 0) {
+        blockAnggota.style.display = 'block';
+    } else {
+        blockAnggota.style.display = 'none';
     }
 
-    renderPhotoPreview();
+    // 6. Dokumentasi Foto
+    const blockDokumentasi = document.getElementById('blockDokumentasi');
+    renderPhotoPreview(blockDokumentasi);
 }
 
-function renderPhotoPreview() {
+function renderPhotoPreview(blockDokumentasi) {
     const container = document.getElementById('photoPreview');
     const viewContainer = document.getElementById('viewDokumentasi');
     const countLabel = document.getElementById('photoCount');
@@ -316,8 +329,10 @@ function renderPhotoPreview() {
     countLabel.textContent = `${uploadedPhotos.length} / 4 Foto`;
 
     if (uploadedPhotos.length === 0) {
-        viewContainer.innerHTML = '<div class="col-span-2 text-center text-slate-400 py-6 italic text-[11px]">Tidak ada foto dokumentasi.</div>';
+        if (blockDokumentasi) blockDokumentasi.style.display = 'none';
         return;
+    } else {
+        if (blockDokumentasi) blockDokumentasi.style.display = 'block';
     }
 
     uploadedPhotos.forEach((src, idx) => {
@@ -341,14 +356,14 @@ function renderPhotoPreview() {
         `;
         viewContainer.appendChild(pdfCard);
     });
-
     lucide.createIcons();
 }
 
 window.removePhoto = function(index) {
     uploadedPhotos.splice(index, 1);
-    renderPhotoPreview();
-};
+    const blockDokumentasi = document.getElementById('blockDokumentasi');
+    renderPhotoPreview(blockDokumentasi);
+}
 
 function handlePhotoUpload(e) {
     const files = Array.from(e.target.files);
@@ -356,14 +371,14 @@ function handlePhotoUpload(e) {
         alert('Maksimal foto dokumentasi adalah 4 foto!');
         return;
     }
-
     files.forEach(file => {
         if (file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = (event) => {
                 if (uploadedPhotos.length < 4) {
                     uploadedPhotos.push(event.target.result);
-                    renderPhotoPreview();
+                    const blockDokumentasi = document.getElementById('blockDokumentasi');
+                    renderPhotoPreview(blockDokumentasi);
                 }
             };
             reader.readAsDataURL(file);
@@ -396,7 +411,6 @@ function handleSettingLogoRight(e) {
     }
 }
 
-/* Download PDF menggunakan Format Gambar PNG jernih */
 function downloadPDF() {
     const element = document.getElementById('pdfContent');
     const filename = generatePdfFilename();
@@ -416,7 +430,6 @@ function downloadPDF() {
 function uploadToGoogleDrive() {
     const filename = generatePdfFilename();
     document.getElementById('driveFilenameLabel').textContent = filename;
-
     downloadPDF();
     window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
     driveNoticeModal.classList.remove('hidden');
@@ -443,13 +456,14 @@ function bindEvents() {
         applyUserProfileUI();
         settingsModal.classList.remove('hidden');
     });
+
     document.getElementById('btnCloseSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
     document.getElementById('btnCancelSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
     document.getElementById('btnSaveSettings').addEventListener('click', saveSettings);
-    
+
     document.getElementById('inputSettingLogoLeft').addEventListener('change', handleSettingLogoLeft);
     document.getElementById('inputSettingLogoRight').addEventListener('change', handleSettingLogoRight);
-    
+
     document.getElementById('btnResetLogoLeft').addEventListener('click', () => {
         userProfile.logoLeft = DEFAULT_INHU_DRIVE_URL;
         document.getElementById('inputSettingLogoLeft').value = '';
