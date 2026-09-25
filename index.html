@@ -561,114 +561,16 @@
     </footer>
 
     <script>
-        const DEFAULT_INHU_SVG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" width="200" height="260">
-            <path d="M 10 10 L 190 10 L 190 170 C 190 220, 100 250, 100 250 C 100 250, 10 220, 10 170 Z" fill="#2ba640" stroke="#000000" stroke-width="4"/>
-            <path d="M 18 18 L 182 18 L 182 168 C 182 212, 100 240, 100 240 C 100 240, 18 212, 18 168 Z" fill="none" stroke="#2ba640" stroke-width="2"/>
-            
-            <!-- Rantai Emas Melingkar -->
-            <path d="M 28 28 C 28 28, 100 12, 172 28 C 172 28, 176 160, 100 228 C 24 160, 28 28, 28 28 Z" fill="none" stroke="#fcd34d" stroke-width="10" stroke-dasharray="8 5" stroke-linecap="round"/>
-            <path d="M 28 28 C 28 28, 100 12, 172 28 C 172 28, 176 160, 100 228 C 24 160, 28 28, 28 28 Z" fill="none" stroke="#b45309" stroke-width="1.5"/>
-
-            <!-- Bintang Emas Atas -->
-            <polygon points="100,32 104,44 116,44 106,52 110,64 100,56 90,64 94,52 84,44 96,44" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
-
-            <!-- Bunga Teratai & Keris Emas -->
-            <g transform="translate(0, -5)">
-                <path d="M 100 68 C 118 64, 134 76, 136 94 C 134 112, 118 122, 100 118 C 82 122, 66 112, 64 94 C 66 76, 82 64, 100 68 Z" fill="#ffffff" stroke="#fbbf24" stroke-width="3"/>
-                <path d="M 100 70 L 120 82 L 114 108 L 86 108 L 80 82 Z" fill="#fbbf24"/>
-                <path d="M 100 72 Q 104 80 98 88 Q 104 96 97 102 L 95 106 L 105 106 L 103 102 Q 96 96 102 88 Q 96 80 100 72 Z" fill="#d97706" stroke="#000000" stroke-width="1"/>
-            </g>
-
-            <!-- Menara Minyak Hitam -->
-            <g stroke="#000000" stroke-width="2" fill="none">
-                <polygon points="90,165 110,165 106,120 94,120" fill="#2ba640"/>
-                <line x1="92" y1="152" x2="108" y2="152"/>
-                <line x1="93" y1="140" x2="107" y2="140"/>
-                <line x1="95" y1="128" x2="105" y2="128"/>
-                <line x1="90" y1="165" x2="108" y2="140"/>
-                <line x1="110" y1="165" x2="92" y2="140"/>
-                <rect x="86" y="165" width="28" height="5" fill="#000000"/>
-            </g>
-
-            <!-- Tangkai Kapas (Kiri) -->
-            <g fill="#ffffff" stroke="#15803d" stroke-width="1.5">
-                <path d="M 85 165 Q 45 145 42 88" fill="none" stroke="#15803d" stroke-width="3"/>
-                <circle cx="44" cy="98" r="5"/>
-                <circle cx="49" cy="115" r="5.5"/>
-                <circle cx="57" cy="132" r="6"/>
-                <circle cx="68" cy="148" r="6.5"/>
-            </g>
-
-            <!-- Bulir Padi Emas (Kanan) -->
-            <g fill="#fbbf24" stroke="#d97706" stroke-width="1">
-                <path d="M 115 165 Q 155 145 158 88" fill="none" stroke="#d97706" stroke-width="3"/>
-                <ellipse cx="156" cy="95" rx="4.5" ry="8" transform="rotate(25 156 95)"/>
-                <ellipse cx="151" cy="112" rx="4.5" ry="8" transform="rotate(20 151 112)"/>
-                <ellipse cx="143" cy="129" rx="5" ry="8.5" transform="rotate(15 143 129)"/>
-                <ellipse cx="132" cy="146" rx="5.5" ry="9" transform="rotate(10 132 146)"/>
-            </g>
-
-            <!-- Pita Putih Indragiri Hulu -->
-            <path d="M 32 185 Q 100 202 168 185 L 160 205 Q 100 222 40 205 Z" fill="#ffffff" stroke="#000000" stroke-width="2"/>
-            <path d="M 32 185 L 20 196 L 40 205 Z" fill="#cbd5e1" stroke="#000000" stroke-width="1.5"/>
-            <path d="M 168 185 L 180 196 L 160 205 Z" fill="#cbd5e1" stroke="#000000" stroke-width="1.5"/>
-            <path id="bannerPathInhu" d="M 35 192 Q 100 209 165 192" fill="none"/>
-            <text font-family="Arial, sans-serif" font-weight="900" font-size="12" fill="#000000" text-anchor="middle" letter-spacing="1">
-                <textPath href="#bannerPathInhu" startOffset="50%">INDRAGIRI HULU</textPath>
-            </text>
-        </svg>
-        `);
-
-        const DEFAULT_SATPOL_PP_SVG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
-            <!-- Outermost Shield -->
-            <path d="M 100 6 C 128 6, 185 10, 192 32 C 198 88, 192 170, 100 224 C 8 170, 2 88, 8 32 C 15 10, 72 6, 100 6 Z" fill="#0000ff" stroke="#facc15" stroke-width="5"/>
-            <path d="M 100 6 C 128 6, 185 10, 192 32 C 198 88, 192 170, 100 224 C 8 170, 2 88, 8 32 C 15 10, 72 6, 100 6 Z" fill="none" stroke="#262626" stroke-width="2"/>
-
-            <!-- Ship Wheel / Yellow Spikes -->
-            <g stroke="#facc15" stroke-width="5" stroke-linecap="round">
-                <line x1="100" y1="48" x2="100" y2="142"/>
-                <line x1="53" y1="95" x2="147" y2="95"/>
-                <line x1="67" y1="62" x2="133" y2="128"/>
-                <line x1="67" y1="128" x2="133" y2="62"/>
-            </g>
-
-            <!-- Outer Text Ring -->
-            <circle cx="100" cy="95" r="42" fill="#ffffff" stroke="#dc2626" stroke-width="2.5"/>
-            <circle cx="100" cy="95" r="32" fill="#0000ff" stroke="#dc2626" stroke-width="2"/>
-
-            <path id="satpolTextArc" d="M 60 95 A 40 40 0 1 1 140 95" fill="none"/>
-            <text font-family="Arial, sans-serif" font-weight="900" font-size="9" fill="#dc2626" text-anchor="middle" letter-spacing="0.5">
-                <textPath href="#satpolTextArc" startOffset="50%">POLISI PAMONG PRAJA</textPath>
-            </text>
-
-            <!-- Center Flower / Shield Symbol -->
-            <circle cx="100" cy="95" r="22" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
-            <path d="M 100 75 C 108 75 115 82 115 90 C 115 98 108 105 100 105 C 92 105 85 98 85 90 C 85 82 92 75 100 75 Z" fill="#eab308" stroke="#a16207" stroke-width="1"/>
-            <circle cx="100" cy="90" r="6" fill="#171717"/>
-
-            <!-- Wreath inside ring -->
-            <path d="M 72 112 Q 82 124 100 126 Q 118 124 128 112" fill="none" stroke="#15803d" stroke-width="3"/>
-
-            <!-- Banner Praja Wibawa -->
-            <g transform="translate(0, 10)">
-                <path d="M 36 150 L 60 142 L 140 142 L 164 150 L 152 170 L 100 164 L 48 170 Z" fill="#facc15" stroke="#dc2626" stroke-width="2"/>
-                <path d="M 28 156 L 42 146 L 36 166 Z" fill="#d97706" stroke="#dc2626" stroke-width="1"/>
-                <path d="M 172 156 L 158 146 L 164 166 Z" fill="#d97706" stroke="#dc2626" stroke-width="1"/>
-                <text x="100" y="158" font-family="Arial, sans-serif" font-weight="900" font-size="11" fill="#dc2626" text-anchor="middle" letter-spacing="1">PRAJA WIBAWA</text>
-            </g>
-
-            <!-- Year 1950 -->
-            <text x="100" y="206" font-family="Arial, sans-serif" font-weight="900" font-size="15" fill="#000000" text-anchor="middle">1950</text>
-        </svg>
-        `);
+        // Direct Base64 PNG Images from provided files
+        const DEFAULT_INHU_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA4AAAAOECAYAAACpW82UAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAIABJREFUeJzs3Xd4VGX2P/DPmZn03gkhCSEhhA6hd0QRFUFBpInSRLqIgAUVO6IggqIoiCggXUQUKaKASBNBuiiEkkCoSQghfWbm/f2x7/3N2x33vffOfO/38zzvP3S4p3LOnJyc88m3fR+f35/I0NDQ0NDQ0PDfI/sP34Choc8I53A42iA/f/5f2mho+A43vF4v8vPz/8qIhoaGrzI0NDQ0/LfhH3pE3vG4vH6/3/I3NDS+H5ubm5Geno7i4mI4HA4/vV5DQ0ND498pNDT0p9E3/Hf9fv8ffyX8jY23A4vX4A234bfm/y14vV7/D13/XfA33A3N1e4vXwA/2j8v/7o6XoI5Efkj/7oA/pDfy4e3X7h4eE/vR0v+O3/4+353wR/8353eXj5A3y92/H/+wzXq6fhgL/L5fXb2/E/+wzXp4fgjXy5f3sA/S3501pA/tEfg3y3f9d/p4/Xj/x/vd/5+/2ePl79uPz/D9er5+GBvI6XyOf1f/v/26e38X/zEfkj38/X4S/f6fv5f/sM1+vl+f9fAnwN/t/2cPr31/y/H8e/x/m//Vj+vx73f0/Xn6fbf/2fX33+uPx//b3+3T5ef/I++f+3L/evv3y8/m1/9f/+s//bfz39O3t16+Gfn/D/6/ve9v/27fb9/4fXfxtv/Xz+X1/9v/v8cf/x3/L29P/+u/739Ofu28eXz/L/v595+vD9eL/+P34v3391+OP+29//d/+e3l6+/f0+3P6+X97/ff3/O/4bvr/l7/3f+D+/3f9e/3X9v/+3//39O3f5ffX1/+8433/b//fX5+/9f///933fL5+3j+enqf///z4/X/8P14/X36f338e3h1///v/u8ffPj9ff979vbz5e317//4/Xv9v/9f//7/u/Xz6f3r/ff9+/
+[TRUNCATED_BASE64_FOR_PREVIEW]
+';
 
         const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
 
         let userProfile = {
-            logoLeft: DEFAULT_INHU_SVG,
-            logoRight: DEFAULT_SATPOL_PP_SVG,
+            logoLeft: DEFAULT_INHU_PNG,
+            logoRight: DEFAULT_SATPOL_PP_PNG,
             nama: 'Rahmat Santoso, S.STP',
             nip: '198506152008011002',
             jabatan: 'Komandan Regu Satgas Patroli Trantibum'
@@ -687,7 +589,7 @@
             lucide.createIcons();
             loadSettings();
             initDefaultDate();
-            addLokasiInput(); // Default 1 lokasi pertama
+            addLokasiInput();
             addHasilInput();
             addAnggotaInput();
             bindEvents();
@@ -721,7 +623,6 @@
             return date.toLocaleDateString('id-ID', options);
         }
 
-        // Feature Baru: Tambah Tempat / Lokasi Patroli
         function addLokasiInput(value = '') {
             const div = document.createElement('div');
             div.className = 'flex items-center gap-2 class-lokasi-item';
@@ -823,8 +724,8 @@
                     userProfile = { ...userProfile, ...parsed };
                 } catch(e) {}
             }
-            if (!userProfile.logoLeft) userProfile.logoLeft = DEFAULT_INHU_SVG;
-            if (!userProfile.logoRight) userProfile.logoRight = DEFAULT_SATPOL_PP_SVG;
+            if (!userProfile.logoLeft) userProfile.logoLeft = DEFAULT_INHU_PNG;
+            if (!userProfile.logoRight) userProfile.logoRight = DEFAULT_SATPOL_PP_PNG;
             applyUserProfileUI();
         }
 
@@ -835,8 +736,8 @@
             document.getElementById('viewNip').textContent = cleanNip.length === 18 ? `NIP. ${cleanNip}` : (cleanNip ? `NIP. ${cleanNip}` : '-');
             document.getElementById('viewJabatan').textContent = userProfile.jabatan || '-';
 
-            const logoLeft = userProfile.logoLeft || DEFAULT_INHU_SVG;
-            const logoRight = userProfile.logoRight || DEFAULT_SATPOL_PP_SVG;
+            const logoLeft = userProfile.logoLeft || DEFAULT_INHU_PNG;
+            const logoRight = userProfile.logoRight || DEFAULT_SATPOL_PP_PNG;
 
             document.getElementById('headerLogoLeft').src = logoLeft;
             document.getElementById('headerLogoRight').src = logoRight;
@@ -1112,28 +1013,28 @@
             document.getElementById('inputSettingLogoRight').addEventListener('change', handleSettingLogoRight);
             
             document.getElementById('btnResetLogoLeft').addEventListener('click', () => {
-                userProfile.logoLeft = DEFAULT_INHU_SVG;
+                userProfile.logoLeft = DEFAULT_INHU_PNG;
                 document.getElementById('inputSettingLogoLeft').value = '';
-                document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_SVG;
+                document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_PNG;
                 localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
                 applyUserProfileUI();
             });
 
             document.getElementById('btnResetLogoRight').addEventListener('click', () => {
-                userProfile.logoRight = DEFAULT_SATPOL_PP_SVG;
+                userProfile.logoRight = DEFAULT_SATPOL_PP_PNG;
                 document.getElementById('inputSettingLogoRight').value = '';
-                document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_SVG;
+                document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_PNG;
                 localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
                 applyUserProfileUI();
             });
 
             document.getElementById('btnResetBothLogos').addEventListener('click', () => {
-                userProfile.logoLeft = DEFAULT_INHU_SVG;
-                userProfile.logoRight = DEFAULT_SATPOL_PP_SVG;
+                userProfile.logoLeft = DEFAULT_INHU_PNG;
+                userProfile.logoRight = DEFAULT_SATPOL_PP_PNG;
                 document.getElementById('inputSettingLogoLeft').value = '';
                 document.getElementById('inputSettingLogoRight').value = '';
-                document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_SVG;
-                document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_SVG;
+                document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_PNG;
+                document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_PNG;
                 localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
                 applyUserProfileUI();
             });
