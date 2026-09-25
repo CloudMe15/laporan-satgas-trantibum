@@ -25,7 +25,12 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Standar Kertas A4 dengan margin atas, bawah, kiri, dan kanan ala Microsoft Word (20mm) */
+/* Pengaturan Standar Lembar A4 ala Microsoft Word */
+@page {
+    size: A4 portrait;
+    margin: 20mm 16mm;
+}
+
 .a4-page {
     width: 210mm;
     min-height: 297mm;
@@ -38,11 +43,11 @@ body {
     color: #0f172a;
 }
 
-/* Mengatur jarak antar blok section agar rapi dan tidak terlalu rapat */
+/* Mengatur agar setiap blok section laporan mengalir rapi antar halaman */
 .preview-block {
     margin-bottom: 0.5rem !important;
-    break-inside: auto !important;
-    page-break-inside: auto !important;
+    break-inside: avoid-page !important;
+    page-break-inside: avoid !important;
 }
 
 /* Explicit Box Style untuk preview dan PDF */
@@ -58,9 +63,11 @@ body {
     overflow: hidden !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
 }
 
-/* Jarak antar list kegiatan agar nyaman dibaca dan tidak menempel */
+/* Jarak antar list kegiatan agar rapi dan tidak menempel */
 .pdf-list-item {
     display: flex !important;
     align-items: flex-start !important;
@@ -118,7 +125,7 @@ body {
 .signature-block {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
-    margin-top: 1.5rem !important;
+    margin-top: 2rem !important;
 }
 
 /* Custom UI Scrollbars */
