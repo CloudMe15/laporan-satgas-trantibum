@@ -11,146 +11,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- html2pdf.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0f172a;
-            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), 
-                              url('https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1920&q=80');
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: cover;
-            background-attachment: fixed;
-        }
-
-        /* Glassmorphism UI Styling */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-
-        .glass-header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        /* Standard A4 Printable Canvas */
-        .a4-page {
-            width: 210mm;
-            min-height: 297mm;
-            padding: 16mm 18mm;
-            margin: 0 auto;
-            background: #ffffff;
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
-            box-sizing: border-box;
-            color: #0f172a;
-        }
-
-        /* Container & Page Break Rules for PDF Export */
-        .preview-block {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
-            margin-bottom: 0.85rem;
-        }
-
-        /* Explicit Box Style for both HTML Preview & PDF Conversion */
-        .pdf-box {
-            background-color: #f8fafc !important;
-            border: 1px solid #cbd5e1 !important;
-            border-radius: 0.75rem !important;
-            padding: 0.875rem 1rem !important;
-            color: #1e293b !important;
-            box-sizing: border-box !important;
-            width: 100% !important;
-            display: block !important;
-            overflow: hidden !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-
-        /* List item flex layout inside boxes */
-        .pdf-list-item {
-            display: flex !important;
-            align-items: flex-start !important;
-            gap: 0.5rem !important;
-            margin-bottom: 0.35rem !important;
-            font-size: 0.75rem !important;
-            line-height: 1.4 !important;
-        }
-
-        .pdf-list-item:last-child {
-            margin-bottom: 0 !important;
-        }
-
-        .pdf-list-num {
-            font-weight: 700 !important;
-            color: #475569 !important;
-            min-width: 1.25rem !important;
-            flex-shrink: 0 !important;
-            text-align: left !important;
-        }
-
-        .pdf-list-text {
-            flex: 1 1 auto !important;
-            word-break: break-word !important;
-            color: #0f172a !important;
-        }
-
-        /* Photo Wrapper inside PDF Boxes */
-        .photo-wrapper {
-            width: 100%;
-            height: 180px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f8fafc !important;
-            border: 1px solid #cbd5e1 !important;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-
-        .photo-wrapper img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* Custom UI Scrollbars */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.1);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(202, 138, 4, 0.5);
-            border-radius: 9999px;
-        }
-
-        @media print {
-            body { background: none !important; }
-            .no-print { display: none !important; }
-            .a4-page {
-                box-shadow: none !important;
-                margin: 0 !important;
-                width: 100% !important;
-            }
-            .preview-block, .photo-wrapper, .signature-block, .pdf-box {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-        }
-    </style>
+    <!-- CSS Terpisah -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between relative selection:bg-amber-500 selection:text-slate-950">
 
@@ -227,12 +89,9 @@
                         <div class="bg-amber-50/80 p-3 rounded-2xl border border-amber-200/90 shadow-inner space-y-3">
                             <textarea id="inputDasar" rows="2" placeholder="Dasar Pelaksanaan (Contoh: Surat Tugas Nomor: 094/123/ST-SATPOLPP/2026...)" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
                             
-                            <!-- Container Dinamis untuk Daftar Lokasi -->
                             <div class="pt-1 border-t border-amber-200/80">
                                 <label class="block text-[11px] font-bold text-amber-900 uppercase tracking-wider mb-1.5">Daftar Tempat / Lokasi Patroli:</label>
-                                <div id="lokasiList" class="space-y-2">
-                                    <!-- Dynamic Lokasi Inputs -->
-                                </div>
+                                <div id="lokasiList" class="space-y-2"></div>
                             </div>
                         </div>
                     </div>
@@ -248,9 +107,7 @@
                             </button>
                         </div>
                         <div class="bg-emerald-50/80 p-3 rounded-2xl border border-emerald-200/90 shadow-inner">
-                            <div id="hasilList" class="space-y-2">
-                                <!-- Dynamic Point Inputs -->
-                            </div>
+                            <div id="hasilList" class="space-y-2"></div>
                         </div>
                     </div>
 
@@ -275,13 +132,11 @@
                             </button>
                         </div>
                         <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200/90 shadow-inner">
-                            <div id="anggotaList" class="space-y-2">
-                                <!-- Dynamic Anggota Inputs -->
-                            </div>
+                            <div id="anggotaList" class="space-y-2"></div>
                         </div>
                     </div>
 
-                    <!-- 6. Foto Dokumentasi (Max 4 Photos) -->
+                    <!-- 6. Foto Dokumentasi -->
                     <div>
                         <div class="flex justify-between items-center mb-1.5">
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
@@ -299,9 +154,7 @@
                                 <p class="text-[10px] text-slate-500 mt-0.5">Format JPG, PNG (Maksimal 4 foto)</p>
                             </div>
                         </div>
-                        <div id="photoPreview" class="grid grid-cols-4 gap-2 mt-3">
-                            <!-- Thumbnails form -->
-                        </div>
+                        <div id="photoPreview" class="grid grid-cols-4 gap-2 mt-3"></div>
                     </div>
                 </form>
             </div>
@@ -310,7 +163,6 @@
         <!-- PREVIEW & DOCUMENT EXPORT SECTION -->
         <section id="previewSection" class="lg:col-span-7 hidden lg:block space-y-4">
             
-            <!-- Action Toolbar Buttons -->
             <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
                 <div class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
                     <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
@@ -370,22 +222,17 @@
 
                         <!-- Report Main Content Fields -->
                         <div class="space-y-3">
-                            <!-- Tanggal -->
                             <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
                                 <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span>
                                 <span class="text-slate-400">:</span>
                                 <span id="viewTanggal" class="font-bold text-slate-950 text-xs"></span>
                             </div>
 
-                            <!-- 1. Dasar Pelaksanaan -->
                             <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">1. Dasar Pelaksanaan</label>
-                                <div id="viewDasar" class="pdf-box min-h-[42px] whitespace-pre-line leading-relaxed">
-                                    -
-                                </div>
+                                <div id="viewDasar" class="pdf-box min-h-[42px] whitespace-pre-line leading-relaxed">-</div>
                             </div>
 
-                            <!-- 2. Tempat Pelaksanaan (Multi-Lokasi) -->
                             <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">2. Tempat Pelaksanaan</label>
                                 <div class="pdf-box min-h-[42px]">
@@ -395,7 +242,6 @@
                                 </div>
                             </div>
 
-                            <!-- 3. Hasil Kegiatan Patroli -->
                             <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">3. Hasil Kegiatan Patroli</label>
                                 <div class="pdf-box min-h-[48px]">
@@ -405,15 +251,11 @@
                                 </div>
                             </div>
 
-                            <!-- 4. Uraian Kegiatan Patroli -->
                             <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">4. Uraian Kegiatan Patroli</label>
-                                <div id="viewKegiatan" class="pdf-box min-h-[48px] whitespace-pre-line leading-relaxed">
-                                    -
-                                </div>
+                                <div id="viewKegiatan" class="pdf-box min-h-[48px] whitespace-pre-line leading-relaxed">-</div>
                             </div>
 
-                            <!-- 5. Daftar Nama Anggota Satgas -->
                             <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">5. Daftar Nama Anggota Satgas</label>
                                 <div class="pdf-box min-h-[42px]">
@@ -423,7 +265,6 @@
                                 </div>
                             </div>
 
-                            <!-- 6. Foto Dokumentasi Grid -->
                             <div class="preview-block">
                                 <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">6. Dokumentasi Foto Kegiatan</label>
                                 <div class="pdf-box min-h-[90px]">
@@ -434,17 +275,13 @@
                             </div>
                         </div>
 
-                        <!-- Blok Tanda Tangan (Sisi Kanan, Rata Kiri) -->
+                        <!-- Blok Tanda Tangan -->
                         <div class="preview-block signature-block mt-8 flex justify-end">
                             <div class="text-left text-slate-900 text-[11px] leading-snug">
                                 <p>Mengetahui,</p>
                                 <p id="viewTanggalTtd" class="font-medium">Rengat, -</p>
                                 <p class="font-bold mt-1">Kepala Bidang Operasi dan Pengamanan</p>
-                                
-                                <!-- Space Tanda Tangan -->
                                 <div class="h-20"></div>
-                                
-                                <!-- Nama Pejabat -->
                                 <p class="font-extrabold underline tracking-wide text-xs whitespace-nowrap">JAWALTER SITUMORANG, S.Pd, M.Pd, M.I.Kom</p>
                                 <p class="font-semibold text-[10px] mt-0.5">NIP. 19700415 199702 1 002</p>
                             </div>
@@ -470,7 +307,6 @@
             </div>
 
             <form id="settingsForm" class="space-y-4" onsubmit="event.preventDefault();">
-                <!-- Logo Indragiri Hulu (Left) -->
                 <div>
                     <div class="flex justify-between items-center mb-1">
                         <label class="block text-xs font-bold text-slate-700">Logo Kiri (Indragiri Hulu)</label>
@@ -478,7 +314,7 @@
                     </div>
                     <div class="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
                         <div class="w-12 h-12 rounded-xl border bg-white flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm p-1">
-                            <img id="settingLogoLeftPreview" src="" class="max-w-full max-h-full object-contain">
+                            <img id="settingLogoLeftPreview" src="https://lh3.googleusercontent.com/d/1CQz4gxA1VCO4hcR7AnlDXeD4FVM6JQMw" class="max-w-full max-h-full object-contain">
                         </div>
                         <div class="flex-1 space-y-1">
                             <input type="file" id="inputSettingLogoLeft" accept="image/*" class="text-[11px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
@@ -486,7 +322,6 @@
                     </div>
                 </div>
 
-                <!-- Logo Satpol PP (Right) -->
                 <div>
                     <div class="flex justify-between items-center mb-1">
                         <label class="block text-xs font-bold text-slate-700">Logo Kanan (Satpol PP)</label>
@@ -494,7 +329,7 @@
                     </div>
                     <div class="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
                         <div class="w-12 h-12 rounded-xl border bg-white flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm p-1">
-                            <img id="settingLogoRightPreview" src="" class="max-w-full max-h-full object-contain">
+                            <img id="settingLogoRightPreview" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="max-w-full max-h-full object-contain">
                         </div>
                         <div class="flex-1 space-y-1">
                             <input type="file" id="inputSettingLogoRight" accept="image/*" class="text-[11px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
@@ -502,43 +337,34 @@
                     </div>
                 </div>
 
-                <!-- Reset Both Logos Button -->
                 <div class="text-center pt-1">
                     <button type="button" id="btnResetBothLogos" class="w-full py-1.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition border border-slate-300">
                         Reset Kedua Logo ke Default
                     </button>
                 </div>
 
-                <!-- Nama Lengkap -->
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
                     <input type="text" id="inputSettingNama" placeholder="Contoh: Rahmat Santoso, S.STP" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
                 </div>
 
-                <!-- NIP VALIDASI 18 DIGIT ANGKA -->
                 <div>
                     <div class="flex justify-between items-center mb-1">
                         <label class="block text-xs font-bold text-slate-700">NIP / ID Pegawai</label>
                         <span id="nipCounter" class="text-[10px] font-bold text-slate-500">0 / 18 Digit</span>
                     </div>
-                    <input type="text" id="inputSettingNip" maxlength="18" placeholder="18 digit angka (Contoh: 198506152008011002)" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold tracking-wider">
+                    <input type="text" id="inputSettingNip" maxlength="18" placeholder="18 digit angka" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold tracking-wider">
                     <p id="nipError" class="text-[10px] text-red-500 mt-1 hidden font-semibold">NIP harus terdiri dari 18 digit angka!</p>
                 </div>
 
-                <!-- Jabatan -->
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Jabatan / Unit Kerja</label>
                     <input type="text" id="inputSettingJabatan" placeholder="Jabatan / Posisi Petugas" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
                 </div>
 
-                <!-- Modal Action Buttons -->
                 <div class="flex justify-end gap-2 pt-3 border-t">
-                    <button type="button" id="btnCancelSettings" class="px-4 py-2 border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 transition">
-                        Batal
-                    </button>
-                    <button type="button" id="btnSaveSettings" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-xl text-xs transition shadow-md shadow-amber-500/20">
-                        Simpan Pengaturan
-                    </button>
+                    <button type="button" id="btnCancelSettings" class="px-4 py-2 border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 transition">Batal</button>
+                    <button type="button" id="btnSaveSettings" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-xl text-xs transition shadow-md shadow-amber-500/20">Simpan Pengaturan</button>
                 </div>
             </form>
         </div>
@@ -559,9 +385,7 @@
                 Folder Google Drive telah dibuka di tab baru. Silahkan pilih/seret file PDF yang terunduh tersebut untuk diunggah ke folder Drive Anda.
             </p>
             <div class="pt-2">
-                <button id="btnCloseDriveNotice" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-indigo-600/20">
-                    Mengerti & Lanjutkan
-                </button>
+                <button id="btnCloseDriveNotice" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-indigo-600/20">Mengerti & Lanjutkan</button>
             </div>
         </div>
     </div>
@@ -573,507 +397,7 @@
         </div>
     </footer>
 
-    <script>
-        // URL Direct Link Google Drive PNG untuk Kedua Logo
-        const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1CQz4gxA1VCO4hcR7AnlDXeD4FVM6JQMw';
-        const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
-
-        const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
-
-        let userProfile = {
-            logoLeft: DEFAULT_INHU_DRIVE_URL,
-            logoRight: DEFAULT_SATPOL_PP_DRIVE_URL,
-            nama: 'Rahmat Santoso, S.STP',
-            nip: '198506152008011002',
-            jabatan: 'Komandan Regu Satgas Patroli Trantibum'
-        };
-
-        let uploadedPhotos = [];
-
-        const settingsModal = document.getElementById('settingsModal');
-        const driveNoticeModal = document.getElementById('driveNoticeModal');
-        const lokasiListContainer = document.getElementById('lokasiList');
-        const hasilListContainer = document.getElementById('hasilList');
-        const anggotaListContainer = document.getElementById('anggotaList');
-        const inputNip = document.getElementById('inputSettingNip');
-
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            loadSettings();
-            initDefaultDate();
-            addLokasiInput();
-            addHasilInput();
-            addAnggotaInput();
-            bindEvents();
-            updatePreview();
-        });
-
-        function initDefaultDate() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('inputTanggal').value = today;
-        }
-
-        function generatePdfFilename() {
-            const rawNama = userProfile.nama || 'Petugas';
-            const cleanNama = rawNama.trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '');
-            const rawDate = document.getElementById('inputTanggal').value || new Date().toISOString().split('T')[0];
-            
-            return `Laporan_Satgas_Patroli_Trantibum_${cleanNama}_${rawDate}.pdf`;
-        }
-
-        function formatIndonesianDate(dateStr) {
-            if (!dateStr) return '-';
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('id-ID', options);
-        }
-
-        function formatIndonesianDateShort(dateStr) {
-            if (!dateStr) return '-';
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('id-ID', options);
-        }
-
-        function addLokasiInput(value = '') {
-            const div = document.createElement('div');
-            div.className = 'flex items-center gap-2 class-lokasi-item';
-            div.innerHTML = `
-                <span class="text-xs font-bold text-slate-400 w-4 text-center lokasi-index">1.</span>
-                <input type="text" value="${value}" placeholder="Tempat / Lokasi Patroli..." class="input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
-                <button type="button" class="btn-remove-lokasi text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-            `;
-            lokasiListContainer.appendChild(div);
-            lucide.createIcons();
-            updateLokasiIndexes();
-
-            div.querySelector('.input-lokasi').addEventListener('input', updatePreview);
-            div.querySelector('.btn-remove-lokasi').addEventListener('click', () => {
-                if (lokasiListContainer.children.length > 1) {
-                    div.remove();
-                    updateLokasiIndexes();
-                    updatePreview();
-                }
-            });
-        }
-
-        function updateLokasiIndexes() {
-            const items = lokasiListContainer.querySelectorAll('.class-lokasi-item');
-            items.forEach((item, index) => {
-                item.querySelector('.lokasi-index').textContent = `${index + 1}.`;
-            });
-        }
-
-        function addHasilInput(value = '') {
-            const div = document.createElement('div');
-            div.className = 'flex items-center gap-2 class-hasil-item';
-            div.innerHTML = `
-                <span class="text-xs font-bold text-slate-400 w-4 text-center item-index">1.</span>
-                <input type="text" value="${value}" placeholder="Tuliskan poin hasil patroli..." class="input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
-                <button type="button" class="btn-remove-hasil text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-            `;
-            hasilListContainer.appendChild(div);
-            lucide.createIcons();
-            updateHasilIndexes();
-
-            div.querySelector('.input-hasil').addEventListener('input', updatePreview);
-            div.querySelector('.btn-remove-hasil').addEventListener('click', () => {
-                if (hasilListContainer.children.length > 1) {
-                    div.remove();
-                    updateHasilIndexes();
-                    updatePreview();
-                }
-            });
-        }
-
-        function updateHasilIndexes() {
-            const items = hasilListContainer.querySelectorAll('.class-hasil-item');
-            items.forEach((item, index) => {
-                item.querySelector('.item-index').textContent = `${index + 1}.`;
-            });
-        }
-
-        function addAnggotaInput(value = '') {
-            const div = document.createElement('div');
-            div.className = 'flex items-center gap-2 class-anggota-item';
-            div.innerHTML = `
-                <span class="text-xs font-bold text-slate-400 w-4 text-center anggota-index">1.</span>
-                <input type="text" value="${value}" placeholder="Tuliskan nama lengkap anggota..." class="input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
-                <button type="button" class="btn-remove-anggota text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-            `;
-            anggotaListContainer.appendChild(div);
-            lucide.createIcons();
-            updateAnggotaIndexes();
-
-            div.querySelector('.input-anggota').addEventListener('input', updatePreview);
-            div.querySelector('.btn-remove-anggota').addEventListener('click', () => {
-                if (anggotaListContainer.children.length > 1) {
-                    div.remove();
-                    updateAnggotaIndexes();
-                    updatePreview();
-                }
-            });
-        }
-
-        function updateAnggotaIndexes() {
-            const items = anggotaListContainer.querySelectorAll('.class-anggota-item');
-            items.forEach((item, index) => {
-                item.querySelector('.anggota-index').textContent = `${index + 1}.`;
-            });
-        }
-
-        function loadSettings() {
-            const saved = localStorage.getItem('satpolpp_inhu_trantibum_profile');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    userProfile = { ...userProfile, ...parsed };
-                } catch(e) {}
-            }
-            if (!userProfile.logoLeft) userProfile.logoLeft = DEFAULT_INHU_DRIVE_URL;
-            if (!userProfile.logoRight) userProfile.logoRight = DEFAULT_SATPOL_PP_DRIVE_URL;
-            applyUserProfileUI();
-        }
-
-        function applyUserProfileUI() {
-            document.getElementById('viewNama').textContent = userProfile.nama || '-';
-            
-            const cleanNip = userProfile.nip ? userProfile.nip.replace(/\D/g, '') : '';
-            document.getElementById('viewNip').textContent = cleanNip.length === 18 ? `NIP. ${cleanNip}` : (cleanNip ? `NIP. ${cleanNip}` : '-');
-            document.getElementById('viewJabatan').textContent = userProfile.jabatan || '-';
-
-            const logoLeft = userProfile.logoLeft || DEFAULT_INHU_DRIVE_URL;
-            const logoRight = userProfile.logoRight || DEFAULT_SATPOL_PP_DRIVE_URL;
-
-            document.getElementById('headerLogoLeft').src = logoLeft;
-            document.getElementById('headerLogoRight').src = logoRight;
-
-            document.getElementById('previewLogoLeft').src = logoLeft;
-            document.getElementById('previewLogoRight').src = logoRight;
-
-            document.getElementById('settingLogoLeftPreview').src = logoLeft;
-            document.getElementById('settingLogoRightPreview').src = logoRight;
-
-            document.getElementById('inputSettingNama').value = userProfile.nama || '';
-            inputNip.value = cleanNip;
-            document.getElementById('inputSettingJabatan').value = userProfile.jabatan || '';
-            
-            updateNipCounter();
-        }
-
-        function updateNipCounter() {
-            const currentLen = inputNip.value.length;
-            document.getElementById('nipCounter').textContent = `${currentLen} / 18 Digit`;
-        }
-
-        function saveSettings() {
-            const nipVal = inputNip.value.trim();
-            if (nipVal && nipVal.length !== 18) {
-                document.getElementById('nipError').classList.remove('hidden');
-                return;
-            } else {
-                document.getElementById('nipError').classList.add('hidden');
-            }
-
-            userProfile.nama = document.getElementById('inputSettingNama').value.trim();
-            userProfile.nip = nipVal;
-            userProfile.jabatan = document.getElementById('inputSettingJabatan').value.trim();
-
-            localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-            applyUserProfileUI();
-            updatePreview();
-            settingsModal.classList.add('hidden');
-        }
-
-        function createPdfListItem(index, text) {
-            const row = document.createElement('div');
-            row.className = 'pdf-list-item';
-            
-            const numSpan = document.createElement('span');
-            numSpan.className = 'pdf-list-num';
-            numSpan.textContent = `${index}.`;
-
-            const textSpan = document.createElement('span');
-            textSpan.className = 'pdf-list-text';
-            textSpan.textContent = text;
-
-            row.appendChild(numSpan);
-            row.appendChild(textSpan);
-            return row;
-        }
-
-        function updatePreview() {
-            const rawDate = document.getElementById('inputTanggal').value;
-            document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
-            document.getElementById('viewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
-
-            const dasarVal = document.getElementById('inputDasar').value.trim();
-            document.getElementById('viewDasar').textContent = dasarVal || '-';
-
-            // 2. Multi-Lokasi
-            const viewTempat = document.getElementById('viewTempat');
-            viewTempat.innerHTML = '';
-            const lokasiInputs = document.querySelectorAll('.input-lokasi');
-            let lokasiCount = 0;
-
-            lokasiInputs.forEach(input => {
-                const val = input.value.trim();
-                if (val) {
-                    lokasiCount++;
-                    viewTempat.appendChild(createPdfListItem(lokasiCount, val));
-                }
-            });
-
-            if (lokasiCount === 0) {
-                viewTempat.innerHTML = '<div class="text-slate-400 italic text-xs">Belum ada lokasi diisi.</div>';
-            }
-
-            // 3. Hasil Patroli
-            const viewHasil = document.getElementById('viewHasil');
-            viewHasil.innerHTML = '';
-            const hasilInputs = document.querySelectorAll('.input-hasil');
-            let hasilCount = 0;
-
-            hasilInputs.forEach(input => {
-                const val = input.value.trim();
-                if (val) {
-                    hasilCount++;
-                    viewHasil.appendChild(createPdfListItem(hasilCount, val));
-                }
-            });
-
-            if (hasilCount === 0) {
-                viewHasil.innerHTML = '<div class="text-slate-400 italic text-xs">Belum ada hasil kegiatan diketik.</div>';
-            }
-
-            // 4. Uraian Kegiatan
-            const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
-            document.getElementById('viewKegiatan').textContent = kegiatanVal || '-';
-
-            // 5. Anggota Satgas
-            const viewAnggota = document.getElementById('viewAnggota');
-            viewAnggota.innerHTML = '';
-            const anggotaInputs = document.querySelectorAll('.input-anggota');
-            let anggotaCount = 0;
-
-            anggotaInputs.forEach(input => {
-                const val = input.value.trim();
-                if (val) {
-                    anggotaCount++;
-                    viewAnggota.appendChild(createPdfListItem(anggotaCount, val));
-                }
-            });
-
-            if (anggotaCount === 0) {
-                viewAnggota.innerHTML = '<div class="text-slate-400 italic text-xs">Belum ada anggota ditambahkan.</div>';
-            }
-
-            renderPhotoPreview();
-        }
-
-        function renderPhotoPreview() {
-            const container = document.getElementById('photoPreview');
-            const viewContainer = document.getElementById('viewDokumentasi');
-            const countLabel = document.getElementById('photoCount');
-            
-            container.innerHTML = '';
-            viewContainer.innerHTML = '';
-            countLabel.textContent = `${uploadedPhotos.length} / 4 Foto`;
-
-            if (uploadedPhotos.length === 0) {
-                viewContainer.innerHTML = '<div class="col-span-2 text-center text-slate-400 py-6 italic text-[11px]">Tidak ada foto dokumentasi.</div>';
-                return;
-            }
-
-            uploadedPhotos.forEach((src, idx) => {
-                const thumb = document.createElement('div');
-                thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
-                thumb.innerHTML = `
-                    <img src="${src}" class="w-full h-full object-cover">
-                    <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
-                        <i data-lucide="x" class="w-3 h-3"></i>
-                    </button>
-                `;
-                container.appendChild(thumb);
-
-                const pdfCard = document.createElement('div');
-                pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-                pdfCard.innerHTML = `
-                    <div class="photo-wrapper">
-                        <img src="${src}" alt="Dokumentasi ${idx + 1}">
-                    </div>
-                    <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
-                `;
-                viewContainer.appendChild(pdfCard);
-            });
-
-            lucide.createIcons();
-        }
-
-        window.removePhoto = function(index) {
-            uploadedPhotos.splice(index, 1);
-            renderPhotoPreview();
-        };
-
-        function handlePhotoUpload(e) {
-            const files = Array.from(e.target.files);
-            if (uploadedPhotos.length + files.length > 4) {
-                alert('Maksimal foto dokumentasi adalah 4 foto!');
-                return;
-            }
-
-            files.forEach(file => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        if (uploadedPhotos.length < 4) {
-                            uploadedPhotos.push(event.target.result);
-                            renderPhotoPreview();
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-            e.target.value = '';
-        }
-
-        function handleSettingLogoLeft(e) {
-            const file = e.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    userProfile.logoLeft = event.target.result;
-                    document.getElementById('settingLogoLeftPreview').src = userProfile.logoLeft;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function handleSettingLogoRight(e) {
-            const file = e.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    userProfile.logoRight = event.target.result;
-                    document.getElementById('settingLogoRightPreview').src = userProfile.logoRight;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        /* Ekspor PDF dengan Rendering PNG Transparan dan Tajam */
-        function downloadPDF() {
-            const element = document.getElementById('pdfContent');
-            const filename = generatePdfFilename();
-            
-            const opt = {
-                margin:       [0, 0, 0, 0],
-                filename:     filename,
-                image:        { type: 'png', quality: 1.0 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
-            };
-
-            return html2pdf().set(opt).from(element).save();
-        }
-
-        function uploadToGoogleDrive() {
-            const filename = generatePdfFilename();
-            document.getElementById('driveFilenameLabel').textContent = filename;
-
-            downloadPDF();
-            window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
-            driveNoticeModal.classList.remove('hidden');
-        }
-
-        function bindEvents() {
-            document.getElementById('inputTanggal').addEventListener('input', updatePreview);
-            document.getElementById('inputDasar').addEventListener('input', updatePreview);
-            document.getElementById('btnAddLokasi').addEventListener('click', () => addLokasiInput());
-            document.getElementById('inputKegiatan').addEventListener('input', updatePreview);
-            document.getElementById('btnAddHasil').addEventListener('click', () => addHasilInput());
-            document.getElementById('btnAddAnggota').addEventListener('click', () => addAnggotaInput());
-            document.getElementById('inputDokumentasi').addEventListener('change', handlePhotoUpload);
-
-            inputNip.addEventListener('input', (e) => {
-                e.target.value = e.target.value.replace(/\D/g, '');
-                updateNipCounter();
-                if (e.target.value.length === 18) {
-                    document.getElementById('nipError').classList.add('hidden');
-                }
-            });
-
-            document.getElementById('btnSettings').addEventListener('click', () => {
-                applyUserProfileUI();
-                settingsModal.classList.remove('hidden');
-            });
-            document.getElementById('btnCloseSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
-            document.getElementById('btnCancelSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
-            document.getElementById('btnSaveSettings').addEventListener('click', saveSettings);
-            
-            document.getElementById('inputSettingLogoLeft').addEventListener('change', handleSettingLogoLeft);
-            document.getElementById('inputSettingLogoRight').addEventListener('change', handleSettingLogoRight);
-            
-            document.getElementById('btnResetLogoLeft').addEventListener('click', () => {
-                userProfile.logoLeft = DEFAULT_INHU_DRIVE_URL;
-                document.getElementById('inputSettingLogoLeft').value = '';
-                document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_DRIVE_URL;
-                localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-                applyUserProfileUI();
-            });
-
-            document.getElementById('btnResetLogoRight').addEventListener('click', () => {
-                userProfile.logoRight = DEFAULT_SATPOL_PP_DRIVE_URL;
-                document.getElementById('inputSettingLogoRight').value = '';
-                document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-                localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-                applyUserProfileUI();
-            });
-
-            document.getElementById('btnResetBothLogos').addEventListener('click', () => {
-                userProfile.logoLeft = DEFAULT_INHU_DRIVE_URL;
-                userProfile.logoRight = DEFAULT_SATPOL_PP_DRIVE_URL;
-                document.getElementById('inputSettingLogoLeft').value = '';
-                document.getElementById('inputSettingLogoRight').value = '';
-                document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_DRIVE_URL;
-                document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-                localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-                applyUserProfileUI();
-            });
-
-            document.getElementById('btnCloseDriveNotice').addEventListener('click', () => {
-                driveNoticeModal.classList.add('hidden');
-            });
-
-            document.getElementById('btnDownloadPDF').addEventListener('click', downloadPDF);
-            document.getElementById('btnUploadDrive').addEventListener('click', uploadToGoogleDrive);
-
-            const tabFormBtn = document.getElementById('tabFormBtn');
-            const tabPreviewBtn = document.getElementById('tabPreviewBtn');
-            const formSection = document.getElementById('formSection');
-            const previewSection = document.getElementById('previewSection');
-
-            tabFormBtn.addEventListener('click', () => {
-                formSection.classList.remove('hidden');
-                previewSection.classList.add('hidden');
-                tabFormBtn.className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
-                tabPreviewBtn.className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
-            });
-
-            tabPreviewBtn.addEventListener('click', () => {
-                previewSection.classList.remove('hidden');
-                formSection.classList.add('hidden');
-                tabPreviewBtn.className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
-                tabFormBtn.className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
-            });
-        }
-    </script>
+    <!-- JS Terpisah -->
+    <script src="app.js"></script>
 </body>
 </html>
