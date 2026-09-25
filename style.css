@@ -25,7 +25,7 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Standard A4 Printable Canvas dengan tinggi dinamis agar tidak ada halaman kosong berlebih */
+/* Standard A4 Printable Canvas dengan tinggi dinamis */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
@@ -38,11 +38,11 @@ body {
     color: #0f172a;
 }
 
-/* Container & Page Break Rules for PDF Export */
+/* Container & Page Break Rules untuk menghindari potongan yang buruk antar halaman */
 .preview-block {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem !important;
 }
 
 /* Explicit Box Style for both HTML Preview & PDF Conversion */
@@ -60,14 +60,14 @@ body {
     print-color-adjust: exact !important;
 }
 
-/* List item flex layout inside boxes */
+/* List item flex layout inside boxes dengan jarak pas antar kegiatan */
 .pdf-list-item {
     display: flex !important;
     align-items: flex-start !important;
     gap: 0.5rem !important;
-    margin-bottom: 0.3rem !important;
+    margin-bottom: 0.45rem !important;
     font-size: 0.75rem !important;
-    line-height: 1.4 !important;
+    line-height: 1.45 !important;
 }
 
 .pdf-list-item:last-child {
@@ -130,6 +130,7 @@ body {
         box-shadow: none !important;
         margin: 0 !important;
         width: 100% !important;
+        page-break-after: always;
     }
     .preview-block, .photo-wrapper, .signature-block, .pdf-box {
         page-break-inside: avoid !important;
