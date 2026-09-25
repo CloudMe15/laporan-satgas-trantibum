@@ -53,6 +53,16 @@
             color: #0f172a;
         }
 
+        /* Mode Khusus Ekspor PDF agar tidak tergeser horizontal */
+        .pdf-render-mode {
+            width: 210mm !important;
+            max-width: 210mm !important;
+            margin: 0 !important;
+            padding: 12mm 15mm !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
         /* Wrapper Foto khusus untuk Pratinjau Dokumen A4 */
         .photo-wrapper {
             width: 100%;
@@ -630,7 +640,7 @@
             lucide.createIcons();
             loadSettings();
             initDefaultDate();
-            addLokasiInput(); // Default 1 lokasi pertama
+            addLokasiInput();
             addHasilInput();
             addAnggotaInput();
             bindEvents();
@@ -664,7 +674,6 @@
             return date.toLocaleDateString('id-ID', options);
         }
 
-        // Feature Baru: Tambah Tempat / Lokasi Patroli
         function addLokasiInput(value = '') {
             const div = document.createElement('div');
             div.className = 'flex items-center gap-2 class-lokasi-item';
@@ -983,7 +992,7 @@
             }
         }
 
-        // FUNGSI PERBAIKAN DOWNLOAD PDF: Mencegah offset/pergeseran ke kanan
+        // FUNGSI PERBAIKAN UTAMA: Mengunci kanvas agar hasil ekspor pas di tengah & presisi
         function downloadPDF() {
             const previewSection = document.getElementById('previewSection');
             const isHiddenMobile = previewSection.classList.contains('hidden');
@@ -997,29 +1006,28 @@
             const element = document.getElementById('pdfContent');
             const filename = generatePdfFilename();
             
-            // Kunci lebar elemen ke ukuran piksel A4 persis (794px) selama pengunduhan
-            const originalWidth = element.style.width;
-            element.style.width = '794px';
+            // Tambahkan kelas CSS sementara untuk mereset margin/padding layar
+            element.classList.add('pdf-render-mode');
 
             const opt = {
-                margin:       [10, 10, 10, 10], // Margin simetris A4 dalam mm
+                margin:       0, // Margin diatur 0 karena padding A4 internal sudah ada di CSS .pdf-render-mode
                 filename:     filename,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true, 
-                    scrollY: 0, 
+                    scrollX: 0,
+                    scrollY: 0,
                     x: 0,
-                    y: 0,
-                    width: 794,
-                    windowWidth: 794
+                    y: 0
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
             return html2pdf().set(opt).from(element).save().then(() => {
-                element.style.width = originalWidth; // Kembalikan ke tampilan responsif web
+                // Bersihkan mode render setelah selesai diunduh
+                element.classList.remove('pdf-render-mode');
                 if (isHiddenMobile) {
                     previewSection.classList.add('hidden');
                 }
