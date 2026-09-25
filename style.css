@@ -25,24 +25,29 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Standard A4 Printable Canvas - Dynamic Height agar Halaman Kosong Hilang */
+/* Standard A4 Printable Canvas - Tinggi Menyesuaikan Konten Utuh */
 .a4-page {
     width: 210mm;
-    min-height: auto !important;
+    min-height: 297mm;
+    height: auto !important;
     padding: 12mm 16mm;
     margin: 0 auto;
     background: #ffffff;
     box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     color: #0f172a;
-    overflow: hidden;
 }
 
 /* Container & Page Break Rules for PDF Export */
 .preview-block {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.75rem;
+}
+
+.signature-block {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
 }
 
 /* Explicit Box Style for both HTML Preview & PDF Conversion */
