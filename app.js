@@ -17,9 +17,9 @@ let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, an
 document.addEventListener('DOMContentLoaded', () => {
     // FORCE CLEAR LOCALSTORAGE LAMA AGAR PROFIL & LOGO DEFAULT AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v4_profile_fajar') {
+    if (cacheVersion !== 'v5_speed_optimized') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v4_profile_fajar');
+        localStorage.setItem('satpol_app_version', 'v5_speed_optimized');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -411,6 +411,7 @@ function handleSettingLogoRight(e) {
     }
 }
 
+// Dipercepat dengan skala 1.5 dan kompresi optimal agar proses render instan
 function downloadPDF() {
     const element = document.getElementById('pdfContent');
     const filename = generatePdfFilename();
@@ -418,10 +419,10 @@ function downloadPDF() {
     const opt = {
         margin:       [0, 0, 0, 0],
         filename:     filename,
-        image:        { type: 'png', quality: 1.0 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        image:        { type: 'jpeg', quality: 0.92 },
+        html2canvas:  { scale: 1.5, useCORS: true, logging: false, letterRendering: true },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak:    { mode: ['css', 'legacy'] }
     };
 
     return html2pdf().set(opt).from(element).save();
