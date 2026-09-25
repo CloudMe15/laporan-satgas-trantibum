@@ -1,7 +1,7 @@
 // Direct Link PNG Google Drive Resmi
 const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1CQz4gxA1VCO4hcR7AnlDXeD4FVM6JQMw';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
-const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
+const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=drive_link';
 
 let userProfile = {
     logoLeft: DEFAULT_INHU_DRIVE_URL,
