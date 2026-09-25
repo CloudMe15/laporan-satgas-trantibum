@@ -25,16 +25,17 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Standard A4 Printable Canvas */
+/* Standard A4 Printable Canvas - Dynamic Height agar Halaman Kosong Hilang */
 .a4-page {
     width: 210mm;
-    min-height: 297mm;
-    padding: 16mm 18mm;
+    min-height: auto !important;
+    padding: 12mm 16mm;
     margin: 0 auto;
     background: #ffffff;
     box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     color: #0f172a;
+    overflow: hidden;
 }
 
 /* Container & Page Break Rules for PDF Export */
