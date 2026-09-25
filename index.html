@@ -63,8 +63,8 @@
         .pdf-box {
             background-color: #f8fafc !important;
             border: 1px solid #cbd5e1 !important;
-            border-radius: 0.75rem !important; /* 12px rounded */
-            padding: 0.875rem 1rem !important; /* Spacious inner padding */
+            border-radius: 0.75rem !important;
+            padding: 0.875rem 1rem !important;
             color: #1e293b !important;
             box-sizing: border-box !important;
             width: 100% !important;
@@ -574,7 +574,7 @@
     </footer>
 
     <script>
-        // URL Direct Link Google Drive untuk Kedua Logo
+        // URL Direct Link Google Drive PNG untuk Kedua Logo
         const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1CQz4gxA1VCO4hcR7AnlDXeD4FVM6JQMw';
         const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
 
@@ -791,7 +791,6 @@
             settingsModal.classList.add('hidden');
         }
 
-        /* Helper function to generate clean flex list items inside PDF boxes */
         function createPdfListItem(index, text) {
             const row = document.createElement('div');
             row.className = 'pdf-list-item';
@@ -968,6 +967,7 @@
             }
         }
 
+        /* Konfigurasi Ekspor PDF dengan Rendering Gambar PNG */
         function downloadPDF() {
             const element = document.getElementById('pdfContent');
             const filename = generatePdfFilename();
@@ -975,7 +975,7 @@
             const opt = {
                 margin:       [0, 0, 0, 0],
                 filename:     filename,
-                image:        { type: 'jpeg', quality: 0.98 },
+                image:        { type: 'png', quality: 1.0 }, /* Menggunakan format PNG tajam */
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
