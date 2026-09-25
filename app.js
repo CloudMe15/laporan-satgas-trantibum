@@ -17,9 +17,9 @@ let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, an
 document.addEventListener('DOMContentLoaded', () => {
     // FORCE CLEAR LOCALSTORAGE LAMA AGAR PROFIL & LOGO DEFAULT AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v6_page_flow_fix') {
+    if (cacheVersion !== 'v7_word_margin_fix') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v6_page_flow_fix');
+        localStorage.setItem('satpol_app_version', 'v7_word_margin_fix');
     }
 
     settingsModal = document.getElementById('settingsModal');
