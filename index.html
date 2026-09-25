@@ -3,1067 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Satgas Patroli Trantibum - Satpol PP Kab. Indragiri Hulu</title>
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- html2pdf.js CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+    <title>Surat Resmi Satpol PP INHU</title>
+    <!-- Menghubungkan ke CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0f172a;
-            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), 
-                              url('https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1920&q=80');
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: cover;
-            background-attachment: fixed;
-        }
-
-        /* Glassmorphism Styling */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-
-        .glass-header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        /* Standard A4 Printable Canvas */
-        .a4-page {
+        /* Panel Tombol Download (Khusus untuk tampilan di layar) */
+        .download-panel {
             width: 210mm;
-            min-height: 297mm;
-            padding: 16mm 18mm;
-            margin: 0 auto;
-            background: #ffffff;
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
-            box-sizing: border-box;
-            color: #0f172a;
+            margin: 10px auto;
+            text-align: right;
         }
-
-        /* Avoid cutting elements across A4 page breaks */
-        .preview-block {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
+        .btn-download {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-
-        /* Uniform PDF Box Styling */
-        .pdf-box {
-            background-color: #f8fafc !important;
-            border: 1px solid #cbd5e1 !important;
-            border-radius: 0.75rem !important;
-            padding: 0.875rem 1rem !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
+        .btn-download:hover {
+            background-color: #0056b3;
         }
-
-        /* Strict Flexbox List Layout inside PDF Box */
-        .pdf-list-item {
-            display: flex !important;
-            align-items: flex-start !important;
-            gap: 0.5rem !important;
-            width: 100% !important;
-            word-break: break-word !important;
-        }
-
-        .pdf-list-num {
-            flex-shrink: 0 !important;
-            font-weight: 700 !important;
-            color: #0f172a !important;
-            min-width: 1.25rem !important;
-        }
-
-        .pdf-list-text {
-            flex: 1 1 auto !important;
-            color: #1e293b !important;
-            font-weight: 500 !important;
-            line-height: 1.5 !important;
-        }
-
-        /* Photo Wrapper for A4 Preview */
-        .photo-wrapper {
-            width: 100%;
-            height: 180px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-
-        .photo-wrapper img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* Custom UI Scrollbars */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.1);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(202, 138, 4, 0.5);
-            border-radius: 9999px;
-        }
-
+        /* Sembunyikan tombol saat dicetak/print */
         @media print {
-            body { background: none !important; }
-            .no-print { display: none !important; }
-            .a4-page {
-                box-shadow: none !important;
-                margin: 0 !important;
-                width: 100% !important;
+            .download-panel {
+                display: none;
             }
-            .preview-block, .signature-block {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
             }
         }
     </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between relative selection:bg-amber-500 selection:text-slate-950">
+<body>
 
-    <div class="fixed inset-0 bg-slate-950/40 pointer-events-none z-0"></div>
-
-    <!-- Top Navigation Bar -->
-    <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
-            <div class="flex items-center space-x-3">
-                <div class="flex items-center gap-1.5 bg-white/10 rounded-xl p-1.5 backdrop-blur-md border border-white/20 shadow-inner">
-                    <img id="headerLogoLeft" src="" alt="Indragiri Hulu" class="w-7 h-8 object-contain">
-                    <div class="w-[1px] h-6 bg-white/30"></div>
-                    <img id="headerLogoRight" src="" alt="Satpol PP" class="w-7 h-8 object-contain">
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">
-                        Laporan Satgas Patroli Trantibum
-                    </h1>
-                    <p class="text-[11px] text-amber-400 font-semibold tracking-wider">Satpol PP Kabupaten Indragiri Hulu</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center space-x-2">
-                <button id="btnSettings" class="flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition duration-200 shadow-lg shadow-amber-500/20 active:scale-95">
-                    <i data-lucide="settings" class="w-4 h-4"></i>
-                    <span class="hidden sm:inline">Pengaturan Profil</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        <!-- Mobile View Navigation Tabs -->
-        <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1.5 rounded-2xl backdrop-blur-md mb-2 no-print border border-slate-700/60 shadow-xl">
-            <button id="tabFormBtn" class="flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition">
-                <i data-lucide="edit-3" class="w-4 h-4 inline mr-1"></i> Isi Laporan
-            </button>
-            <button id="tabPreviewBtn" class="flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition">
-                <i data-lucide="eye" class="w-4 h-4 inline mr-1"></i> Pratinjau Dokumen
-            </button>
-        </div>
-
-        <section id="formSection" class="lg:col-span-5 space-y-6 no-print">
-            <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
-                <div class="flex items-center justify-between mb-5 border-b border-slate-200 pb-3">
-                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                        <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600"></i>
-                        Formulir Patroli Trantibum
-                    </h2>
-                    <span class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">Input Data</span>
-                </div>
-
-                <form id="reportForm" class="space-y-4" onsubmit="event.preventDefault();">
-                    <!-- 1. Tanggal Laporan -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-600"></i> 1. Tanggal Laporan
-                        </label>
-                        <input type="date" id="inputTanggal" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none text-sm font-semibold transition shadow-sm">
-                    </div>
-
-                    <!-- 2. Dasar Pelaksanaan & Tambah Lokasi -->
-                    <div>
-                        <div class="flex justify-between items-center mb-1.5">
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-                                <i data-lucide="file-badge" class="w-3.5 h-3.5 text-amber-600"></i> 2. Dasar Pelaksanaan & Lokasi
-                            </label>
-                            <button type="button" id="btnAddLokasi" class="text-xs font-bold text-amber-800 hover:text-amber-950 bg-amber-100 hover:bg-amber-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-amber-300">
-                                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Tambah Lokasi
-                            </button>
-                        </div>
-                        <div class="bg-amber-50/80 p-3 rounded-2xl border border-amber-200/90 shadow-inner space-y-3">
-                            <textarea id="inputDasar" rows="2" placeholder="Dasar Pelaksanaan (Contoh: Surat Tugas Nomor: 094/123/ST-SATPOLPP/2026...)" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
-                            
-                            <!-- Container Dinamis untuk Daftar Lokasi -->
-                            <div class="pt-1 border-t border-amber-200/80">
-                                <label class="block text-[11px] font-bold text-amber-900 uppercase tracking-wider mb-1.5">Daftar Tempat / Lokasi Patroli:</label>
-                                <div id="lokasiList" class="space-y-2">
-                                    <!-- Dynamic Lokasi Inputs -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 3. Uraian Kegiatan Patroli -->
-                    <div>
-                        <div class="flex justify-between items-center mb-1.5">
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-                                <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-600"></i> 3. Hasil Kegiatan Patroli
-                            </label>
-                            <button type="button" id="btnAddHasil" class="text-xs font-bold text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-emerald-300">
-                                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Tambah Poin
-                            </button>
-                        </div>
-                        <div class="bg-emerald-50/80 p-3 rounded-2xl border border-emerald-200/90 shadow-inner">
-                            <div id="hasilList" class="space-y-2">
-                                <!-- Dynamic Point Inputs -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 4. Uraian Kegiatan Patroli -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                            <i data-lucide="activity" class="w-3.5 h-3.5 text-slate-700"></i> 4. Uraian Kegiatan Patroli
-                        </label>
-                        <div class="bg-slate-100/90 p-3 rounded-2xl border border-slate-300/80 shadow-inner">
-                            <textarea id="inputKegiatan" rows="3" placeholder="Deskripsikan rincian pelaksanaan tugas pengawasan dan penertiban..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- 5. Daftar Nama Anggota Satgas -->
-                    <div>
-                        <div class="flex justify-between items-center mb-1.5">
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-                                <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-600"></i> 5. Daftar Nama Anggota Satgas
-                            </label>
-                            <button type="button" id="btnAddAnggota" class="text-xs font-bold text-indigo-700 hover:text-indigo-900 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-indigo-300">
-                                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Tambah Anggota
-                            </button>
-                        </div>
-                        <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200/90 shadow-inner">
-                            <div id="anggotaList" class="space-y-2">
-                                <!-- Dynamic Anggota Inputs -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 6. Foto Dokumentasi (Max 4 Photos) -->
-                    <div>
-                        <div class="flex justify-between items-center mb-1.5">
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-                                <i data-lucide="camera" class="w-3.5 h-3.5 text-amber-600"></i> 6. Foto Dokumentasi
-                            </label>
-                            <span id="photoCount" class="text-[11px] font-bold text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
-                        </div>
-                        <div class="border-2 border-dashed border-indigo-300 hover:border-amber-500 bg-white/90 rounded-2xl p-4 text-center transition cursor-pointer relative group">
-                            <input type="file" id="inputDokumentasi" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                            <div class="flex flex-col items-center justify-center">
-                                <div class="w-10 h-10 bg-indigo-50 text-indigo-600 group-hover:bg-amber-50 group-hover:text-amber-600 rounded-2xl flex items-center justify-center mb-2 transition">
-                                    <i data-lucide="upload-cloud" class="w-5 h-5"></i>
-                                </div>
-                                <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Dokumentasi</p>
-                                <p class="text-[10px] text-slate-500 mt-0.5">Format JPG, PNG (Maksimal 4 foto)</p>
-                            </div>
-                        </div>
-                        <div id="photoPreview" class="grid grid-cols-4 gap-2 mt-3">
-                            <!-- Thumbnails form -->
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </section>
-
-        <!-- PREVIEW & DOCUMENT EXPORT SECTION -->
-        <section id="previewSection" class="lg:col-span-7 hidden lg:block space-y-4">
-            
-            <!-- Action Toolbar Buttons -->
-            <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
-                <div class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                    <span>Pratinjau Dokumen A4</span>
-                </div>
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <button id="btnDownloadPDF" class="flex-1 sm:flex-initial flex items-center justify-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-emerald-600/20 active:scale-95">
-                        <i data-lucide="file-down" class="w-4 h-4"></i>
-                        <span>Download PDF</span>
-                    </button>
-                    <button id="btnUploadDrive" class="flex-1 sm:flex-initial flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-indigo-600/20 active:scale-95">
-                        <i data-lucide="hard-drive" class="w-4 h-4"></i>
-                        <span>Google Drive</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="overflow-x-auto pb-6">
-                <!-- Printable A4 Document Area -->
-                <div id="pdfContent" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
-                    <div>
-                        <!-- Official Dual Logo KOP Surat -->
-                        <div class="flex items-center justify-between border-b-2 border-slate-900 pb-2 mb-1 gap-3">
-                            <div class="w-16 h-20 flex-shrink-0 flex items-center justify-center">
-                                <img id="previewLogoLeft" src="" alt="Logo Indragiri Hulu" class="max-w-full max-h-full object-contain">
-                            </div>
-
-                            <div class="flex-1 text-center px-1">
-                                <h3 class="text-[11px] font-extrabold uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
-                                <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
-                            </div>
-
-                            <div class="w-16 h-20 flex-shrink-0 flex items-center justify-center">
-                                <img id="previewLogoRight" src="" alt="Logo Satpol PP" class="max-w-full max-h-full object-contain">
-                            </div>
-                        </div>
-                        <div class="w-full border-b-4 border-double border-slate-900 mb-4"></div>
-
-                        <div class="text-center mb-4">
-                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN SATGAS PATROLI TRANTIBUM</h1>
-                        </div>
-
-                        <!-- Officer Profile Summary Card -->
-                        <div class="preview-block grid grid-cols-2 gap-2 text-[11px] mb-4 bg-slate-50 p-3 rounded-xl border border-slate-300 shadow-sm">
-                            <div>
-                                <span class="font-semibold text-slate-500 block text-[10px]">Nama Lengkap:</span>
-                                <span id="viewNama" class="font-bold text-slate-900 text-xs">-</span>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-slate-500 block text-[10px]">NIP:</span>
-                                <span id="viewNip" class="font-semibold text-slate-800">-</span>
-                            </div>
-                            <div class="col-span-2 border-t border-slate-200 pt-1.5 mt-0.5">
-                                <span class="font-semibold text-slate-500 block text-[10px]">Jabatan / Unit Kerja:</span>
-                                <span id="viewJabatan" class="font-semibold text-slate-800">-</span>
-                            </div>
-                        </div>
-
-                        <!-- Report Main Content Fields -->
-                        <div class="space-y-3">
-                            <!-- Tanggal -->
-                            <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
-                                <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span>
-                                <span class="text-slate-400">:</span>
-                                <span id="viewTanggal" class="font-bold text-slate-950 text-xs"></span>
-                            </div>
-
-                            <!-- 1. Dasar Pelaksanaan -->
-                            <div class="preview-block">
-                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">1. DASAR PELAKSANAAN</label>
-                                <div id="viewDasar" class="pdf-box text-slate-800 whitespace-pre-line leading-relaxed font-medium">
-                                    -
-                                </div>
-                            </div>
-
-                            <!-- 2. Tempat Pelaksanaan (Multi-Lokasi) -->
-                            <div class="preview-block">
-                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">2. TEMPAT PELAKSANAAN</label>
-                                <div class="pdf-box">
-                                    <div id="viewTempat" class="space-y-1.5">
-                                        <div class="text-slate-400 italic">Belum ada lokasi diisi.</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 3. Hasil Kegiatan Patroli -->
-                            <div class="preview-block">
-                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">3. HASIL KEGIATAN PATROLI</label>
-                                <div class="pdf-box">
-                                    <div id="viewHasil" class="space-y-1.5">
-                                        <div class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 4. Uraian Kegiatan Patroli -->
-                            <div class="preview-block">
-                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">4. URAIAN KEGIATAN PATROLI</label>
-                                <div id="viewKegiatan" class="pdf-box text-slate-800 whitespace-pre-line leading-relaxed font-medium">
-                                    -
-                                </div>
-                            </div>
-
-                            <!-- 5. Daftar Nama Anggota Satgas -->
-                            <div class="preview-block">
-                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">5. DAFTAR NAMA ANGGOTA SATGAS</label>
-                                <div class="pdf-box">
-                                    <div id="viewAnggota" class="space-y-1.5">
-                                        <div class="text-slate-400 italic">Belum ada anggota ditambahkan.</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 6. Foto Dokumentasi Grid -->
-                            <div class="preview-block">
-                                <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">6. DOKUMENTASI FOTO KEGIATAN</label>
-                                <div class="pdf-box">
-                                    <div id="viewDokumentasi" class="grid grid-cols-2 gap-3">
-                                        <div class="col-span-2 text-center text-slate-400 py-6 italic text-[11px]">Tidak ada foto dokumentasi.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Blok Tanda Tangan (Sisi Kanan, Rata Kiri) -->
-                        <div class="signature-block preview-block mt-8 flex justify-end">
-                            <div class="text-left text-slate-900 text-[11px] leading-snug">
-                                <p>Mengetahui,</p>
-                                <p id="viewTanggalTtd" class="font-medium">Rengat, -</p>
-                                <p class="font-bold mt-1">Kepala Bidang Operasi dan Pengamanan</p>
-                                
-                                <!-- Space Tanda Tangan -->
-                                <div class="h-20"></div>
-                                
-                                <!-- Nama Pejabat -->
-                                <p class="font-extrabold underline tracking-wide text-xs whitespace-nowrap">JAWALTER SITUMORANG, S.Pd, M.Pd, M.I.Kom</p>
-                                <p class="font-semibold text-[10px] mt-0.5">NIP. 19700415 199702 1 002</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- SETTINGS MODAL -->
-    <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in duration-200">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                    <i data-lucide="sliders" class="w-5 h-5 text-amber-600"></i>
-                    Pengaturan Profil & Dual Logo
-                </h3>
-                <button id="btnCloseSettings" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <form id="settingsForm" class="space-y-4" onsubmit="event.preventDefault();">
-                <!-- Logo Indragiri Hulu (Left) -->
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block text-xs font-bold text-slate-700">Logo Kiri (Indragiri Hulu)</label>
-                        <button type="button" id="btnResetLogoLeft" class="text-[10px] text-emerald-600 hover:text-emerald-800 font-bold underline">Reset Logo Kiri</button>
-                    </div>
-                    <div class="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
-                        <div class="w-12 h-12 rounded-xl border bg-white flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm p-1">
-                            <img id="settingLogoLeftPreview" src="" class="max-w-full max-h-full object-contain">
-                        </div>
-                        <div class="flex-1 space-y-1">
-                            <input type="file" id="inputSettingLogoLeft" accept="image/*" class="text-[11px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Logo Satpol PP (Right) -->
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block text-xs font-bold text-slate-700">Logo Kanan (Satpol PP)</label>
-                        <button type="button" id="btnResetLogoRight" class="text-[10px] text-indigo-600 hover:text-indigo-800 font-bold underline">Reset Logo Kanan</button>
-                    </div>
-                    <div class="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
-                        <div class="w-12 h-12 rounded-xl border bg-white flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm p-1">
-                            <img id="settingLogoRightPreview" src="" class="max-w-full max-h-full object-contain">
-                        </div>
-                        <div class="flex-1 space-y-1">
-                            <input type="file" id="inputSettingLogoRight" accept="image/*" class="text-[11px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Reset Both Logos Button -->
-                <div class="text-center pt-1">
-                    <button type="button" id="btnResetBothLogos" class="w-full py-1.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition border border-slate-300">
-                        Reset Kedua Logo ke Default
-                    </button>
-                </div>
-
-                <!-- Nama Lengkap -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
-                    <input type="text" id="inputSettingNama" placeholder="Contoh: Rahmat Santoso, S.STP" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
-                </div>
-
-                <!-- NIP VALIDASI 18 DIGIT ANGKA -->
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block text-xs font-bold text-slate-700">NIP / ID Pegawai</label>
-                        <span id="nipCounter" class="text-[10px] font-bold text-slate-500">0 / 18 Digit</span>
-                    </div>
-                    <input type="text" id="inputSettingNip" maxlength="18" placeholder="18 digit angka (Contoh: 198506152008011002)" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold tracking-wider">
-                    <p id="nipError" class="text-[10px] text-red-500 mt-1 hidden font-semibold">NIP harus terdiri dari 18 digit angka!</p>
-                </div>
-
-                <!-- Jabatan -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Jabatan / Unit Kerja</label>
-                    <input type="text" id="inputSettingJabatan" placeholder="Jabatan / Posisi Petugas" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
-                </div>
-
-                <!-- Modal Action Buttons -->
-                <div class="flex justify-end gap-2 pt-3 border-t">
-                    <button type="button" id="btnCancelSettings" class="px-4 py-2 border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 transition">
-                        Batal
-                    </button>
-                    <button type="button" id="btnSaveSettings" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-xl text-xs transition shadow-md shadow-amber-500/20">
-                        Simpan Pengaturan
-                    </button>
-                </div>
-            </form>
-        </div>
+    <!-- Tombol untuk Mengunduh File CSS -->
+    <div class="download-panel">
+        <button class="btn-download" onclick="downloadCSS()">⬇ Download File CSS (style.css)</button>
     </div>
 
-    <!-- GOOGLE DRIVE INSTRUCTION MODAL -->
-    <div id="driveNoticeModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4 text-center">
-            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto">
-                <i data-lucide="hard-drive" class="w-6 h-6"></i>
+    <div class="container">
+        <!-- Kop Surat -->
+        <div class="header">
+            <!-- Logo Kiri: Logo Kabupaten INHU -->
+            <img class="logo" src="https://lh3.googleusercontent.com/d/1CQz4gxA1VCO4hcR7AnlDXeD4FVM6JQMw" alt="Logo Kabupaten INHU">
+            
+            <!-- Teks Kop Surat -->
+            <div class="header-text">
+                <h2>PEMERINTAH KABUPATEN INDRAGIRI HULU</h2>
+                <h3>SATUAN POLISI PAMONG PRAJA</h3>
+                <p>Jl. Jenderal Sudirman No. 1, Rengat, Kabupaten Indragiri Hulu, Riau</p>
+                <p>Website: inhukab.go.id | Email: satpolpp@inhukab.go.id</p>
             </div>
-            <h3 class="text-base font-extrabold text-slate-900">Petunjuk Upload Google Drive</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">
-                File PDF laporan Anda telah diunduh dengan nama:<br>
-                <strong id="driveFilenameLabel" class="text-indigo-700 font-bold block mt-1 bg-indigo-50 p-2 rounded-xl border border-indigo-100 break-all">Laporan_Satgas_Patroli_Trantibum.pdf</strong>
-            </p>
-            <p class="text-xs text-slate-500 leading-relaxed">
-                Folder Google Drive telah dibuka di tab baru. Silahkan pilih/seret file PDF yang terunduh tersebut untuk diunggah ke folder Drive Anda.
-            </p>
-            <div class="pt-2">
-                <button id="btnCloseDriveNotice" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-indigo-600/20">
-                    Mengerti & Lanjutkan
-                </button>
-            </div>
+
+            <!-- Logo Kanan: Logo Satpol PP -->
+            <img class="logo" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" alt="Logo Satpol PP">
         </div>
+
+        <!-- Isi Dokumen / Surat -->
+
     </div>
 
-    <!-- COPYRIGHT FOOTER -->
-    <footer class="relative z-10 w-full py-4 text-center text-xs text-slate-200 font-semibold no-print bg-slate-950/90 backdrop-blur-md border-t border-slate-800/80 mt-auto shadow-2xl">
-        <div class="max-w-7xl mx-auto px-4">
-            CloudMe - Bag. Program Satuan Polisi Pamong Praja - 2026
-        </div>
-    </footer>
-
+    <!-- Script JavaScript untuk Fitur Download CSS -->
     <script>
-        // Direct Base64 PNG Images from provided files
-        const DEFAULT_INHU_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA4AAAAOECAYAAACpW82UAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAIABJREFUeJzs3Xd4VGX2P/DPmZn03gkhCSEhhA6hd0QRFUFBpInSRLqIgAUVO6IggqIoiCggXUQUKaKASBNBuiiEkkCoSQghfWbm/f2x7/3N2x33vffOfO/38zzvP3S4p3LOnJyc88m3fR+f35/I0NDQ0NDQ0PDfI/sP34Choc8I53A42iA/f/5f2mho+A43vF4v8vPz/8qIhoaGrzI0NDQ0/LfhH3pE3vG4vH6/3/I3NDS+H5ubm5Geno7i4mI4HA4/vV5DQ0ND498pNDT0p9E3/Hf9fv8ffyX8jY23A4vX4A234bfm/y14vV7/D13/XfA33A3N1e4vXwA/2j8v/7o6XoI5Efkj/7oA/pDfy4e3X7h4eE/vR0v+O3/4+353wR/8353eXj5A3y92/H/+wzXq6fhgL/L5fXb2/E/+wzXp4fgjXy5f3sA/S3501pA/tEfg3y3f9d/p4/Xj/x/vd/5+/2ePl79uPz/D9er5+GBvI6XyOf1f/v/26e38X/zEfkj38/X4S/f6fv5f/sM1+vl+f9fAnwN/t/2cPr31/y/H8e/x/m//Vj+vx73f0/Xn6fbf/2fX33+uPx//b3+3T5ef/I++f+3L/evv3y8/m1/9f/+s//bfz39O3t16+Gfn/D/6/ve9v/27fb9/4fXfxtv/Xz+X1/9v/v8cf/x3/L29P/+u/739Ofu28eXz/L/v595+vD9eL/+P34v3391+OP+29//d/+e3l6+/f0+3P6+X97/ff3/O/4bvr/l7/3f+D+/3f9e/3X9v/+3//39O3f5ffX1/+8433/b//fX5+/9f///933fL5+3j+enqf///z4/X/8P14/X36f338e3h1///v/u8ffPj9ff979vbz5e317//4/Xv9v/9f//7/u/Xz6f3r/ff9+/
-[TRUNCATED_BASE64_FOR_PREVIEW]
-';
-
-        const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
-
-        let userProfile = {
-            logoLeft: DEFAULT_INHU_PNG,
-            logoRight: DEFAULT_SATPOL_PP_PNG,
-            nama: 'Rahmat Santoso, S.STP',
-            nip: '198506152008011002',
-            jabatan: 'Komandan Regu Satgas Patroli Trantibum'
-        };
-
-        let uploadedPhotos = [];
-
-        const settingsModal = document.getElementById('settingsModal');
-        const driveNoticeModal = document.getElementById('driveNoticeModal');
-        const lokasiListContainer = document.getElementById('lokasiList');
-        const hasilListContainer = document.getElementById('hasilList');
-        const anggotaListContainer = document.getElementById('anggotaList');
-        const inputNip = document.getElementById('inputSettingNip');
-
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            loadSettings();
-            initDefaultDate();
-            addLokasiInput();
-            addHasilInput();
-            addAnggotaInput();
-            bindEvents();
-            updatePreview();
-        });
-
-        function initDefaultDate() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('inputTanggal').value = today;
-        }
-
-        function generatePdfFilename() {
-            const rawNama = userProfile.nama || 'Petugas';
-            const cleanNama = rawNama.trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '');
-            const rawDate = document.getElementById('inputTanggal').value || new Date().toISOString().split('T')[0];
-            
-            return `Laporan_Satgas_Patroli_Trantibum_${cleanNama}_${rawDate}.pdf`;
-        }
-
-        function formatIndonesianDate(dateStr) {
-            if (!dateStr) return '-';
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('id-ID', options);
-        }
-
-        function formatIndonesianDateShort(dateStr) {
-            if (!dateStr) return '-';
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('id-ID', options);
-        }
-
-        function addLokasiInput(value = '') {
-            const div = document.createElement('div');
-            div.className = 'flex items-center gap-2 class-lokasi-item';
-            div.innerHTML = `
-                <span class="text-xs font-bold text-slate-400 w-4 text-center lokasi-index">1.</span>
-                <input type="text" value="${value}" placeholder="Tempat / Lokasi Patroli..." class="input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
-                <button type="button" class="btn-remove-lokasi text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-            `;
-            lokasiListContainer.appendChild(div);
-            lucide.createIcons();
-            updateLokasiIndexes();
-
-            div.querySelector('.input-lokasi').addEventListener('input', updatePreview);
-            div.querySelector('.btn-remove-lokasi').addEventListener('click', () => {
-                if (lokasiListContainer.children.length > 1) {
-                    div.remove();
-                    updateLokasiIndexes();
-                    updatePreview();
-                }
-            });
-        }
-
-        function updateLokasiIndexes() {
-            const items = lokasiListContainer.querySelectorAll('.class-lokasi-item');
-            items.forEach((item, index) => {
-                item.querySelector('.lokasi-index').textContent = `${index + 1}.`;
-            });
-        }
-
-        function addHasilInput(value = '') {
-            const div = document.createElement('div');
-            div.className = 'flex items-center gap-2 class-hasil-item';
-            div.innerHTML = `
-                <span class="text-xs font-bold text-slate-400 w-4 text-center item-index">1.</span>
-                <input type="text" value="${value}" placeholder="Tuliskan poin hasil patroli..." class="input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
-                <button type="button" class="btn-remove-hasil text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-            `;
-            hasilListContainer.appendChild(div);
-            lucide.createIcons();
-            updateHasilIndexes();
-
-            div.querySelector('.input-hasil').addEventListener('input', updatePreview);
-            div.querySelector('.btn-remove-hasil').addEventListener('click', () => {
-                if (hasilListContainer.children.length > 1) {
-                    div.remove();
-                    updateHasilIndexes();
-                    updatePreview();
-                }
-            });
-        }
-
-        function updateHasilIndexes() {
-            const items = hasilListContainer.querySelectorAll('.class-hasil-item');
-            items.forEach((item, index) => {
-                item.querySelector('.item-index').textContent = `${index + 1}.`;
-            });
-        }
-
-        function addAnggotaInput(value = '') {
-            const div = document.createElement('div');
-            div.className = 'flex items-center gap-2 class-anggota-item';
-            div.innerHTML = `
-                <span class="text-xs font-bold text-slate-400 w-4 text-center anggota-index">1.</span>
-                <input type="text" value="${value}" placeholder="Tuliskan nama lengkap anggota..." class="input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
-                <button type="button" class="btn-remove-anggota text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-            `;
-            anggotaListContainer.appendChild(div);
-            lucide.createIcons();
-            updateAnggotaIndexes();
-
-            div.querySelector('.input-anggota').addEventListener('input', updatePreview);
-            div.querySelector('.btn-remove-anggota').addEventListener('click', () => {
-                if (anggotaListContainer.children.length > 1) {
-                    div.remove();
-                    updateAnggotaIndexes();
-                    updatePreview();
-                }
-            });
-        }
-
-        function updateAnggotaIndexes() {
-            const items = anggotaListContainer.querySelectorAll('.class-anggota-item');
-            items.forEach((item, index) => {
-                item.querySelector('.anggota-index').textContent = `${index + 1}.`;
-            });
-        }
-
-        function loadSettings() {
-            const saved = localStorage.getItem('satpolpp_inhu_trantibum_profile');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    userProfile = { ...userProfile, ...parsed };
-                } catch(e) {}
-            }
-            if (!userProfile.logoLeft) userProfile.logoLeft = DEFAULT_INHU_PNG;
-            if (!userProfile.logoRight) userProfile.logoRight = DEFAULT_SATPOL_PP_PNG;
-            applyUserProfileUI();
-        }
-
-        function applyUserProfileUI() {
-            document.getElementById('viewNama').textContent = userProfile.nama || '-';
-            
-            const cleanNip = userProfile.nip ? userProfile.nip.replace(/\D/g, '') : '';
-            document.getElementById('viewNip').textContent = cleanNip.length === 18 ? `NIP. ${cleanNip}` : (cleanNip ? `NIP. ${cleanNip}` : '-');
-            document.getElementById('viewJabatan').textContent = userProfile.jabatan || '-';
-
-            const logoLeft = userProfile.logoLeft || DEFAULT_INHU_PNG;
-            const logoRight = userProfile.logoRight || DEFAULT_SATPOL_PP_PNG;
-
-            document.getElementById('headerLogoLeft').src = logoLeft;
-            document.getElementById('headerLogoRight').src = logoRight;
-
-            document.getElementById('previewLogoLeft').src = logoLeft;
-            document.getElementById('previewLogoRight').src = logoRight;
-
-            document.getElementById('settingLogoLeftPreview').src = logoLeft;
-            document.getElementById('settingLogoRightPreview').src = logoRight;
-
-            document.getElementById('inputSettingNama').value = userProfile.nama || '';
-            inputNip.value = cleanNip;
-            document.getElementById('inputSettingJabatan').value = userProfile.jabatan || '';
-            
-            updateNipCounter();
-        }
-
-        function updateNipCounter() {
-            const currentLen = inputNip.value.length;
-            document.getElementById('nipCounter').textContent = `${currentLen} / 18 Digit`;
-        }
-
-        function saveSettings() {
-            const nipVal = inputNip.value.trim();
-            if (nipVal && nipVal.length !== 18) {
-                document.getElementById('nipError').classList.remove('hidden');
-                return;
-            } else {
-                document.getElementById('nipError').classList.add('hidden');
-            }
-
-            userProfile.nama = document.getElementById('inputSettingNama').value.trim();
-            userProfile.nip = nipVal;
-            userProfile.jabatan = document.getElementById('inputSettingJabatan').value.trim();
-
-            localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-            applyUserProfileUI();
-            updatePreview();
-            settingsModal.classList.add('hidden');
-        }
-
-        function updatePreview() {
-            const rawDate = document.getElementById('inputTanggal').value;
-            document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
-            document.getElementById('viewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
-
-            const dasarVal = document.getElementById('inputDasar').value.trim();
-            document.getElementById('viewDasar').textContent = dasarVal || '-';
-
-            // Render Multi-Lokasi Patroli (Nomor 2)
-            const viewTempat = document.getElementById('viewTempat');
-            viewTempat.innerHTML = '';
-            const lokasiInputs = document.querySelectorAll('.input-lokasi');
-            let hasLokasi = false;
-            let lokasiCounter = 1;
-
-            lokasiInputs.forEach(input => {
-                const val = input.value.trim();
-                if (val) {
-                    hasLokasi = true;
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'pdf-list-item';
-                    itemDiv.innerHTML = `
-                        <span class="pdf-list-num">${lokasiCounter}.</span>
-                        <span class="pdf-list-text">${val}</span>
-                    `;
-                    viewTempat.appendChild(itemDiv);
-                    lokasiCounter++;
-                }
-            });
-
-            if (!hasLokasi) {
-                viewTempat.innerHTML = '<div class="text-slate-400 italic">Belum ada lokasi diisi.</div>';
-            }
-
-            const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
-            document.getElementById('viewKegiatan').textContent = kegiatanVal || '-';
-
-            const viewHasil = document.getElementById('viewHasil');
-            viewHasil.innerHTML = '';
-            const hasilInputs = document.querySelectorAll('.input-hasil');
-            let hasHasil = false;
-            let hasilCounter = 1;
-
-            hasilInputs.forEach(input => {
-                const val = input.value.trim();
-                if (val) {
-                    hasHasil = true;
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'pdf-list-item';
-                    itemDiv.innerHTML = `
-                        <span class="pdf-list-num">${hasilCounter}.</span>
-                        <span class="pdf-list-text">${val}</span>
-                    `;
-                    viewHasil.appendChild(itemDiv);
-                    hasilCounter++;
-                }
-            });
-
-            if (!hasHasil) {
-                viewHasil.innerHTML = '<div class="text-slate-400 italic">Belum ada hasil kegiatan diketik.</div>';
-            }
-
-            const viewAnggota = document.getElementById('viewAnggota');
-            viewAnggota.innerHTML = '';
-            const anggotaInputs = document.querySelectorAll('.input-anggota');
-            let hasAnggota = false;
-            let anggotaCounter = 1;
-
-            anggotaInputs.forEach(input => {
-                const val = input.value.trim();
-                if (val) {
-                    hasAnggota = true;
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'pdf-list-item';
-                    itemDiv.innerHTML = `
-                        <span class="pdf-list-num">${anggotaCounter}.</span>
-                        <span class="pdf-list-text">${val}</span>
-                    `;
-                    viewAnggota.appendChild(itemDiv);
-                    anggotaCounter++;
-                }
-            });
-
-            if (!hasAnggota) {
-                viewAnggota.innerHTML = '<div class="text-slate-400 italic">Belum ada anggota ditambahkan.</div>';
-            }
-
-            renderPhotoPreview();
-        }
-
-        function renderPhotoPreview() {
-            const container = document.getElementById('photoPreview');
-            const viewContainer = document.getElementById('viewDokumentasi');
-            const countLabel = document.getElementById('photoCount');
-            
-            container.innerHTML = '';
-            viewContainer.innerHTML = '';
-            countLabel.textContent = `${uploadedPhotos.length} / 4 Foto`;
-
-            if (uploadedPhotos.length === 0) {
-                viewContainer.innerHTML = '<div class="col-span-2 text-center text-slate-400 py-6 italic text-[11px]">Tidak ada foto dokumentasi.</div>';
-                return;
-            }
-
-            uploadedPhotos.forEach((src, idx) => {
-                const thumb = document.createElement('div');
-                thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
-                thumb.innerHTML = `
-                    <img src="${src}" class="w-full h-full object-cover">
-                    <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
-                        <i data-lucide="x" class="w-3 h-3"></i>
-                    </button>
-                `;
-                container.appendChild(thumb);
-
-                const pdfCard = document.createElement('div');
-                pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm';
-                pdfCard.innerHTML = `
-                    <div class="photo-wrapper">
-                        <img src="${src}" alt="Dokumentasi ${idx + 1}">
-                    </div>
-                    <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
-                `;
-                viewContainer.appendChild(pdfCard);
-            });
-
-            lucide.createIcons();
-        }
-
-        window.removePhoto = function(index) {
-            uploadedPhotos.splice(index, 1);
-            renderPhotoPreview();
-        };
-
-        function handlePhotoUpload(e) {
-            const files = Array.from(e.target.files);
-            if (uploadedPhotos.length + files.length > 4) {
-                alert('Maksimal foto dokumentasi adalah 4 foto!');
-                return;
-            }
-
-            files.forEach(file => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        if (uploadedPhotos.length < 4) {
-                            uploadedPhotos.push(event.target.result);
-                            renderPhotoPreview();
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-            e.target.value = '';
-        }
-
-        function handleSettingLogoLeft(e) {
-            const file = e.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    userProfile.logoLeft = event.target.result;
-                    document.getElementById('settingLogoLeftPreview').src = userProfile.logoLeft;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function handleSettingLogoRight(e) {
-            const file = e.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    userProfile.logoRight = event.target.result;
-                    document.getElementById('settingLogoRightPreview').src = userProfile.logoRight;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function downloadPDF() {
-            const element = document.getElementById('pdfContent');
-            const filename = generatePdfFilename();
-            
-            const opt = {
-                margin:       [10, 10, 10, 10],
-                filename:     filename,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
-            };
-
-            return html2pdf().set(opt).from(element).save();
-        }
-
-        function uploadToGoogleDrive() {
-            const filename = generatePdfFilename();
-            document.getElementById('driveFilenameLabel').textContent = filename;
-
-            downloadPDF();
-            window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
-            driveNoticeModal.classList.remove('hidden');
-        }
-
-        function bindEvents() {
-            document.getElementById('inputTanggal').addEventListener('input', updatePreview);
-            document.getElementById('inputDasar').addEventListener('input', updatePreview);
-            document.getElementById('btnAddLokasi').addEventListener('click', () => addLokasiInput());
-            document.getElementById('inputKegiatan').addEventListener('input', updatePreview);
-            document.getElementById('btnAddHasil').addEventListener('click', () => addHasilInput());
-            document.getElementById('btnAddAnggota').addEventListener('click', () => addAnggotaInput());
-            document.getElementById('inputDokumentasi').addEventListener('change', handlePhotoUpload);
-
-            inputNip.addEventListener('input', (e) => {
-                e.target.value = e.target.value.replace(/\D/g, '');
-                updateNipCounter();
-                if (e.target.value.length === 18) {
-                    document.getElementById('nipError').classList.add('hidden');
-                }
-            });
-
-            document.getElementById('btnSettings').addEventListener('click', () => {
-                applyUserProfileUI();
-                settingsModal.classList.remove('hidden');
-            });
-            document.getElementById('btnCloseSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
-            document.getElementById('btnCancelSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
-            document.getElementById('btnSaveSettings').addEventListener('click', saveSettings);
-            
-            document.getElementById('inputSettingLogoLeft').addEventListener('change', handleSettingLogoLeft);
-            document.getElementById('inputSettingLogoRight').addEventListener('change', handleSettingLogoRight);
-            
-            document.getElementById('btnResetLogoLeft').addEventListener('click', () => {
-                userProfile.logoLeft = DEFAULT_INHU_PNG;
-                document.getElementById('inputSettingLogoLeft').value = '';
-                document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_PNG;
-                localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-                applyUserProfileUI();
-            });
-
-            document.getElementById('btnResetLogoRight').addEventListener('click', () => {
-                userProfile.logoRight = DEFAULT_SATPOL_PP_PNG;
-                document.getElementById('inputSettingLogoRight').value = '';
-                document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_PNG;
-                localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-                applyUserProfileUI();
-            });
-
-            document.getElementById('btnResetBothLogos').addEventListener('click', () => {
-                userProfile.logoLeft = DEFAULT_INHU_PNG;
-                userProfile.logoRight = DEFAULT_SATPOL_PP_PNG;
-                document.getElementById('inputSettingLogoLeft').value = '';
-                document.getElementById('inputSettingLogoRight').value = '';
-                document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_PNG;
-                document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_PNG;
-                localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-                applyUserProfileUI();
-            });
-
-            document.getElementById('btnCloseDriveNotice').addEventListener('click', () => {
-                driveNoticeModal.classList.add('hidden');
-            });
-
-            document.getElementById('btnDownloadPDF').addEventListener('click', downloadPDF);
-            document.getElementById('btnUploadDrive').addEventListener('click', uploadToGoogleDrive);
-
-            const tabFormBtn = document.getElementById('tabFormBtn');
-            const tabPreviewBtn = document.getElementById('tabPreviewBtn');
-            const formSection = document.getElementById('formSection');
-            const previewSection = document.getElementById('previewSection');
-
-            tabFormBtn.addEventListener('click', () => {
-                formSection.classList.remove('hidden');
-                previewSection.classList.add('hidden');
-                tabFormBtn.className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
-                tabPreviewBtn.className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
-            });
-
-            tabPreviewBtn.addEventListener('click', () => {
-                previewSection.classList.remove('hidden');
-                formSection.classList.add('hidden');
-                tabPreviewBtn.className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
-                tabFormBtn.className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
-            });
+        function downloadCSS() {
+            // Teks kode CSS yang akan diunduh
+            const cssContent = `body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: auto;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Ukuran dan Tata Letak Kop Surat */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid #000;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* Pengaturan Ukuran Logo */
+.logo {
+    width: 80px;        /* Atur lebar logo sesuai kebutuhan */
+    height: auto;       /* Menjaga rasio agar logo tidak gepeng */
+    object-fit: contain;
+}
+
+.header-text {
+    text-align: center;
+    flex-grow: 1;
+    padding: 0 15px;
+}
+
+.header-text h2 {
+    margin: 0;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.header-text h3 {
+    margin: 0;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.header-text p {
+    margin: 2px 0;
+    font-size: 8.5pt;
+}`;
+
+            // Proses membuat file dan mengunduhnya secara otomatis
+            const blob = new Blob([cssContent], { type: 'text/css' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'style.css';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
