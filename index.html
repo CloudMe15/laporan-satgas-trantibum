@@ -43,6 +43,7 @@
         /* Standard A4 Printable Canvas */
         .a4-page {
             width: 210mm;
+            max-width: 100%;
             min-height: 297mm;
             padding: 12mm 15mm;
             margin: 0 auto;
@@ -282,7 +283,7 @@
                 </div>
             </div>
 
-            <div class="overflow-x-auto pb-6">
+            <div class="overflow-x-auto pb-6 flex justify-center">
                 <!-- Printable A4 Document Area -->
                 <div id="pdfContent" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
                     <div>
@@ -1006,7 +1007,9 @@
                     scale: 2, 
                     useCORS: true, 
                     scrollY: 0, 
-                    windowWidth: 1200 
+                    x: 0,
+                    y: 0,
+                    windowWidth: element.scrollWidth
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
