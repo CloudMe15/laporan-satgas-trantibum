@@ -161,9 +161,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
             <div class="flex items-center space-x-3">
                 <div class="flex items-center gap-1.5 bg-white/10 rounded-xl p-1.5 backdrop-blur-md border border-white/20 shadow-inner">
-                    <img id="headerLogoLeft" src="" alt="Indragiri Hulu" class="w-7 h-7 object-contain">
+                    <img id="headerLogoLeft" src="https://lh3.googleusercontent.com/d/1CQz4gxA1VCO4hcR7AnlDXeD4FVM6JQMw" alt="Indragiri Hulu" class="w-7 h-7 object-contain">
                     <div class="w-[1px] h-6 bg-white/30"></div>
-                    <img id="headerLogoRight" src="" alt="Satpol PP" class="w-7 h-7 object-contain">
+                    <img id="headerLogoRight" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" alt="Satpol PP" class="w-7 h-7 object-contain">
                 </div>
                 <div>
                     <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">
@@ -335,7 +335,7 @@
                         <!-- Official Dual Logo KOP Surat -->
                         <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
                             <div class="w-16 h-20 flex-shrink-0 flex items-center justify-center">
-                                <img id="previewLogoLeft" src="" alt="Logo Indragiri Hulu" class="max-w-full max-h-full object-contain">
+                                <img id="previewLogoLeft" src="https://lh3.googleusercontent.com/d/1CQz4gxA1VCO4hcR7AnlDXeD4FVM6JQMw" alt="Logo Indragiri Hulu" class="max-w-full max-h-full object-contain">
                             </div>
 
                             <div class="flex-1 text-center px-1">
@@ -346,7 +346,7 @@
                             </div>
 
                             <div class="w-16 h-20 flex-shrink-0 flex items-center justify-center">
-                                <img id="previewLogoRight" src="" alt="Logo Satpol PP" class="max-w-full max-h-full object-contain">
+                                <img id="previewLogoRight" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" alt="Logo Satpol PP" class="max-w-full max-h-full object-contain">
                             </div>
                         </div>
 
@@ -967,7 +967,7 @@
             }
         }
 
-        /* Konfigurasi Ekspor PDF dengan Rendering Gambar PNG */
+        /* Ekspor PDF dengan Rendering PNG Transparan dan Tajam */
         function downloadPDF() {
             const element = document.getElementById('pdfContent');
             const filename = generatePdfFilename();
@@ -975,7 +975,7 @@
             const opt = {
                 margin:       [0, 0, 0, 0],
                 filename:     filename,
-                image:        { type: 'png', quality: 1.0 }, /* Menggunakan format PNG tajam */
+                image:        { type: 'png', quality: 1.0 },
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
