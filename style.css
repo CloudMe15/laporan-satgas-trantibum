@@ -166,3 +166,9 @@ body {
         white-space: nowrap !important;
     }
 }
+/* Perbaikan khusus untuk menghilangkan latar belakang putih di luar lambang Logo Inhu */
+img[src*="logo-inhu.png"], .logo-inhu {
+    background: transparent !important;
+    background-color: transparent !important;
+    object-fit: contain;
+}
