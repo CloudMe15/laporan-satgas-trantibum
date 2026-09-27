@@ -1,5 +1,5 @@
-// Direct Link PNG Google Drive Resmi
-const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1CQz4gxA1VCO4hcR7AnlDXeD4FVM6JQMw';
+// Direct Link PNG Google Drive Resmi (Diperbarui dengan link terbaru)
+const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=drive_link';
 
@@ -15,11 +15,11 @@ let uploadedPhotos = [];
 let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, anggotaListContainer, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // FORCE CLEAR LOCALSTORAGE LAMA AGAR PROFIL & LOGO DEFAULT AKTIF
+    // FORCE CLEAR LOCALSTORAGE AGAR CACHE LAMA DI GITHUB PAGES TER-RESET TOTAL
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v8_word_pagination_fix') {
+    if (cacheVersion !== 'v9_logo_refresh_fix') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v8_word_pagination_fix');
+        localStorage.setItem('satpol_app_version', 'v9_logo_refresh_fix');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -411,7 +411,6 @@ function handleSettingLogoRight(e) {
     }
 }
 
-// Dipercepat dengan skala 1.5 agar proses unduh instan dan mulus
 function downloadPDF() {
     const element = document.getElementById('pdfContent');
     const filename = generatePdfFilename();
