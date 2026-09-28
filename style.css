@@ -25,13 +25,12 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Mengatur kotak latar belakang logo menjadi putih bersih, sudut melengkung, dan berbayangan */
+/* Menghapus latar belakang kotak-kotak dan membuat logo tampil bersih */
 #headerLogoLeft, #headerLogoRight, #previewLogoLeft, #previewLogoRight, #settingLogoLeftPreview, #settingLogoRightPreview {
-    background-color: #ffffff !important;
-    padding: 6px !important;
-    border-radius: 12px !important;
-    border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
     object-fit: contain !important;
 }
 
@@ -96,7 +95,7 @@ body {
 .pdf-list-num {
     font-weight: 700 !important;
     color: #475569 !important;
-    min-width: 1.25rem !important;
+-width: 1.25rem !important;
     flex-shrink: 0 !important;
     text-align: left !important;
 }
