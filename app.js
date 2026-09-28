@@ -1,5 +1,5 @@
-// Direct Link PNG Google Drive Resmi
-const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1CQz4gxA1VCO4hcR7AnlDXeD4FVM6JQMw';
+// Link Logo Inhu Baru & Logo Satpol PP
+const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1jRc4ntpi6JSHVaG9jZ3qpYMTiJTpcO8q';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
 
@@ -17,9 +17,9 @@ let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, an
 document.addEventListener('DOMContentLoaded', () => {
     // FORCE CLEAR LOCALSTORAGE LAMA AGAR PROFIL & LOGO DEFAULT AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v8_word_pagination_fix') {
+    if (cacheVersion !== 'v10_new_inhu_logo') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v8_word_pagination_fix');
+        localStorage.setItem('satpol_app_version', 'v10_new_inhu_logo');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -411,7 +411,6 @@ function handleSettingLogoRight(e) {
     }
 }
 
-// Dipercepat dengan skala 1.5 agar proses unduh instan dan mulus
 function downloadPDF() {
     const element = document.getElementById('pdfContent');
     const filename = generatePdfFilename();
@@ -462,23 +461,16 @@ function bindEvents() {
     document.getElementById('btnCancelSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
     document.getElementById('btnSaveSettings').addEventListener('click', saveSettings);
 
-    document.getElementById('inputSettingLogoLeft').addEventListener('change', handleSettingLogoLeft);
-    document.getElementById('inputSettingLogoRight').addEventListener('change', handleSettingLogoRight);
-
     document.getElementById('btnResetLogoLeft').addEventListener('click', () => {
         userProfile.logoLeft = DEFAULT_INHU_DRIVE_URL;
         document.getElementById('inputSettingLogoLeft').value = '';
         document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_DRIVE_URL;
-        localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-        applyUserProfileUI();
     });
 
     document.getElementById('btnResetLogoRight').addEventListener('click', () => {
         userProfile.logoRight = DEFAULT_SATPOL_PP_DRIVE_URL;
         document.getElementById('inputSettingLogoRight').value = '';
         document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-        localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-        applyUserProfileUI();
     });
 
     document.getElementById('btnResetBothLogos').addEventListener('click', () => {
@@ -488,8 +480,6 @@ function bindEvents() {
         document.getElementById('inputSettingLogoRight').value = '';
         document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_DRIVE_URL;
         document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-        localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-        applyUserProfileUI();
     });
 
     document.getElementById('btnCloseDriveNotice').addEventListener('click', () => {
