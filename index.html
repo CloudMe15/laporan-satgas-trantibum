@@ -45,7 +45,7 @@
         <!-- KONTEN UTAMA DI SEBELAH KANAN -->
         <div class="main-content-wrapper flex-1 flex flex-col justify-between">
             
-            <!-- VIEW 1: SiLAHAPP -->
+            <!-- ================= VIEW 1: SILAHAPP ================= -->
             <div id="view-silahapp" class="app-view active-view flex-1 flex flex-col">
                 <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
@@ -81,7 +81,7 @@
                         </button>
                     </div>
 
-                    <!-- FORM INPUT SECTION -->
+                    <!-- FORM INPUT SILAHAPP -->
                     <section id="formSection" class="lg:col-span-5 space-y-6 no-print">
                         <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
                             <div class="flex items-center justify-between mb-5 border-b border-slate-200 pb-3">
@@ -142,25 +142,19 @@
                                     </div>
                                 </div>
 
-                                <!-- 5. Foto Anggota / Personil -->
+                                <!-- 5. Daftar Nama Anggota Satgas (Sesuai Semula / Text Input) -->
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-                                            <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-600"></i> 5. Foto Anggota Satgas
+                                            <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-600"></i> 5. Daftar Nama Anggota Satgas
                                         </label>
-                                        <span id="anggotaPhotoCount" class="text-[11px] font-bold text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                        <button type="button" id="btnAddAnggota" class="text-xs font-bold text-indigo-700 hover:text-indigo-900 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-indigo-300">
+                                            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Tambah Anggota
+                                        </button>
                                     </div>
-                                    <div class="border-2 border-dashed border-indigo-300 hover:border-indigo-500 bg-white/90 rounded-2xl p-4 text-center transition cursor-pointer relative group">
-                                        <input type="file" id="inputAnggotaFoto" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                        <div class="flex flex-col items-center justify-center">
-                                            <div class="w-10 h-10 bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 group-hover:text-indigo-700 rounded-2xl flex items-center justify-center mb-2 transition">
-                                                <i data-lucide="user-plus" class="w-5 h-5"></i>
-                                            </div>
-                                            <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Anggota Satgas</p>
-                                            <p class="text-[10px] text-slate-500 mt-0.5">Format JPG, PNG (Maksimal 4 foto)</p>
-                                        </div>
+                                    <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200/90 shadow-inner">
+                                        <div id="anggotaList" class="space-y-2"></div>
                                     </div>
-                                    <div id="anggotaPhotoPreview" class="grid grid-cols-4 gap-2 mt-3"></div>
                                 </div>
 
                                 <!-- 6. Foto Dokumentasi -->
@@ -187,7 +181,7 @@
                         </div>
                     </section>
 
-                    <!-- PREVIEW & DOCUMENT EXPORT SECTION -->
+                    <!-- PREVIEW SILAHAPP -->
                     <section id="previewSection" class="lg:col-span-7 hidden lg:block space-y-4">
                         <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
                             <div class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
@@ -273,9 +267,9 @@
                                         </div>
 
                                         <div id="blockAnggota" class="preview-block">
-                                            <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">5. Dokumentasi Foto Anggota Satgas</label>
-                                            <div class="pdf-box min-h-[90px]">
-                                                <div id="viewAnggota" class="grid grid-cols-2 gap-3"></div>
+                                            <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">5. Daftar Nama Anggota Satgas</label>
+                                            <div class="pdf-box min-h-[42px]">
+                                                <div id="viewAnggota" class="space-y-1"></div>
                                             </div>
                                         </div>
 
@@ -304,7 +298,7 @@
                 </main>
             </div>
 
-            <!-- VIEW 2: COMING SOON -->
+            <!-- ================= VIEW 2: COMING SOON ================= -->
             <div id="view-coming-soon" class="app-view hidden flex-1 flex flex-col">
                 <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
@@ -321,7 +315,6 @@
                             </div>
                         </div>
                         
-                        <!-- Tombol Pengaturan Profil di Coming Soon -->
                         <div class="flex items-center space-x-2">
                             <button id="btnSettings" class="flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition duration-200 shadow-lg shadow-amber-500/20 active:scale-95">
                                 <i data-lucide="settings" class="w-4 h-4"></i>
@@ -341,7 +334,7 @@
                         </button>
                     </div>
 
-                    <!-- FORM INPUT SECTION CS -->
+                    <!-- FORM INPUT CS (Dengan Input Foto Anggota) -->
                     <section id="csFormSection" class="lg:col-span-5 space-y-6 no-print">
                         <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
                             <div class="flex items-center justify-between mb-5 border-b border-slate-200 pb-3">
@@ -402,7 +395,7 @@
                                     </div>
                                 </div>
 
-                                <!-- 5. Foto Anggota CS -->
+                                <!-- 5. Foto Anggota Satgas (Berupa Input Foto) -->
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
@@ -447,7 +440,7 @@
                         </div>
                     </section>
 
-                    <!-- PREVIEW & DOCUMENT EXPORT SECTION CS -->
+                    <!-- PREVIEW CS -->
                     <section id="csPreviewSection" class="lg:col-span-7 hidden lg:block space-y-4">
                         <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
                             <div class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
@@ -655,7 +648,7 @@
             <h3 class="text-base font-extrabold text-slate-900">Petunjuk Upload Google Drive</h3>
             <p class="text-xs text-slate-600 leading-relaxed">
                 File PDF laporan Anda telah diunduh dengan nama:<br>
-                <strong id="driveFilenameLabel" class="text-indigo-700 font-bold block mt-1 bg-indigo-50 p-2 rounded-xl border border-indigo-100 break-all">Laporan_Satgas_Patroli_Trantibum.pdf</strong>
+                <strong id="driveFilenameLabel" class="text-indigo-700 font-bold block mt-1 bg-indigo-50 p-2 rounded-xl border border-indigo-100 break-all">Laporan.pdf</strong>
             </p>
             <p class="text-xs text-slate-500 leading-relaxed">
                 Folder Google Drive telah dibuka di tab baru. Silahkan pilih/seret file PDF yang terunduh tersebut untuk diunggah ke folder Drive Anda.
