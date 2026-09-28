@@ -39,7 +39,34 @@ document.addEventListener('DOMContentLoaded', () => {
     
     bindEvents();
     updatePreview();
+    initSidebarNavigation();
 });
+
+// LOGIKA NAVIGASI SIDEBAR KIRI
+function initSidebarNavigation() {
+    const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+    const appViews = document.querySelectorAll('.app-view');
+
+    sidebarBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-target');
+            
+            sidebarBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            appViews.forEach(view => {
+                view.classList.add('hidden');
+                view.classList.remove('active-view');
+            });
+
+            const targetView = document.getElementById(`view-${target}`);
+            if (targetView) {
+                targetView.classList.remove('hidden');
+                targetView.classList.add('active-view');
+            }
+        });
+    });
+}
 
 function initDefaultDate() {
     const today = new Date().toISOString().split('T')[0];
@@ -237,7 +264,6 @@ function updatePreview() {
     document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
     document.getElementById('viewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
 
-    // 1. Dasar Pelaksanaan
     const blockDasar = document.getElementById('blockDasar');
     const dasarVal = document.getElementById('inputDasar').value.trim();
     if (dasarVal) {
@@ -247,7 +273,6 @@ function updatePreview() {
         blockDasar.style.display = 'none';
     }
 
-    // 2. Multi-Lokasi
     const blockLokasi = document.getElementById('blockLokasi');
     const viewTempat = document.getElementById('viewTempat');
     viewTempat.innerHTML = '';
@@ -266,7 +291,6 @@ function updatePreview() {
         blockLokasi.style.display = 'none';
     }
 
-    // 3. Hasil Patroli
     const blockHasil = document.getElementById('blockHasil');
     const viewHasil = document.getElementById('viewHasil');
     viewHasil.innerHTML = '';
@@ -285,7 +309,6 @@ function updatePreview() {
         blockHasil.style.display = 'none';
     }
 
-    // 4. Uraian Kegiatan
     const blockKegiatan = document.getElementById('blockKegiatan');
     const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
     if (kegiatanVal) {
@@ -295,7 +318,6 @@ function updatePreview() {
         blockKegiatan.style.display = 'none';
     }
 
-    // 5. Anggota Satgas
     const blockAnggota = document.getElementById('blockAnggota');
     const viewAnggota = document.getElementById('viewAnggota');
     viewAnggota.innerHTML = '';
@@ -314,7 +336,6 @@ function updatePreview() {
         blockAnggota.style.display = 'none';
     }
 
-    // 6. Dokumentasi Foto
     const blockDokumentasi = document.getElementById('blockDokumentasi');
     renderPhotoPreview(blockDokumentasi);
 }
