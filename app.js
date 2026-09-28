@@ -1,7 +1,7 @@
-// Link Logo Inhu Baru & Logo Satpol PP
 const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
+const COMING_SOON_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing';
 
 let userProfile = {
     logoLeft: DEFAULT_INHU_DRIVE_URL,
@@ -12,21 +12,28 @@ let userProfile = {
 };
 
 let uploadedPhotos = [];
+let csUploadedPhotos = [];
 let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, anggotaListContainer, inputNip;
+let csLokasiListContainer, csHasilListContainer, csAnggotaListContainer;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // FORCE CLEAR LOCALSTORAGE LAMA AGAR PROFIL & LOGO DEFAULT AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v11_latest_inhu_logo') {
+    if (cacheVersion !== 'v12_latest_inhu_logo') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v11_latest_inhu_logo');
+        localStorage.setItem('satpol_app_version', 'v12_latest_inhu_logo');
     }
 
     settingsModal = document.getElementById('settingsModal');
     driveNoticeModal = document.getElementById('driveNoticeModal');
+    
     lokasiListContainer = document.getElementById('lokasiList');
     hasilListContainer = document.getElementById('hasilList');
     anggotaListContainer = document.getElementById('anggotaList');
+    
+    csLokasiListContainer = document.getElementById('csLokasiList');
+    csHasilListContainer = document.getElementById('csHasilList');
+    csAnggotaListContainer = document.getElementById('csAnggotaList');
+
     inputNip = document.getElementById('inputSettingNip');
 
     lucide.createIcons();
@@ -36,13 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
     addLokasiInput();
     addHasilInput();
     addAnggotaInput();
+
+    addCsLokasiInput();
+    addCsHasilInput();
+    addCsAnggotaInput();
     
     bindEvents();
     updatePreview();
+    updateCsPreview();
     initSidebarNavigation();
 });
 
-// LOGIKA NAVIGASI SIDEBAR KIRI
 function initSidebarNavigation() {
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
     const appViews = document.querySelectorAll('.app-view');
@@ -71,13 +82,14 @@ function initSidebarNavigation() {
 function initDefaultDate() {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('inputTanggal').value = today;
+    document.getElementById('csInputTanggal').value = today;
 }
 
-function generatePdfFilename() {
+function generatePdfFilename(prefix = 'Laporan_Satgas_Patroli_Trantibum') {
     const rawNama = userProfile.nama || 'Petugas';
     const cleanNama = rawNama.trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '');
     const rawDate = document.getElementById('inputTanggal').value || new Date().toISOString().split('T')[0];
-    return `Laporan_Satgas_Patroli_Trantibum_${cleanNama}_${rawDate}.pdf`;
+    return `${prefix}_${cleanNama}_${rawDate}.pdf`;
 }
 
 function formatIndonesianDate(dateStr) {
@@ -94,6 +106,24 @@ function formatIndonesianDateShort(dateStr) {
     return date.toLocaleDateString('id-ID', options);
 }
 
+function createPdfListItem(index, text) {
+    const row = document.createElement('div');
+    row.className = 'pdf-list-item';
+    
+    const numSpan = document.createElement('span');
+    numSpan.className = 'pdf-list-num';
+    numSpan.textContent = `${index}.`;
+
+    const textSpan = document.createElement('span');
+    textSpan.className = 'pdf-list-text';
+    textSpan.textContent = text;
+
+    row.appendChild(numSpan);
+    row.appendChild(textSpan);
+    return row;
+}
+
+// --- SILAHAPP FUNCTIONS ---
 function addLokasiInput(value = '') {
     const div = document.createElement('div');
     div.className = 'flex items-center gap-2 class-lokasi-item';
@@ -116,10 +146,8 @@ function addLokasiInput(value = '') {
         }
     });
 }
-
 function updateLokasiIndexes() {
-    const items = lokasiListContainer.querySelectorAll('.class-lokasi-item');
-    items.forEach((item, index) => {
+    lokasiListContainer.querySelectorAll('.class-lokasi-item').forEach((item, index) => {
         item.querySelector('.lokasi-index').textContent = `${index + 1}.`;
     });
 }
@@ -146,10 +174,8 @@ function addHasilInput(value = '') {
         }
     });
 }
-
 function updateHasilIndexes() {
-    const items = hasilListContainer.querySelectorAll('.class-hasil-item');
-    items.forEach((item, index) => {
+    hasilListContainer.querySelectorAll('.class-hasil-item').forEach((item, index) => {
         item.querySelector('.item-index').textContent = `${index + 1}.`;
     });
 }
@@ -176,14 +202,290 @@ function addAnggotaInput(value = '') {
         }
     });
 }
-
 function updateAnggotaIndexes() {
-    const items = anggotaListContainer.querySelectorAll('.class-anggota-item');
-    items.forEach((item, index) => {
+    anggotaListContainer.querySelectorAll('.class-anggota-item').forEach((item, index) => {
         item.querySelector('.anggota-index').textContent = `${index + 1}.`;
     });
 }
 
+function updatePreview() {
+    const rawDate = document.getElementById('inputTanggal').value;
+    document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
+    document.getElementById('viewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
+
+    const blockDasar = document.getElementById('blockDasar');
+    const dasarVal = document.getElementById('inputDasar').value.trim();
+    blockDasar.style.display = dasarVal ? 'block' : 'none';
+    document.getElementById('viewDasar').textContent = dasarVal;
+
+    const blockLokasi = document.getElementById('blockLokasi');
+    const viewTempat = document.getElementById('viewTempat');
+    viewTempat.innerHTML = '';
+    let lokasiCount = 0;
+    document.querySelectorAll('.input-lokasi').forEach(input => {
+        const val = input.value.trim();
+        if (val) {
+            lokasiCount++;
+            viewTempat.appendChild(createPdfListItem(lokasiCount, val));
+        }
+    });
+    blockLokasi.style.display = lokasiCount > 0 ? 'block' : 'none';
+
+    const blockHasil = document.getElementById('blockHasil');
+    const viewHasil = document.getElementById('viewHasil');
+    viewHasil.innerHTML = '';
+    let hasilCount = 0;
+    document.querySelectorAll('.input-hasil').forEach(input => {
+        const val = input.value.trim();
+        if (val) {
+            hasilCount++;
+            viewHasil.appendChild(createPdfListItem(hasilCount, val));
+        }
+    });
+    blockHasil.style.display = hasilCount > 0 ? 'block' : 'none';
+
+    const blockKegiatan = document.getElementById('blockKegiatan');
+    const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
+    blockKegiatan.style.display = kegiatanVal ? 'block' : 'none';
+    document.getElementById('viewKegiatan').textContent = kegiatanVal;
+
+    const blockAnggota = document.getElementById('blockAnggota');
+    const viewAnggota = document.getElementById('viewAnggota');
+    viewAnggota.innerHTML = '';
+    let anggotaCount = 0;
+    document.querySelectorAll('.input-anggota').forEach(input => {
+        const val = input.value.trim();
+        if (val) {
+            anggotaCount++;
+            viewAnggota.appendChild(createPdfListItem(anggotaCount, val));
+        }
+    });
+    blockAnggota.style.display = anggotaCount > 0 ? 'block' : 'none';
+
+    renderPhotoPreview();
+}
+
+function renderPhotoPreview() {
+    const container = document.getElementById('photoPreview');
+    const viewContainer = document.getElementById('viewDokumentasi');
+    const countLabel = document.getElementById('photoCount');
+    const blockDokumentasi = document.getElementById('blockDokumentasi');
+    
+    container.innerHTML = '';
+    viewContainer.innerHTML = '';
+    countLabel.textContent = `${uploadedPhotos.length} / 4 Foto`;
+    blockDokumentasi.style.display = uploadedPhotos.length === 0 ? 'none' : 'block';
+
+    uploadedPhotos.forEach((src, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
+        thumb.innerHTML = `
+            <img src="${src}" class="w-full h-full object-cover">
+            <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+            </button>
+        `;
+        container.appendChild(thumb);
+
+        const pdfCard = document.createElement('div');
+        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+        pdfCard.innerHTML = `
+            <div class="photo-wrapper"><img src="${src}" alt="Dokumentasi ${idx + 1}"></div>
+            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
+        `;
+        viewContainer.appendChild(pdfCard);
+    });
+    lucide.createIcons();
+}
+
+window.removePhoto = function(index) {
+    uploadedPhotos.splice(index, 1);
+    renderPhotoPreview();
+}
+
+
+// --- COMING SOON FUNCTIONS ---
+function addCsLokasiInput(value = '') {
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2 cs-lokasi-item';
+    div.innerHTML = `
+        <span class="text-xs font-bold text-slate-400 w-4 text-center cs-lokasi-index">1.</span>
+        <input type="text" value="${value}" placeholder="Tempat / Lokasi Patroli CS..." class="cs-input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
+        <button type="button" class="cs-btn-remove-lokasi text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    `;
+    csLokasiListContainer.appendChild(div);
+    lucide.createIcons();
+    updateCsLokasiIndexes();
+    div.querySelector('.cs-input-lokasi').addEventListener('input', updateCsPreview);
+    div.querySelector('.cs-btn-remove-lokasi').addEventListener('click', () => {
+        if (csLokasiListContainer.children.length > 1) {
+            div.remove();
+            updateCsLokasiIndexes();
+            updateCsPreview();
+        }
+    });
+}
+function updateCsLokasiIndexes() {
+    csLokasiListContainer.querySelectorAll('.cs-lokasi-item').forEach((item, index) => {
+        item.querySelector('.cs-lokasi-index').textContent = `${index + 1}.`;
+    });
+}
+
+function addCsHasilInput(value = '') {
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2 cs-hasil-item';
+    div.innerHTML = `
+        <span class="text-xs font-bold text-slate-400 w-4 text-center cs-item-index">1.</span>
+        <input type="text" value="${value}" placeholder="Tuliskan poin hasil..." class="cs-input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
+        <button type="button" class="cs-btn-remove-hasil text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    `;
+    csHasilListContainer.appendChild(div);
+    lucide.createIcons();
+    updateCsHasilIndexes();
+    div.querySelector('.cs-input-hasil').addEventListener('input', updateCsPreview);
+    div.querySelector('.cs-btn-remove-hasil').addEventListener('click', () => {
+        if (csHasilListContainer.children.length > 1) {
+            div.remove();
+            updateCsHasilIndexes();
+            updateCsPreview();
+        }
+    });
+}
+function updateCsHasilIndexes() {
+    csHasilListContainer.querySelectorAll('.cs-hasil-item').forEach((item, index) => {
+        item.querySelector('.cs-item-index').textContent = `${index + 1}.`;
+    });
+}
+
+function addCsAnggotaInput(value = '') {
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2 cs-anggota-item';
+    div.innerHTML = `
+        <span class="text-xs font-bold text-slate-400 w-4 text-center cs-anggota-index">1.</span>
+        <input type="text" value="${value}" placeholder="Tuliskan nama lengkap anggota..." class="cs-input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
+        <button type="button" class="cs-btn-remove-anggota text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    `;
+    csAnggotaListContainer.appendChild(div);
+    lucide.createIcons();
+    updateCsAnggotaIndexes();
+    div.querySelector('.cs-input-anggota').addEventListener('input', updateCsPreview);
+    div.querySelector('.cs-btn-remove-anggota').addEventListener('click', () => {
+        if (csAnggotaListContainer.children.length > 1) {
+            div.remove();
+            updateCsAnggotaIndexes();
+            updateCsPreview();
+        }
+    });
+}
+function updateCsAnggotaIndexes() {
+    csAnggotaListContainer.querySelectorAll('.cs-anggota-item').forEach((item, index) => {
+        item.querySelector('.cs-anggota-index').textContent = `${index + 1}.`;
+    });
+}
+
+function updateCsPreview() {
+    const rawDate = document.getElementById('csInputTanggal').value;
+    document.getElementById('csViewTanggal').textContent = formatIndonesianDate(rawDate);
+    document.getElementById('csViewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
+
+    const blockDasar = document.getElementById('csBlockDasar');
+    const dasarVal = document.getElementById('csInputDasar').value.trim();
+    blockDasar.style.display = dasarVal ? 'block' : 'none';
+    document.getElementById('csViewDasar').textContent = dasarVal;
+
+    const blockLokasi = document.getElementById('csBlockLokasi');
+    const viewTempat = document.getElementById('csViewTempat');
+    viewTempat.innerHTML = '';
+    let lokasiCount = 0;
+    document.querySelectorAll('.cs-input-lokasi').forEach(input => {
+        const val = input.value.trim();
+        if (val) {
+            lokasiCount++;
+            viewTempat.appendChild(createPdfListItem(lokasiCount, val));
+        }
+    });
+    blockLokasi.style.display = lokasiCount > 0 ? 'block' : 'none';
+
+    const blockHasil = document.getElementById('csBlockHasil');
+    const viewHasil = document.getElementById('csViewHasil');
+    viewHasil.innerHTML = '';
+    let hasilCount = 0;
+    document.querySelectorAll('.cs-input-hasil').forEach(input => {
+        const val = input.value.trim();
+        if (val) {
+            hasilCount++;
+            viewHasil.appendChild(createPdfListItem(hasilCount, val));
+        }
+    });
+    blockHasil.style.display = hasilCount > 0 ? 'block' : 'none';
+
+    const blockKegiatan = document.getElementById('csBlockKegiatan');
+    const kegiatanVal = document.getElementById('csInputKegiatan').value.trim();
+    blockKegiatan.style.display = kegiatanVal ? 'block' : 'none';
+    document.getElementById('csViewKegiatan').textContent = kegiatanVal;
+
+    const blockAnggota = document.getElementById('csBlockAnggota');
+    const viewAnggota = document.getElementById('csViewAnggota');
+    viewAnggota.innerHTML = '';
+    let anggotaCount = 0;
+    document.querySelectorAll('.cs-input-anggota').forEach(input => {
+        const val = input.value.trim();
+        if (val) {
+            anggotaCount++;
+            viewAnggota.appendChild(createPdfListItem(anggotaCount, val));
+        }
+    });
+    blockAnggota.style.display = anggotaCount > 0 ? 'block' : 'none';
+
+    renderCsPhotoPreview();
+}
+
+function renderCsPhotoPreview() {
+    const container = document.getElementById('csPhotoPreview');
+    const viewContainer = document.getElementById('csViewDokumentasi');
+    const countLabel = document.getElementById('csPhotoCount');
+    const blockDokumentasi = document.getElementById('csBlockDokumentasi');
+    
+    container.innerHTML = '';
+    viewContainer.innerHTML = '';
+    countLabel.textContent = `${csUploadedPhotos.length} / 4 Foto`;
+    blockDokumentasi.style.display = csUploadedPhotos.length === 0 ? 'none' : 'block';
+
+    csUploadedPhotos.forEach((src, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
+        thumb.innerHTML = `
+            <img src="${src}" class="w-full h-full object-cover">
+            <button type="button" onclick="removeCsPhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+            </button>
+        `;
+        container.appendChild(thumb);
+
+        const pdfCard = document.createElement('div');
+        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+        pdfCard.innerHTML = `
+            <div class="photo-wrapper"><img src="${src}" alt="Dokumentasi ${idx + 1}"></div>
+            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
+        `;
+        viewContainer.appendChild(pdfCard);
+    });
+    lucide.createIcons();
+}
+
+window.removeCsPhoto = function(index) {
+    csUploadedPhotos.splice(index, 1);
+    renderCsPhotoPreview();
+}
+
+
+// --- SETTINGS & PROFILES ---
 function loadSettings() {
     const saved = localStorage.getItem('satpolpp_inhu_trantibum_profile');
     if (saved) {
@@ -199,10 +501,15 @@ function loadSettings() {
 
 function applyUserProfileUI() {
     document.getElementById('viewNama').textContent = userProfile.nama || '-';
+    document.getElementById('csViewNama').textContent = userProfile.nama || '-';
     
     const cleanNip = userProfile.nip ? userProfile.nip.replace(/\D/g, '') : '';
-    document.getElementById('viewNip').textContent = cleanNip.length === 18 ? `NIP. ${cleanNip}` : (cleanNip ? `NIP. ${cleanNip}` : '-');
+    const formattedNip = cleanNip.length === 18 ? `NIP. ${cleanNip}` : (cleanNip ? `NIP. ${cleanNip}` : '-');
+    document.getElementById('viewNip').textContent = formattedNip;
+    document.getElementById('csViewNip').textContent = formattedNip;
+
     document.getElementById('viewJabatan').textContent = userProfile.jabatan || '-';
+    document.getElementById('csViewJabatan').textContent = userProfile.jabatan || '-';
 
     document.getElementById('headerLogoLeft').src = DEFAULT_INHU_DRIVE_URL;
     document.getElementById('headerLogoRight').src = DEFAULT_SATPOL_PP_DRIVE_URL;
@@ -219,8 +526,7 @@ function applyUserProfileUI() {
 }
 
 function updateNipCounter() {
-    const currentLen = inputNip.value.length;
-    document.getElementById('nipCounter').textContent = `${currentLen} / 18 Digit`;
+    document.getElementById('nipCounter').textContent = `${inputNip.value.length} / 18 Digit`;
 }
 
 function saveSettings() {
@@ -239,232 +545,162 @@ function saveSettings() {
     localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
     applyUserProfileUI();
     updatePreview();
+    updateCsPreview();
     settingsModal.classList.add('hidden');
 }
 
-function createPdfListItem(index, text) {
-    const row = document.createElement('div');
-    row.className = 'pdf-list-item';
-    
-    const numSpan = document.createElement('span');
-    numSpan.className = 'pdf-list-num';
-    numSpan.textContent = `${index}.`;
 
-    const textSpan = document.createElement('span');
-    textSpan.className = 'pdf-list-text';
-    textSpan.textContent = text;
-
-    row.appendChild(numSpan);
-    row.appendChild(textSpan);
-    return row;
-}
-
-function updatePreview() {
-    const rawDate = document.getElementById('inputTanggal').value;
-    document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
-    document.getElementById('viewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
-
-    const blockDasar = document.getElementById('blockDasar');
-    const dasarVal = document.getElementById('inputDasar').value.trim();
-    if (dasarVal) {
-        blockDasar.style.display = 'block';
-        document.getElementById('viewDasar').textContent = dasarVal;
-    } else {
-        blockDasar.style.display = 'none';
-    }
-
-    const blockLokasi = document.getElementById('blockLokasi');
-    const viewTempat = document.getElementById('viewTempat');
-    viewTempat.innerHTML = '';
-    const lokasiInputs = document.querySelectorAll('.input-lokasi');
-    let lokasiCount = 0;
-    lokasiInputs.forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            lokasiCount++;
-            viewTempat.appendChild(createPdfListItem(lokasiCount, val));
-        }
-    });
-    if (lokasiCount > 0) {
-        blockLokasi.style.display = 'block';
-    } else {
-        blockLokasi.style.display = 'none';
-    }
-
-    const blockHasil = document.getElementById('blockHasil');
-    const viewHasil = document.getElementById('viewHasil');
-    viewHasil.innerHTML = '';
-    const hasilInputs = document.querySelectorAll('.input-hasil');
-    let hasilCount = 0;
-    hasilInputs.forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            hasilCount++;
-            viewHasil.appendChild(createPdfListItem(hasilCount, val));
-        }
-    });
-    if (hasilCount > 0) {
-        blockHasil.style.display = 'block';
-    } else {
-        blockHasil.style.display = 'none';
-    }
-
-    const blockKegiatan = document.getElementById('blockKegiatan');
-    const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
-    if (kegiatanVal) {
-        blockKegiatan.style.display = 'block';
-        document.getElementById('viewKegiatan').textContent = kegiatanVal;
-    } else {
-        blockKegiatan.style.display = 'none';
-    }
-
-    const blockAnggota = document.getElementById('blockAnggota');
-    const viewAnggota = document.getElementById('viewAnggota');
-    viewAnggota.innerHTML = '';
-    const anggotaInputs = document.querySelectorAll('.input-anggota');
-    let anggotaCount = 0;
-    anggotaInputs.forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            anggotaCount++;
-            viewAnggota.appendChild(createPdfListItem(anggotaCount, val));
-        }
-    });
-    if (anggotaCount > 0) {
-        blockAnggota.style.display = 'block';
-    } else {
-        blockAnggota.style.display = 'none';
-    }
-
-    const blockDokumentasi = document.getElementById('blockDokumentasi');
-    renderPhotoPreview(blockDokumentasi);
-}
-
-function renderPhotoPreview(blockDokumentasi) {
-    const container = document.getElementById('photoPreview');
-    const viewContainer = document.getElementById('viewDokumentasi');
-    const countLabel = document.getElementById('photoCount');
-    
-    container.innerHTML = '';
-    viewContainer.innerHTML = '';
-    countLabel.textContent = `${uploadedPhotos.length} / 4 Foto`;
-
-    if (uploadedPhotos.length === 0) {
-        if (blockDokumentasi) blockDokumentasi.style.display = 'none';
-        return;
-    } else {
-        if (blockDokumentasi) blockDokumentasi.style.display = 'block';
-    }
-
-    uploadedPhotos.forEach((src, idx) => {
-        const thumb = document.createElement('div');
-        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
-        thumb.innerHTML = `
-            <img src="${src}" class="w-full h-full object-cover">
-            <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
-                <i data-lucide="x" class="w-3 h-3"></i>
-            </button>
-        `;
-        container.appendChild(thumb);
-
-        const pdfCard = document.createElement('div');
-        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-        pdfCard.innerHTML = `
-            <div class="photo-wrapper">
-                <img src="${src}" alt="Dokumentasi ${idx + 1}">
-            </div>
-            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
-        `;
-        viewContainer.appendChild(pdfCard);
-    });
-    lucide.createIcons();
-}
-
-window.removePhoto = function(index) {
-    uploadedPhotos.splice(index, 1);
-    const blockDokumentasi = document.getElementById('blockDokumentasi');
-    renderPhotoPreview(blockDokumentasi);
-}
-
-function handlePhotoUpload(e) {
-    const files = Array.from(e.target.files);
-    if (uploadedPhotos.length + files.length > 4) {
-        alert('Maksimal foto dokumentasi adalah 4 foto!');
-        return;
-    }
-    files.forEach(file => {
-        if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                if (uploadedPhotos.length < 4) {
-                    uploadedPhotos.push(event.target.result);
-                    const blockDokumentasi = document.getElementById('blockDokumentasi');
-                    renderPhotoPreview(blockDokumentasi);
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-    e.target.value = '';
-}
-
-function handleSettingLogoLeft(e) {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            userProfile.logoLeft = event.target.result;
-            document.getElementById('settingLogoLeftPreview').src = userProfile.logoLeft;
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-function handleSettingLogoRight(e) {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            userProfile.logoRight = event.target.result;
-            document.getElementById('settingLogoRightPreview').src = userProfile.logoRight;
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-function downloadPDF() {
-    const element = document.getElementById('pdfContent');
-    const filename = generatePdfFilename();
-    
-    const opt = {
-        margin:       [0, 0, 0, 0],
-        filename:     filename,
-        image:        { type: 'jpeg', quality: 0.92 },
-        html2canvas:  { scale: 1.5, useCORS: true, logging: false, letterRendering: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak:    { mode: ['css', 'legacy'] }
-    };
-
-    return html2pdf().set(opt).from(element).save();
-}
-
-function uploadToGoogleDrive() {
-    const filename = generatePdfFilename();
-    document.getElementById('driveFilenameLabel').textContent = filename;
-    downloadPDF();
-    window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
-    driveNoticeModal.classList.remove('hidden');
-}
-
+// --- EVENT BINDINGS & EXPORT ---
 function bindEvents() {
+    // SiLAHAPP Events
     document.getElementById('inputTanggal').addEventListener('input', updatePreview);
     document.getElementById('inputDasar').addEventListener('input', updatePreview);
     document.getElementById('btnAddLokasi').addEventListener('click', () => addLokasiInput());
     document.getElementById('inputKegiatan').addEventListener('input', updatePreview);
     document.getElementById('btnAddHasil').addEventListener('click', () => addHasilInput());
     document.getElementById('btnAddAnggota').addEventListener('click', () => addAnggotaInput());
-    document.getElementById('inputDokumentasi').addEventListener('change', handlePhotoUpload);
+    
+    document.getElementById('inputDokumentasi').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (uploadedPhotos.length + files.length > 4) {
+            alert('Maksimal foto dokumentasi adalah 4 foto!');
+            return;
+        }
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    if (uploadedPhotos.length < 4) {
+                        uploadedPhotos.push(event.target.result);
+                        renderPhotoPreview();
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        e.target.value = '';
+    });
 
+    document.getElementById('tabFormBtn').addEventListener('click', () => {
+        document.getElementById('formSection').classList.remove('hidden');
+        document.getElementById('previewSection').classList.add('hidden');
+        document.getElementById('tabFormBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
+        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
+    });
+
+    document.getElementById('tabPreviewBtn').addEventListener('click', () => {
+        document.getElementById('previewSection').classList.remove('hidden');
+        document.getElementById('formSection').classList.add('hidden');
+        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
+        document.getElementById('tabFormBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
+    });
+
+    document.getElementById('btnDownloadPDF').addEventListener('click', () => {
+        const element = document.getElementById('pdfContent');
+        const opt = {
+            margin: [0, 0, 0, 0],
+            filename: generatePdfFilename('Laporan_SiLAHAPP'),
+            image: { type: 'jpeg', quality: 0.92 },
+            html2canvas: { scale: 1.5, useCORS: true, logging: false },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    });
+
+    document.getElementById('btnUploadDrive').addEventListener('click', () => {
+        const filename = generatePdfFilename('Laporan_SiLAHAPP');
+        document.getElementById('driveFilenameLabel').textContent = filename;
+        
+        const element = document.getElementById('pdfContent');
+        const opt = {
+            margin: [0, 0, 0, 0],
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.92 },
+            html2canvas: { scale: 1.5, useCORS: true, logging: false },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+
+        window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
+        driveNoticeModal.classList.remove('hidden');
+    });
+
+
+    // Coming Soon Events
+    document.getElementById('csInputTanggal').addEventListener('input', updateCsPreview);
+    document.getElementById('csInputDasar').addEventListener('input', updateCsPreview);
+    document.getElementById('csBtnAddLokasi').addEventListener('click', () => addCsLokasiInput());
+    document.getElementById('csInputKegiatan').addEventListener('input', updateCsPreview);
+    document.getElementById('csBtnAddHasil').addEventListener('click', () => addCsHasilInput());
+    document.getElementById('csBtnAddAnggota').addEventListener('click', () => addCsAnggotaInput());
+
+    document.getElementById('csInputDokumentasi').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (csUploadedPhotos.length + files.length > 4) {
+            alert('Maksimal foto dokumentasi adalah 4 foto!');
+            return;
+        }
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    if (csUploadedPhotos.length < 4) {
+                        csUploadedPhotos.push(event.target.result);
+                        renderCsPhotoPreview();
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        e.target.value = '';
+    });
+
+    document.getElementById('csTabFormBtn').addEventListener('click', () => {
+        document.getElementById('csFormSection').classList.remove('hidden');
+        document.getElementById('csPreviewSection').classList.add('hidden');
+        document.getElementById('csTabFormBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-indigo-500 text-white shadow-md transition';
+        document.getElementById('csTabPreviewBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
+    });
+
+    document.getElementById('csTabPreviewBtn').addEventListener('click', () => {
+        document.getElementById('csPreviewSection').classList.remove('hidden');
+        document.getElementById('csFormSection').classList.add('hidden');
+        document.getElementById('csTabPreviewBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-indigo-500 text-white shadow-md transition';
+        document.getElementById('csTabFormBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
+    });
+
+    document.getElementById('csBtnDownloadPDF').addEventListener('click', () => {
+        const element = document.getElementById('csPdfContent');
+        const opt = {
+            margin: [0, 0, 0, 0],
+            filename: generatePdfFilename('Laporan_ComingSoon'),
+            image: { type: 'jpeg', quality: 0.92 },
+            html2canvas: { scale: 1.5, useCORS: true, logging: false },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    });
+
+    document.getElementById('csBtnUploadDrive').addEventListener('click', () => {
+        const filename = generatePdfFilename('Laporan_ComingSoon');
+        document.getElementById('driveFilenameLabel').textContent = filename;
+        
+        const element = document.getElementById('csPdfContent');
+        const opt = {
+            margin: [0, 0, 0, 0],
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.92 },
+            html2canvas: { scale: 1.5, useCORS: true, logging: false },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+
+        window.open(COMING_SOON_DRIVE_FOLDER_URL, '_blank');
+        driveNoticeModal.classList.remove('hidden');
+    });
+
+
+    // Global Settings & Modal Events
     inputNip.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/\D/g, '');
         updateNipCounter();
@@ -505,27 +741,5 @@ function bindEvents() {
 
     document.getElementById('btnCloseDriveNotice').addEventListener('click', () => {
         driveNoticeModal.classList.add('hidden');
-    });
-
-    document.getElementById('btnDownloadPDF').addEventListener('click', downloadPDF);
-    document.getElementById('btnUploadDrive').addEventListener('click', uploadToGoogleDrive);
-
-    const tabFormBtn = document.getElementById('tabFormBtn');
-    const tabPreviewBtn = document.getElementById('tabPreviewBtn');
-    const formSection = document.getElementById('formSection');
-    const previewSection = document.getElementById('previewSection');
-
-    tabFormBtn.addEventListener('click', () => {
-        formSection.classList.remove('hidden');
-        previewSection.classList.add('hidden');
-        tabFormBtn.className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
-        tabPreviewBtn.className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
-    });
-
-    tabPreviewBtn.addEventListener('click', () => {
-        previewSection.classList.remove('hidden');
-        formSection.classList.add('hidden');
-        tabPreviewBtn.className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
-        tabFormBtn.className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
     });
 }
