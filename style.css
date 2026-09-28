@@ -25,12 +25,11 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Menghapus latar belakang kotak-kotak dan membuat logo tampil bersih */
-#headerLogoLeft, #headerLogoRight, #previewLogoLeft, #previewLogoRight, #settingLogoLeftPreview, #settingLogoRightPreview {
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
+/* Memberikan latar belakang putih bersih khusus pada logo Inhu agar rapi */
+#headerLogoLeft, #previewLogoLeft, #settingLogoLeftPreview {
+    background-color: #ffffff !important;
+    padding: 3px !important;
+    border-radius: 6px !important;
     object-fit: contain !important;
 }
 
@@ -95,7 +94,7 @@ body {
 .pdf-list-num {
     font-weight: 700 !important;
     color: #475569 !important;
--width: 1.25rem !important;
+    min-width: 1.25rem !important;
     flex-shrink: 0 !important;
     text-align: left !important;
 }
