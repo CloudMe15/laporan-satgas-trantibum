@@ -12,15 +12,18 @@ let userProfile = {
 };
 
 let uploadedPhotos = [];
+let anggotaPhotos = [];
 let csUploadedPhotos = [];
-let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, anggotaListContainer, inputNip;
-let csLokasiListContainer, csHasilListContainer, csAnggotaListContainer;
+let csAnggotaPhotos = [];
+
+let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, inputNip;
+let csLokasiListContainer, csHasilListContainer;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v12_latest_inhu_logo') {
+    if (cacheVersion !== 'v13_latest_inhu_logo') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v12_latest_inhu_logo');
+        localStorage.setItem('satpol_app_version', 'v13_latest_inhu_logo');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -28,11 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     lokasiListContainer = document.getElementById('lokasiList');
     hasilListContainer = document.getElementById('hasilList');
-    anggotaListContainer = document.getElementById('anggotaList');
     
     csLokasiListContainer = document.getElementById('csLokasiList');
     csHasilListContainer = document.getElementById('csHasilList');
-    csAnggotaListContainer = document.getElementById('csAnggotaList');
 
     inputNip = document.getElementById('inputSettingNip');
 
@@ -42,11 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     addLokasiInput();
     addHasilInput();
-    addAnggotaInput();
 
     addCsLokasiInput();
     addCsHasilInput();
-    addCsAnggotaInput();
     
     bindEvents();
     updatePreview();
@@ -180,34 +179,6 @@ function updateHasilIndexes() {
     });
 }
 
-function addAnggotaInput(value = '') {
-    const div = document.createElement('div');
-    div.className = 'flex items-center gap-2 class-anggota-item';
-    div.innerHTML = `
-        <span class="text-xs font-bold text-slate-400 w-4 text-center anggota-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tuliskan nama lengkap anggota..." class="input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
-        <button type="button" class="btn-remove-anggota text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
-    `;
-    anggotaListContainer.appendChild(div);
-    lucide.createIcons();
-    updateAnggotaIndexes();
-    div.querySelector('.input-anggota').addEventListener('input', updatePreview);
-    div.querySelector('.btn-remove-anggota').addEventListener('click', () => {
-        if (anggotaListContainer.children.length > 1) {
-            div.remove();
-            updateAnggotaIndexes();
-            updatePreview();
-        }
-    });
-}
-function updateAnggotaIndexes() {
-    anggotaListContainer.querySelectorAll('.class-anggota-item').forEach((item, index) => {
-        item.querySelector('.anggota-index').textContent = `${index + 1}.`;
-    });
-}
-
 function updatePreview() {
     const rawDate = document.getElementById('inputTanggal').value;
     document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
@@ -249,20 +220,46 @@ function updatePreview() {
     blockKegiatan.style.display = kegiatanVal ? 'block' : 'none';
     document.getElementById('viewKegiatan').textContent = kegiatanVal;
 
-    const blockAnggota = document.getElementById('blockAnggota');
-    const viewAnggota = document.getElementById('viewAnggota');
-    viewAnggota.innerHTML = '';
-    let anggotaCount = 0;
-    document.querySelectorAll('.input-anggota').forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            anggotaCount++;
-            viewAnggota.appendChild(createPdfListItem(anggotaCount, val));
-        }
-    });
-    blockAnggota.style.display = anggotaCount > 0 ? 'block' : 'none';
-
+    renderAnggotaPhotoPreview();
     renderPhotoPreview();
+}
+
+function renderAnggotaPhotoPreview() {
+    const container = document.getElementById('anggotaPhotoPreview');
+    const viewContainer = document.getElementById('viewAnggota');
+    const countLabel = document.getElementById('anggotaPhotoCount');
+    const blockAnggota = document.getElementById('blockAnggota');
+    
+    container.innerHTML = '';
+    viewContainer.innerHTML = '';
+    countLabel.textContent = `${anggotaPhotos.length} / 4 Foto`;
+    blockAnggota.style.display = anggotaPhotos.length === 0 ? 'none' : 'block';
+
+    anggotaPhotos.forEach((src, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
+        thumb.innerHTML = `
+            <img src="${src}" class="w-full h-full object-cover">
+            <button type="button" onclick="removeAnggotaPhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+            </button>
+        `;
+        container.appendChild(thumb);
+
+        const pdfCard = document.createElement('div');
+        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+        pdfCard.innerHTML = `
+            <div class="photo-wrapper"><img src="${src}" alt="Anggota ${idx + 1}"></div>
+            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Anggota Satgas ${idx + 1}</span>
+        `;
+        viewContainer.appendChild(pdfCard);
+    });
+    lucide.createIcons();
+}
+
+window.removeAnggotaPhoto = function(index) {
+    anggotaPhotos.splice(index, 1);
+    renderAnggotaPhotoPreview();
 }
 
 function renderPhotoPreview() {
@@ -361,34 +358,6 @@ function updateCsHasilIndexes() {
     });
 }
 
-function addCsAnggotaInput(value = '') {
-    const div = document.createElement('div');
-    div.className = 'flex items-center gap-2 cs-anggota-item';
-    div.innerHTML = `
-        <span class="text-xs font-bold text-slate-400 w-4 text-center cs-anggota-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tuliskan nama lengkap anggota..." class="cs-input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
-        <button type="button" class="cs-btn-remove-anggota text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
-    `;
-    csAnggotaListContainer.appendChild(div);
-    lucide.createIcons();
-    updateCsAnggotaIndexes();
-    div.querySelector('.cs-input-anggota').addEventListener('input', updateCsPreview);
-    div.querySelector('.cs-btn-remove-anggota').addEventListener('click', () => {
-        if (csAnggotaListContainer.children.length > 1) {
-            div.remove();
-            updateCsAnggotaIndexes();
-            updateCsPreview();
-        }
-    });
-}
-function updateCsAnggotaIndexes() {
-    csAnggotaListContainer.querySelectorAll('.cs-anggota-item').forEach((item, index) => {
-        item.querySelector('.cs-anggota-index').textContent = `${index + 1}.`;
-    });
-}
-
 function updateCsPreview() {
     const rawDate = document.getElementById('csInputTanggal').value;
     document.getElementById('csViewTanggal').textContent = formatIndonesianDate(rawDate);
@@ -430,20 +399,46 @@ function updateCsPreview() {
     blockKegiatan.style.display = kegiatanVal ? 'block' : 'none';
     document.getElementById('csViewKegiatan').textContent = kegiatanVal;
 
-    const blockAnggota = document.getElementById('csBlockAnggota');
-    const viewAnggota = document.getElementById('csViewAnggota');
-    viewAnggota.innerHTML = '';
-    let anggotaCount = 0;
-    document.querySelectorAll('.cs-input-anggota').forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            anggotaCount++;
-            viewAnggota.appendChild(createPdfListItem(anggotaCount, val));
-        }
-    });
-    blockAnggota.style.display = anggotaCount > 0 ? 'block' : 'none';
-
+    renderCsAnggotaPhotoPreview();
     renderCsPhotoPreview();
+}
+
+function renderCsAnggotaPhotoPreview() {
+    const container = document.getElementById('csAnggotaPhotoPreview');
+    const viewContainer = document.getElementById('csViewAnggota');
+    const countLabel = document.getElementById('csAnggotaPhotoCount');
+    const blockAnggota = document.getElementById('csBlockAnggota');
+    
+    container.innerHTML = '';
+    viewContainer.innerHTML = '';
+    countLabel.textContent = `${csAnggotaPhotos.length} / 4 Foto`;
+    blockAnggota.style.display = csAnggotaPhotos.length === 0 ? 'none' : 'block';
+
+    csAnggotaPhotos.forEach((src, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
+        thumb.innerHTML = `
+            <img src="${src}" class="w-full h-full object-cover">
+            <button type="button" onclick="removeCsAnggotaPhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
+                <i data-lucide="x" class="w-3 h-3"></i>
+            </button>
+        `;
+        container.appendChild(thumb);
+
+        const pdfCard = document.createElement('div');
+        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+        pdfCard.innerHTML = `
+            <div class="photo-wrapper"><img src="${src}" alt="Anggota CS ${idx + 1}"></div>
+            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Anggota Satgas ${idx + 1}</span>
+        `;
+        viewContainer.appendChild(pdfCard);
+    });
+    lucide.createIcons();
+}
+
+window.removeCsAnggotaPhoto = function(index) {
+    csAnggotaPhotos.splice(index, 1);
+    renderCsAnggotaPhotoPreview();
 }
 
 function renderCsPhotoPreview() {
@@ -471,7 +466,7 @@ function renderCsPhotoPreview() {
         const pdfCard = document.createElement('div');
         pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
         pdfCard.innerHTML = `
-            <div class="photo-wrapper"><img src="${src}" alt="Dokumentasi ${idx + 1}"></div>
+            <div class="photo-wrapper"><img src="${src}" alt="Dokumentasi CS ${idx + 1}"></div>
             <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
         `;
         viewContainer.appendChild(pdfCard);
@@ -558,8 +553,28 @@ function bindEvents() {
     document.getElementById('btnAddLokasi').addEventListener('click', () => addLokasiInput());
     document.getElementById('inputKegiatan').addEventListener('input', updatePreview);
     document.getElementById('btnAddHasil').addEventListener('click', () => addHasilInput());
-    document.getElementById('btnAddAnggota').addEventListener('click', () => addAnggotaInput());
     
+    document.getElementById('inputAnggotaFoto').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (anggotaPhotos.length + files.length > 4) {
+            alert('Maksimal foto anggota adalah 4 foto!');
+            return;
+        }
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    if (anggotaPhotos.length < 4) {
+                        anggotaPhotos.push(event.target.result);
+                        renderAnggotaPhotoPreview();
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        e.target.value = '';
+    });
+
     document.getElementById('inputDokumentasi').addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
         if (uploadedPhotos.length + files.length > 4) {
@@ -632,7 +647,27 @@ function bindEvents() {
     document.getElementById('csBtnAddLokasi').addEventListener('click', () => addCsLokasiInput());
     document.getElementById('csInputKegiatan').addEventListener('input', updateCsPreview);
     document.getElementById('csBtnAddHasil').addEventListener('click', () => addCsHasilInput());
-    document.getElementById('csBtnAddAnggota').addEventListener('click', () => addCsAnggotaInput());
+
+    document.getElementById('csInputAnggotaFoto').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (csAnggotaPhotos.length + files.length > 4) {
+            alert('Maksimal foto anggota adalah 4 foto!');
+            return;
+        }
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    if (csAnggotaPhotos.length < 4) {
+                        csAnggotaPhotos.push(event.target.result);
+                        renderCsAnggotaPhotoPreview();
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        e.target.value = '';
+    });
 
     document.getElementById('csInputDokumentasi').addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
@@ -709,9 +744,11 @@ function bindEvents() {
         }
     });
 
-    document.getElementById('btnSettings').addEventListener('click', () => {
-        applyUserProfileUI();
-        settingsModal.classList.remove('hidden');
+    document.querySelectorAll('#btnSettings').forEach(btn => {
+        btn.addEventListener('click', () => {
+            applyUserProfileUI();
+            settingsModal.classList.remove('hidden');
+        });
     });
 
     document.getElementById('btnCloseSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
