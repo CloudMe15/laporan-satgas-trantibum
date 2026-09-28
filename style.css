@@ -25,15 +25,26 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Menyamakan wadah latar belakang putih untuk kedua logo agar berukuran dan bentuknya sama rapi */
-#headerLogoLeft, #headerLogoRight, #previewLogoLeft, #previewLogoRight, #settingLogoLeftPreview, #settingLogoRightPreview {
+/* Pengaturan latar belakang putih bersih dan proporsional untuk logo di Header Navbar */
+#headerLogoLeft, #headerLogoRight {
     background-color: #ffffff !important;
-    padding: 4px !important;
-    width: 34px !important;
-    height: 34px !important;
-    border-radius: 8px !important;
+    padding: 3px !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 6px !important;
     object-fit: contain !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Pengaturan latar belakang putih bersih dan proporsional untuk logo di Pratinjau KOP Surat A4 & Modal Setting */
+#previewLogoLeft, #previewLogoRight, #settingLogoLeftPreview, #settingLogoRightPreview {
+    background-color: #ffffff !important;
+    padding: 4px !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    border-radius: 6px !important;
+    object-fit: contain !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Pengaturan Standar Lembar A4 ala Microsoft Word */
