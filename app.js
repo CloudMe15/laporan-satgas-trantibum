@@ -24,9 +24,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v14_separated_modules') {
+    if (cacheVersion !== 'v15_date_first_no_sig') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v14_separated_modules');
+        localStorage.setItem('satpol_app_version', 'v15_date_first_no_sig');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -98,10 +98,12 @@ function formatIndonesianDate(dateStr) {
     return new Date(dateStr).toLocaleDateString('id-ID', options);
 }
 
-function formatIndonesianDateShort(dateStr) {
-    if (!dateStr) return '-';
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-    return new Date(dateStr).toLocaleDateString('id-ID', options);
+// Fungsi pembantu untuk membuat nama file PDF dengan urutan Tanggal terlebih dahulu
+function generatePdfFilename(modulePrefix, inputDateId) {
+    const rawDate = document.getElementById(inputDateId).value || new Date().toISOString().split('T')[0];
+    const rawNama = userProfile.nama || 'Petugas';
+    const cleanNama = rawNama.trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '');
+    return `${rawDate}_${modulePrefix}_${cleanNama}.pdf`;
 }
 
 function createPdfListItem(index, text) {
@@ -211,7 +213,6 @@ function updateAnggotaIndexes() {
 function updatePreview() {
     const rawDate = document.getElementById('inputTanggal').value;
     document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
-    document.getElementById('viewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
 
     const blockDasar = document.getElementById('blockDasar');
     const dasarVal = document.getElementById('inputDasar').value.trim();
@@ -305,7 +306,7 @@ window.removePhoto = function(index) {
 
 
 // ==========================================
-// LOGIKA COMING SOON (DENGAN INPUT FOTO ANGGOTA)
+// LOGIKA COMING SOON
 // ==========================================
 function addCsLokasiInput(value = '') {
     const div = document.createElement('div');
@@ -366,7 +367,6 @@ function updateCsHasilIndexes() {
 function updateCsPreview() {
     const rawDate = document.getElementById('csInputTanggal').value;
     document.getElementById('csViewTanggal').textContent = formatIndonesianDate(rawDate);
-    document.getElementById('csViewTanggalTtd').textContent = `Rengat, ${formatIndonesianDateShort(rawDate)}`;
 
     const blockDasar = document.getElementById('csBlockDasar');
     const dasarVal = document.getElementById('csInputDasar').value.trim();
@@ -601,9 +601,10 @@ function bindEvents() {
 
     document.getElementById('btnDownloadPDF').addEventListener('click', () => {
         const element = document.getElementById('pdfContent');
+        const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
         const opt = {
             margin: [0, 0, 0, 0],
-            filename: `Laporan_SiLAHAPP_${userProfile.nama.replace(/\s+/g, '_')}.pdf`,
+            filename: filename,
             image: { type: 'jpeg', quality: 0.92 },
             html2canvas: { scale: 1.5, useCORS: true, logging: false },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -612,7 +613,7 @@ function bindEvents() {
     });
 
     document.getElementById('btnUploadDrive').addEventListener('click', () => {
-        const filename = `Laporan_SiLAHAPP_${userProfile.nama.replace(/\s+/g, '_')}.pdf`;
+        const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
         document.getElementById('driveFilenameLabel').textContent = filename;
         
         const element = document.getElementById('pdfContent');
@@ -695,9 +696,10 @@ function bindEvents() {
 
     document.getElementById('csBtnDownloadPDF').addEventListener('click', () => {
         const element = document.getElementById('csPdfContent');
+        const filename = generatePdfFilename('ComingSoon', 'csInputTanggal');
         const opt = {
             margin: [0, 0, 0, 0],
-            filename: `Laporan_ComingSoon_${userProfile.nama.replace(/\s+/g, '_')}.pdf`,
+            filename: filename,
             image: { type: 'jpeg', quality: 0.92 },
             html2canvas: { scale: 1.5, useCORS: true, logging: false },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -706,7 +708,7 @@ function bindEvents() {
     });
 
     document.getElementById('csBtnUploadDrive').addEventListener('click', () => {
-        const filename = `Laporan_ComingSoon_${userProfile.nama.replace(/\s+/g, '_')}.pdf`;
+        const filename = generatePdfFilename('ComingSoon', 'csInputTanggal');
         document.getElementById('driveFilenameLabel').textContent = filename;
         
         const element = document.getElementById('csPdfContent');
