@@ -25,12 +25,13 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Gaya Tampilan Logo dengan Latar Belakang Putih, Sudut Melengkung, & Bayangan */
+/* Mengatur kotak latar belakang logo menjadi putih bersih, sudut melengkung, dan berbayangan */
 #headerLogoLeft, #headerLogoRight, #previewLogoLeft, #previewLogoRight, #settingLogoLeftPreview, #settingLogoRightPreview {
     background-color: #ffffff !important;
     padding: 6px !important;
     border-radius: 12px !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
     object-fit: contain !important;
 }
 
