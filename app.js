@@ -1,5 +1,5 @@
 // Link Logo Inhu Baru & Logo Satpol PP
-const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1jRc4ntpi6JSHVaG9jZ3qpYMTiJTpcO8q';
+const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
 
@@ -17,9 +17,9 @@ let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, an
 document.addEventListener('DOMContentLoaded', () => {
     // FORCE CLEAR LOCALSTORAGE LAMA AGAR PROFIL & LOGO DEFAULT AKTIF
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v10_new_inhu_logo') {
+    if (cacheVersion !== 'v11_latest_inhu_logo') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v10_new_inhu_logo');
+        localStorage.setItem('satpol_app_version', 'v11_latest_inhu_logo');
     }
 
     settingsModal = document.getElementById('settingsModal');
