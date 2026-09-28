@@ -11,6 +11,22 @@ body {
     background-attachment: fixed;
 }
 
+/* Sidebar Kiri Styling */
+.sidebar {
+    width: 76px;
+    transition: width 0.3s ease;
+}
+
+.sidebar-btn.active {
+    background-color: rgba(51, 65, 85, 0.9);
+    color: #ffffff;
+    box-shadow: inset 3px 0 0 #f59e0b;
+}
+
+.main-content-wrapper {
+    margin-left: 76px;
+}
+
 /* Glassmorphism UI Styling */
 .glass-panel {
     background: rgba(255, 255, 255, 0.96);
@@ -39,8 +55,8 @@ body {
 /* MEMPERBESAR LOGO DI KOP SURAT A4/PDF */
 .a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
 .a4-page .flex.items-center.justify-between.border-b-4 > div:last-child {
-    width: 24mm !important; /* Memperlebar wadah logo */
-    height: 28mm !important; /* Mempertinggi wadah logo */
+    width: 24mm !important;
+    height: 28mm !important;
 }
 
 #previewLogoLeft, #previewLogoRight {
@@ -81,14 +97,12 @@ body {
     color: #0f172a;
 }
 
-/* Mengatur agar setiap blok section laporan mengalir rapi antar halaman */
 .preview-block {
     margin-bottom: 0.5rem !important;
     break-inside: avoid-page !important;
     page-break-inside: avoid !important;
 }
 
-/* Explicit Box Style untuk preview dan PDF */
 .pdf-box {
     background-color: #f8fafc !important;
     border: 1px solid #cbd5e1 !important;
@@ -105,7 +119,6 @@ body {
     page-break-inside: avoid !important;
 }
 
-/* Jarak antar list kegiatan agar rapi dan tidak menempel */
 .pdf-list-item {
     display: flex !important;
     align-items: flex-start !important;
@@ -135,7 +148,6 @@ body {
     color: #0f172a !important;
 }
 
-/* Photo Wrapper inside PDF Boxes */
 .photo-wrapper {
     width: 100%;
     height: 135px;
@@ -159,7 +171,6 @@ body {
     display: block;
 }
 
-/* Blok Tanda Tangan dijaga agar tidak terpotong */
 .signature-block {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
@@ -182,6 +193,7 @@ body {
 @media print {
     body { background: none !important; }
     .no-print { display: none !important; }
+    .main-content-wrapper { margin-left: 0 !important; }
     .a4-page {
         box-shadow: none !important;
         margin: 0 !important;
