@@ -1,105 +1,191 @@
-/* Layout Wrapper */
-.app-container {
-    display: flex;
-    min-height: 100vh;
-}
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
-/* Sidebar Sebelah Kiri */
-.sidebar {
-    width: 80px;
-    background-color: #1e293b;
-    border-right: 1px solid #334155;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 0;
-    position: fixed;
-    height: 100vh;
-    z-index: 1000;
-}
-
-.sidebar-logo img {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-    margin-bottom: 30px;
-}
-
-.sidebar-menu {
-    list-style: none;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-
-.menu-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 15px 0;
-    cursor: pointer;
-    color: #94a3b8;
-    transition: all 0.3s ease;
-    border-left: 4px solid transparent;
-}
-
-.menu-item i {
-    font-size: 20px;
-    margin-bottom: 5px;
-}
-
-.menu-text {
-    font-size: 10px;
-    font-weight: 500;
-}
-
-.menu-item:hover, .menu-item.active {
-    color: #38bdf8;
-    background-color: #334155;
-    border-left-color: #38bdf8;
-}
-
-/* Area Konten Utama Menyesuaikan Sidebar */
-.main-content {
-    margin-left: 80px;
-    flex: 1;
-    padding: 20px;
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    min-height: 100vh;
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)),
+                       url('https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1920&q=80');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
-.app-view {
-    display: none;
+/* Glassmorphism UI Styling */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-.app-view.active-view {
+.glass-header {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+/* Pengaturan latar belakang putih bersih dan proporsional untuk logo di Header Navbar */
+#headerLogoLeft, #headerLogoRight {
+    background-color: #ffffff !important;
+    padding: 3px !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 6px !important;
+    object-fit: contain !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* MEMPERBESAR LOGO DI KOP SURAT A4/PDF */
+.a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
+.a4-page .flex.items-center.justify-between.border-b-4 > div:last-child {
+    width: 24mm !important; /* Memperlebar wadah logo */
+    height: 28mm !important; /* Mempertinggi wadah logo */
+}
+
+#previewLogoLeft, #previewLogoRight {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #ffffff !important;
+    padding: 6px !important;
+    border-radius: 8px !important;
+    object-fit: contain !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+#settingLogoLeftPreview, #settingLogoRightPreview {
+    background-color: #ffffff !important;
+    padding: 4px !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    border-radius: 6px !important;
+    object-fit: contain !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Pengaturan Standar Lembar A4 ala Microsoft Word */
+@page {
+    size: A4 portrait;
+    margin: 20mm 16mm;
+}
+
+.a4-page {
+    width: 210mm;
+    min-height: 297mm;
+    height: auto;
+    padding: 20mm 16mm !important;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    color: #0f172a;
+}
+
+/* Mengatur agar setiap blok section laporan mengalir rapi antar halaman */
+.preview-block {
+    margin-bottom: 0.5rem !important;
+    break-inside: avoid-page !important;
+    page-break-inside: avoid !important;
+}
+
+/* Explicit Box Style untuk preview dan PDF */
+.pdf-box {
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 0.5rem !important;
+    padding: 0.5rem 0.75rem !important;
+    color: #1e293b !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    display: block !important;
+    overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+/* Jarak antar list kegiatan agar rapi dan tidak menempel */
+.pdf-list-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    margin-bottom: 0.35rem !important;
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.pdf-list-item:last-child {
+    margin-bottom: 0 !important;
+}
+
+.pdf-list-num {
+    font-weight: 700 !important;
+    color: #475569 !important;
+    min-width: 1.25rem !important;
+    flex-shrink: 0 !important;
+    text-align: left !important;
+}
+
+.pdf-list-text {
+    flex: 1 1 auto !important;
+    word-break: break-word !important;
+    color: #0f172a !important;
+}
+
+/* Photo Wrapper inside PDF Boxes */
+.photo-wrapper {
+    width: 100%;
+    height: 135px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.photo-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
     display: block;
 }
 
-/* Coming Soon Styling */
-.coming-soon-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 80vh;
-    text-align: center;
-    color: #e2e8f0;
+/* Blok Tanda Tangan dijaga agar tidak terpotong */
+.signature-block {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-top: 2rem !important;
 }
 
-.coming-soon-icon {
-    font-size: 64px;
-    color: #f59e0b;
-    margin-bottom: 20px;
+/* Custom UI Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.1);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(202, 138, 4, 0.5);
+    border-radius: 9999px;
 }
 
-.coming-soon-container h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-.coming-soon-container p {
-    color: #94a3b8;
-    font-size: 14px;
+@media print {
+    body { background: none !important; }
+    .no-print { display: none !important; }
+    .a4-page {
+        box-shadow: none !important;
+        margin: 0 !important;
+        width: 100% !important;
+        padding: 20mm 16mm !important;
+    }
 }
