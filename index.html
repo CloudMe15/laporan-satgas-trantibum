@@ -25,7 +25,7 @@
                 <img src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" alt="Logo Satpol" class="w-10 h-10 object-contain p-1 bg-white rounded-xl shadow">
             </div>
             <ul class="sidebar-menu space-y-4 w-full px-2">
-                <!-- Icon 1: SiLAHAPP (Halaman Utama Laporan) -->
+                <!-- Icon 1: SiLAHAPP -->
                 <li>
                     <button class="sidebar-btn active flex flex-col items-center justify-center w-full py-3 px-2 rounded-2xl text-slate-400 hover:text-white hover:bg-slate-800 transition group" data-target="silahapp" title="SiLAHAPP">
                         <i data-lucide="layout-dashboard" class="w-6 h-6 mb-1 text-amber-500"></i>
@@ -45,9 +45,8 @@
         <!-- KONTEN UTAMA DI SEBELAH KANAN -->
         <div class="main-content-wrapper flex-1 flex flex-col justify-between">
             
-            <!-- VIEW 1: SiLAHAPP (Seluruh Fungsi Laporan Sesuai Gambar Asli) -->
+            <!-- VIEW 1: SiLAHAPP -->
             <div id="view-silahapp" class="app-view active-view flex-1 flex flex-col">
-                <!-- Top Navigation Bar -->
                 <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
                         <div class="flex items-center space-x-3">
@@ -73,7 +72,6 @@
                 </header>
 
                 <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <!-- Mobile View Navigation Tabs -->
                     <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1.5 rounded-2xl backdrop-blur-md mb-2 no-print border border-slate-700/60 shadow-xl">
                         <button id="tabFormBtn" class="flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition">
                             <i data-lucide="edit-3" class="w-4 h-4 inline mr-1"></i> Isi Laporan
@@ -91,11 +89,10 @@
                                     <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600"></i>
                                     Formulir Patroli Trantibum
                                 </h2>
-                                <span class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">Input Data</span>
+                                <span class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">SiLAHAPP</span>
                             </div>
 
                             <form id="reportForm" class="space-y-4" onsubmit="event.preventDefault();">
-                                <!-- 1. Tanggal Laporan -->
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                                         <i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-600"></i> 1. Tanggal Laporan
@@ -103,7 +100,6 @@
                                     <input type="date" id="inputTanggal" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none text-sm font-semibold transition shadow-sm">
                                 </div>
 
-                                <!-- 2. Dasar Pelaksanaan & Tambah Lokasi -->
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
@@ -123,7 +119,6 @@
                                     </div>
                                 </div>
 
-                                <!-- 3. Uraian Kegiatan Patroli -->
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
@@ -138,7 +133,6 @@
                                     </div>
                                 </div>
 
-                                <!-- 4. Hasil Kegiatan Patroli -->
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                                         <i data-lucide="activity" class="w-3.5 h-3.5 text-slate-700"></i> 4. Hasil Kegiatan Patroli
@@ -148,7 +142,6 @@
                                     </div>
                                 </div>
 
-                                <!-- 5. Daftar Nama Anggota Satgas -->
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
@@ -163,7 +156,6 @@
                                     </div>
                                 </div>
 
-                                <!-- 6. Foto Dokumentasi -->
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
@@ -192,7 +184,7 @@
                         <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
                             <div class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                                <span>Pratinjau Dokumen A4</span>
+                                <span>Pratinjau Dokumen A4 (SiLAHAPP)</span>
                             </div>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
                                 <button id="btnDownloadPDF" class="flex-1 sm:flex-initial flex items-center justify-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-emerald-600/20 active:scale-95">
@@ -207,7 +199,6 @@
                         </div>
 
                         <div class="overflow-x-auto pb-6">
-                            <!-- Printable A4 Document Area -->
                             <div id="pdfContent" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
                                 <div>
                                     <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
@@ -305,17 +296,248 @@
                 </main>
             </div>
 
-            <!-- VIEW 2: COMING SOON (Mengambil struktur dan gaya tampilan yang sama) -->
-            <div id="view-coming-soon" class="app-view hidden flex-1 flex flex-col justify-center items-center p-6 text-center">
-                <div class="glass-panel p-10 rounded-3xl shadow-2xl max-w-lg w-full border border-white/70 space-y-4">
-                    <div class="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-                        <i data-lucide="rocket" class="w-8 h-8 animate-bounce"></i>
+            <!-- VIEW 2: COMING SOON (Modul Disamakan dengan SiLAHAPP, Folder Drive Khusus) -->
+            <div id="view-coming-soon" class="app-view hidden flex-1 flex flex-col">
+                <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center gap-2">
+                                <img src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" alt="Indragiri Hulu" class="w-8 h-8 object-contain bg-white rounded p-0.5">
+                                <img src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" alt="Satpol PP" class="w-8 h-8 object-contain bg-white rounded p-0.5">
+                            </div>
+                            <div>
+                                <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">
+                                    Coming Soon
+                                </h1>
+                                <p class="text-[11px] text-indigo-400 font-semibold tracking-wider">Modul & Fitur Pengembangan Lanjutan</p>
+                            </div>
+                        </div>
                     </div>
-                    <h2 class="text-2xl font-black text-slate-900">Coming Soon</h2>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        Fitur dan modul baru pada sistem ini sedang dalam tahap pengembangan lanjutan. Nantikan pembaruan berikutnya untuk pengalaman yang lebih optimal!
-                    </p>
-                </div>
+                </header>
+
+                <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1.5 rounded-2xl backdrop-blur-md mb-2 no-print border border-slate-700/60 shadow-xl">
+                        <button id="csTabFormBtn" class="flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-indigo-500 text-white shadow-md transition">
+                            <i data-lucide="edit-3" class="w-4 h-4 inline mr-1"></i> Isi Laporan CS
+                        </button>
+                        <button id="csTabPreviewBtn" class="flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition">
+                            <i data-lucide="eye" class="w-4 h-4 inline mr-1"></i> Pratinjau CS
+                        </button>
+                    </div>
+
+                    <!-- FORM INPUT SECTION CS -->
+                    <section id="csFormSection" class="lg:col-span-5 space-y-6 no-print">
+                        <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
+                            <div class="flex items-center justify-between mb-5 border-b border-slate-200 pb-3">
+                                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                    <i data-lucide="rocket" class="w-5 h-5 text-indigo-600"></i>
+                                    Formulir Coming Soon
+                                </h2>
+                                <span class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">Coming Soon</span>
+                            </div>
+
+                            <form id="csReportForm" class="space-y-4" onsubmit="event.preventDefault();">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-600"></i> 1. Tanggal Laporan
+                                    </label>
+                                    <input type="date" id="csInputTanggal" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm font-semibold transition shadow-sm">
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
+                                            <i data-lucide="file-badge" class="w-3.5 h-3.5 text-indigo-600"></i> 2. Dasar Pelaksanaan & Lokasi
+                                        </label>
+                                        <button type="button" id="csBtnAddLokasi" class="text-xs font-bold text-indigo-800 hover:text-indigo-950 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-indigo-300">
+                                            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Tambah Lokasi
+                                        </button>
+                                    </div>
+                                    <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200/90 shadow-inner space-y-3">
+                                        <textarea id="csInputDasar" rows="2" placeholder="Dasar Pelaksanaan..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
+                                        
+                                        <div class="pt-1 border-t border-indigo-200/80">
+                                            <label class="block text-[11px] font-bold text-indigo-900 uppercase tracking-wider mb-1.5">Daftar Tempat / Lokasi Patroli:</label>
+                                            <div id="csLokasiList" class="space-y-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
+                                            <i data-lucide="check-square" class="w-3.5 h-3.5 text-indigo-600"></i> 3. Uraian Kegiatan Patroli
+                                        </label>
+                                        <button type="button" id="csBtnAddHasil" class="text-xs font-bold text-indigo-700 hover:text-indigo-900 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-indigo-300">
+                                            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Tambah Poin
+                                        </button>
+                                    </div>
+                                    <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200/90 shadow-inner">
+                                        <div id="csHasilList" class="space-y-2"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                                        <i data-lucide="activity" class="w-3.5 h-3.5 text-slate-700"></i> 4. Hasil Kegiatan Patroli
+                                    </label>
+                                    <div class="bg-slate-100/90 p-3 rounded-2xl border border-slate-300/80 shadow-inner">
+                                        <textarea id="csInputKegiatan" rows="3" placeholder="Deskripsikan rincian..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium transition shadow-sm placeholder:text-slate-400"></textarea>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
+                                            <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-600"></i> 5. Daftar Nama Anggota Satgas
+                                        </label>
+                                        <button type="button" id="csBtnAddAnggota" class="text-xs font-bold text-indigo-700 hover:text-indigo-900 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition flex items-center gap-1 border border-indigo-300">
+                                            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Tambah Anggota
+                                        </button>
+                                    </div>
+                                    <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200/90 shadow-inner">
+                                        <div id="csAnggotaList" class="space-y-2"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
+                                            <i data-lucide="camera" class="w-3.5 h-3.5 text-indigo-600"></i> 6. Foto Dokumentasi
+                                        </label>
+                                        <span id="csPhotoCount" class="text-[11px] font-bold text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                    </div>
+                                    <div class="border-2 border-dashed border-indigo-300 hover:border-indigo-500 bg-white/90 rounded-2xl p-4 text-center transition cursor-pointer relative group">
+                                        <input type="file" id="csInputDokumentasi" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <div class="w-10 h-10 bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 group-hover:text-indigo-700 rounded-2xl flex items-center justify-center mb-2 transition">
+                                                <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                                            </div>
+                                            <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Dokumentasi</p>
+                                            <p class="text-[10px] text-slate-500 mt-0.5">Format JPG, PNG (Maksimal 4 foto)</p>
+                                        </div>
+                                    </div>
+                                    <div id="csPhotoPreview" class="grid grid-cols-4 gap-2 mt-3"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- PREVIEW & DOCUMENT EXPORT SECTION CS -->
+                    <section id="csPreviewSection" class="lg:col-span-7 hidden lg:block space-y-4">
+                        <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
+                            <div class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span>
+                                <span>Pratinjau Dokumen A4 (Coming Soon)</span>
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <button id="csBtnDownloadPDF" class="flex-1 sm:flex-initial flex items-center justify-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-emerald-600/20 active:scale-95">
+                                    <i data-lucide="file-down" class="w-4 h-4"></i>
+                                    <span>Download PDF</span>
+                                </button>
+                                <button id="csBtnUploadDrive" class="flex-1 sm:flex-initial flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-indigo-600/20 active:scale-95">
+                                    <i data-lucide="hard-drive" class="w-4 h-4"></i>
+                                    <span>Google Drive</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto pb-6">
+                            <div id="csPdfContent" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
+                                        <div class="flex-shrink-0 flex items-center justify-center">
+                                            <img src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" alt="Logo Indragiri Hulu" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;">
+                                        </div>
+                                        <div class="flex-1 text-center px-1">
+                                            <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
+                                            <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
+                                            <div class="w-full h-0.5 bg-slate-900 my-1"></div>
+                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN COMING SOON</h1>
+                                        </div>
+                                        <div class="flex-shrink-0 flex items-center justify-center">
+                                            <img src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" alt="Logo Satpol PP" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;">
+                                        </div>
+                                    </div>
+
+                                    <div class="preview-block pdf-box shadow-sm mb-4">
+                                        <div class="grid grid-cols-2 gap-2 text-[11px]">
+                                            <div>
+                                                <span class="font-semibold text-slate-500 block text-[10px]">Nama Lengkap:</span>
+                                                <span id="csViewNama" class="font-bold text-slate-900 text-xs">-</span>
+                                            </div>
+                                            <div>
+                                                <span class="font-semibold text-slate-500 block text-[10px]">NIP:</span>
+                                                <span id="csViewNip" class="font-semibold text-slate-800">-</span>
+                                            </div>
+                                            <div class="col-span-2 border-t border-slate-200 pt-1.5 mt-0.5">
+                                                <span class="font-semibold text-slate-500 block text-[10px]">Jabatan / Unit Kerja:</span>
+                                                <span id="csViewJabatan" class="font-semibold text-slate-800">-</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-3">
+                                        <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
+                                            <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span>
+                                            <span class="text-slate-400">:</span>
+                                            <span id="csViewTanggal" class="font-bold text-slate-950 text-xs"></span>
+                                        </div>
+
+                                        <div id="csBlockDasar" class="preview-block">
+                                            <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">1. Dasar Pelaksanaan</label>
+                                            <div id="csViewDasar" class="pdf-box min-h-[42px] whitespace-pre-line leading-relaxed">-</div>
+                                        </div>
+
+                                        <div id="csBlockLokasi" class="preview-block">
+                                            <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">2. Tempat Pelaksanaan</label>
+                                            <div class="pdf-box min-h-[42px]">
+                                                <div id="csViewTempat" class="space-y-1"></div>
+                                            </div>
+                                        </div>
+
+                                        <div id="csBlockHasil" class="preview-block">
+                                            <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">3. Hasil Kegiatan Patroli</label>
+                                            <div class="pdf-box min-h-[48px]">
+                                                <div id="csViewHasil" class="space-y-1"></div>
+                                            </div>
+                                        </div>
+
+                                        <div id="csBlockKegiatan" class="preview-block">
+                                            <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">4. Uraian Kegiatan Patroli</label>
+                                            <div id="csViewKegiatan" class="pdf-box min-h-[48px] whitespace-pre-line leading-relaxed">-</div>
+                                        </div>
+
+                                        <div id="csBlockAnggota" class="preview-block">
+                                            <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">5. Daftar Nama Anggota Satgas</label>
+                                            <div class="pdf-box min-h-[42px]">
+                                                <div id="csViewAnggota" class="space-y-1"></div>
+                                            </div>
+                                        </div>
+
+                                        <div id="csBlockDokumentasi" class="preview-block">
+                                            <label class="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-1">6. Dokumentasi Foto Kegiatan</label>
+                                            <div class="pdf-box min-h-[90px]">
+                                                <div id="csViewDokumentasi" class="grid grid-cols-2 gap-3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="preview-block signature-block mt-8 flex justify-end">
+                                        <div class="text-left text-slate-900 text-[11px] leading-snug">
+                                            <p>Mengetahui,</p>
+                                            <p id="csViewTanggalTtd" class="font-medium">Rengat, -</p>
+                                            <p class="font-bold mt-1">Kepala Bidang Operasi dan Pengamanan</p>
+                                            <div class="h-20"></div>
+                                            <p class="font-extrabold underline tracking-wide text-xs whitespace-nowrap">JAWALTER SITUMORANG, S.Pd, M.Pd, M.I.Kom</p>
+                                            <p class="font-semibold text-[10px] mt-0.5">NIP. 19700415 199702 1 002</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
             </div>
 
             <!-- COPYRIGHT FOOTER -->
