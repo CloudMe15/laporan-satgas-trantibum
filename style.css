@@ -25,13 +25,15 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Menyamakan tampilan logo Inhu agar latar putihnya menyatu secara transparan dengan header gelap */
-#headerLogoLeft, #previewLogoLeft, #settingLogoLeftPreview {
-    background-color: transparent !important;
-    mix-blend-mode: screen !important; /* Membuat warna putih pada gambar menjadi transparan */
-    padding: 0 !important;
-    border-radius: 0 !important;
+/* Menyamakan wadah latar belakang putih untuk kedua logo agar berukuran dan bentuknya sama rapi */
+#headerLogoLeft, #headerLogoRight, #previewLogoLeft, #previewLogoRight, #settingLogoLeftPreview, #settingLogoRightPreview {
+    background-color: #ffffff !important;
+    padding: 4px !important;
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 8px !important;
     object-fit: contain !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Pengaturan Standar Lembar A4 ala Microsoft Word */
