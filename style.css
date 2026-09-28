@@ -166,12 +166,6 @@ body {
     display: block;
 }
 
-.signature-block {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-    margin-top: 2rem !important;
-}
-
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
