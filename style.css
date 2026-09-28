@@ -25,11 +25,12 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Memberikan latar belakang putih bersih khusus pada logo Inhu agar rapi */
+/* Menyamakan tampilan logo Inhu agar latar putihnya menyatu secara transparan dengan header gelap */
 #headerLogoLeft, #previewLogoLeft, #settingLogoLeftPreview {
-    background-color: #ffffff !important;
-    padding: 3px !important;
-    border-radius: 6px !important;
+    background-color: transparent !important;
+    mix-blend-mode: screen !important; /* Membuat warna putih pada gambar menjadi transparan */
+    padding: 0 !important;
+    border-radius: 0 !important;
     object-fit: contain !important;
 }
 
