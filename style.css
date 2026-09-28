@@ -41,7 +41,6 @@ body {
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Pengaturan latar belakang putih bersih dan proporsional untuk logo di Header Navbar */
 #headerLogoLeft, #headerLogoRight {
     background-color: #ffffff !important;
     padding: 3px !important;
@@ -52,7 +51,6 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* MEMPERBESAR LOGO DI KOP SURAT A4/PDF */
 .a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
 .a4-page .flex.items-center.justify-between.border-b-4 > div:last-child {
     width: 24mm !important;
@@ -79,7 +77,6 @@ body {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Pengaturan Standar Lembar A4 ala Microsoft Word */
 @page {
     size: A4 portrait;
     margin: 20mm 16mm;
@@ -177,7 +174,6 @@ body {
     margin-top: 2rem !important;
 }
 
-/* Custom UI Scrollbars */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
