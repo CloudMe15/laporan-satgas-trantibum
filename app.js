@@ -11,39 +11,47 @@ let userProfile = {
     jabatan: 'Staff Program dan Keuangan'
 };
 
+// State Terpisah untuk SiLAHAPP
 let uploadedPhotos = [];
-let anggotaPhotos = [];
+let anggotaListContainer, lokasiListContainer, hasilListContainer;
+
+// State Terpisah untuk Coming Soon
 let csUploadedPhotos = [];
 let csAnggotaPhotos = [];
-
-let settingsModal, driveNoticeModal, lokasiListContainer, hasilListContainer, inputNip;
 let csLokasiListContainer, csHasilListContainer;
+
+let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v13_latest_inhu_logo') {
+    if (cacheVersion !== 'v14_separated_modules') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v13_latest_inhu_logo');
+        localStorage.setItem('satpol_app_version', 'v14_separated_modules');
     }
 
     settingsModal = document.getElementById('settingsModal');
     driveNoticeModal = document.getElementById('driveNoticeModal');
-    
+    inputNip = document.getElementById('inputSettingNip');
+
+    // Inisialisasi Container SiLAHAPP
     lokasiListContainer = document.getElementById('lokasiList');
     hasilListContainer = document.getElementById('hasilList');
-    
+    anggotaListContainer = document.getElementById('anggotaList');
+
+    // Inisialisasi Container Coming Soon
     csLokasiListContainer = document.getElementById('csLokasiList');
     csHasilListContainer = document.getElementById('csHasilList');
-
-    inputNip = document.getElementById('inputSettingNip');
 
     lucide.createIcons();
     loadSettings();
     initDefaultDate();
     
+    // SiLAHAPP Default Inputs
     addLokasiInput();
     addHasilInput();
+    addAnggotaInput();
 
+    // Coming Soon Default Inputs
     addCsLokasiInput();
     addCsHasilInput();
     
@@ -84,25 +92,16 @@ function initDefaultDate() {
     document.getElementById('csInputTanggal').value = today;
 }
 
-function generatePdfFilename(prefix = 'Laporan_Satgas_Patroli_Trantibum') {
-    const rawNama = userProfile.nama || 'Petugas';
-    const cleanNama = rawNama.trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '');
-    const rawDate = document.getElementById('inputTanggal').value || new Date().toISOString().split('T')[0];
-    return `${prefix}_${cleanNama}_${rawDate}.pdf`;
-}
-
 function formatIndonesianDate(dateStr) {
     if (!dateStr) return '-';
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('id-ID', options);
+    return new Date(dateStr).toLocaleDateString('id-ID', options);
 }
 
 function formatIndonesianDateShort(dateStr) {
     if (!dateStr) return '-';
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('id-ID', options);
+    return new Date(dateStr).toLocaleDateString('id-ID', options);
 }
 
 function createPdfListItem(index, text) {
@@ -122,7 +121,9 @@ function createPdfListItem(index, text) {
     return row;
 }
 
-// --- SILAHAPP FUNCTIONS ---
+// ==========================================
+// LOGIKA SILAHAPP
+// ==========================================
 function addLokasiInput(value = '') {
     const div = document.createElement('div');
     div.className = 'flex items-center gap-2 class-lokasi-item';
@@ -179,6 +180,34 @@ function updateHasilIndexes() {
     });
 }
 
+function addAnggotaInput(value = '') {
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2 class-anggota-item';
+    div.innerHTML = `
+        <span class="text-xs font-bold text-slate-400 w-4 text-center anggota-index">1.</span>
+        <input type="text" value="${value}" placeholder="Tuliskan nama lengkap anggota..." class="input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
+        <button type="button" class="btn-remove-anggota text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    `;
+    anggotaListContainer.appendChild(div);
+    lucide.createIcons();
+    updateAnggotaIndexes();
+    div.querySelector('.input-anggota').addEventListener('input', updatePreview);
+    div.querySelector('.btn-remove-anggota').addEventListener('click', () => {
+        if (anggotaListContainer.children.length > 1) {
+            div.remove();
+            updateAnggotaIndexes();
+            updatePreview();
+        }
+    });
+}
+function updateAnggotaIndexes() {
+    anggotaListContainer.querySelectorAll('.class-anggota-item').forEach((item, index) => {
+        item.querySelector('.anggota-index').textContent = `${index + 1}.`;
+    });
+}
+
 function updatePreview() {
     const rawDate = document.getElementById('inputTanggal').value;
     document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
@@ -220,46 +249,20 @@ function updatePreview() {
     blockKegiatan.style.display = kegiatanVal ? 'block' : 'none';
     document.getElementById('viewKegiatan').textContent = kegiatanVal;
 
-    renderAnggotaPhotoPreview();
-    renderPhotoPreview();
-}
-
-function renderAnggotaPhotoPreview() {
-    const container = document.getElementById('anggotaPhotoPreview');
-    const viewContainer = document.getElementById('viewAnggota');
-    const countLabel = document.getElementById('anggotaPhotoCount');
     const blockAnggota = document.getElementById('blockAnggota');
-    
-    container.innerHTML = '';
-    viewContainer.innerHTML = '';
-    countLabel.textContent = `${anggotaPhotos.length} / 4 Foto`;
-    blockAnggota.style.display = anggotaPhotos.length === 0 ? 'none' : 'block';
-
-    anggotaPhotos.forEach((src, idx) => {
-        const thumb = document.createElement('div');
-        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
-        thumb.innerHTML = `
-            <img src="${src}" class="w-full h-full object-cover">
-            <button type="button" onclick="removeAnggotaPhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
-                <i data-lucide="x" class="w-3 h-3"></i>
-            </button>
-        `;
-        container.appendChild(thumb);
-
-        const pdfCard = document.createElement('div');
-        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-        pdfCard.innerHTML = `
-            <div class="photo-wrapper"><img src="${src}" alt="Anggota ${idx + 1}"></div>
-            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Anggota Satgas ${idx + 1}</span>
-        `;
-        viewContainer.appendChild(pdfCard);
+    const viewAnggota = document.getElementById('viewAnggota');
+    viewAnggota.innerHTML = '';
+    let anggotaCount = 0;
+    document.querySelectorAll('.input-anggota').forEach(input => {
+        const val = input.value.trim();
+        if (val) {
+            anggotaCount++;
+            viewAnggota.appendChild(createPdfListItem(anggotaCount, val));
+        }
     });
-    lucide.createIcons();
-}
+    blockAnggota.style.display = anggotaCount > 0 ? 'block' : 'none';
 
-window.removeAnggotaPhoto = function(index) {
-    anggotaPhotos.splice(index, 1);
-    renderAnggotaPhotoPreview();
+    renderPhotoPreview();
 }
 
 function renderPhotoPreview() {
@@ -301,13 +304,15 @@ window.removePhoto = function(index) {
 }
 
 
-// --- COMING SOON FUNCTIONS ---
+// ==========================================
+// LOGIKA COMING SOON (DENGAN INPUT FOTO ANGGOTA)
+// ==========================================
 function addCsLokasiInput(value = '') {
     const div = document.createElement('div');
     div.className = 'flex items-center gap-2 cs-lokasi-item';
     div.innerHTML = `
         <span class="text-xs font-bold text-slate-400 w-4 text-center cs-lokasi-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tempat / Lokasi Patroli CS..." class="cs-input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
+        <input type="text" value="${value}" placeholder="Tempat / Lokasi Patroli..." class="cs-input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
         <button type="button" class="cs-btn-remove-lokasi text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
             <i data-lucide="trash-2" class="w-4 h-4"></i>
         </button>
@@ -480,7 +485,9 @@ window.removeCsPhoto = function(index) {
 }
 
 
-// --- SETTINGS & PROFILES ---
+// ==========================================
+// SETTINGS & PROFILES
+// ==========================================
 function loadSettings() {
     const saved = localStorage.getItem('satpolpp_inhu_trantibum_profile');
     if (saved) {
@@ -545,7 +552,9 @@ function saveSettings() {
 }
 
 
-// --- EVENT BINDINGS & EXPORT ---
+// ==========================================
+// EVENT BINDINGS
+// ==========================================
 function bindEvents() {
     // SiLAHAPP Events
     document.getElementById('inputTanggal').addEventListener('input', updatePreview);
@@ -553,27 +562,7 @@ function bindEvents() {
     document.getElementById('btnAddLokasi').addEventListener('click', () => addLokasiInput());
     document.getElementById('inputKegiatan').addEventListener('input', updatePreview);
     document.getElementById('btnAddHasil').addEventListener('click', () => addHasilInput());
-    
-    document.getElementById('inputAnggotaFoto').addEventListener('change', (e) => {
-        const files = Array.from(e.target.files);
-        if (anggotaPhotos.length + files.length > 4) {
-            alert('Maksimal foto anggota adalah 4 foto!');
-            return;
-        }
-        files.forEach(file => {
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    if (anggotaPhotos.length < 4) {
-                        anggotaPhotos.push(event.target.result);
-                        renderAnggotaPhotoPreview();
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        e.target.value = '';
-    });
+    document.getElementById('btnAddAnggota').addEventListener('click', () => addAnggotaInput());
 
     document.getElementById('inputDokumentasi').addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
@@ -614,7 +603,7 @@ function bindEvents() {
         const element = document.getElementById('pdfContent');
         const opt = {
             margin: [0, 0, 0, 0],
-            filename: generatePdfFilename('Laporan_SiLAHAPP'),
+            filename: `Laporan_SiLAHAPP_${userProfile.nama.replace(/\s+/g, '_')}.pdf`,
             image: { type: 'jpeg', quality: 0.92 },
             html2canvas: { scale: 1.5, useCORS: true, logging: false },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -623,7 +612,7 @@ function bindEvents() {
     });
 
     document.getElementById('btnUploadDrive').addEventListener('click', () => {
-        const filename = generatePdfFilename('Laporan_SiLAHAPP');
+        const filename = `Laporan_SiLAHAPP_${userProfile.nama.replace(/\s+/g, '_')}.pdf`;
         document.getElementById('driveFilenameLabel').textContent = filename;
         
         const element = document.getElementById('pdfContent');
@@ -708,7 +697,7 @@ function bindEvents() {
         const element = document.getElementById('csPdfContent');
         const opt = {
             margin: [0, 0, 0, 0],
-            filename: generatePdfFilename('Laporan_ComingSoon'),
+            filename: `Laporan_ComingSoon_${userProfile.nama.replace(/\s+/g, '_')}.pdf`,
             image: { type: 'jpeg', quality: 0.92 },
             html2canvas: { scale: 1.5, useCORS: true, logging: false },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -717,7 +706,7 @@ function bindEvents() {
     });
 
     document.getElementById('csBtnUploadDrive').addEventListener('click', () => {
-        const filename = generatePdfFilename('Laporan_ComingSoon');
+        const filename = `Laporan_ComingSoon_${userProfile.nama.replace(/\s+/g, '_')}.pdf`;
         document.getElementById('driveFilenameLabel').textContent = filename;
         
         const element = document.getElementById('csPdfContent');
@@ -735,7 +724,7 @@ function bindEvents() {
     });
 
 
-    // Global Settings & Modal Events
+    // Global Settings & Modals
     inputNip.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/\D/g, '');
         updateNipCounter();
