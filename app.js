@@ -1,7 +1,16 @@
 const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
-const COMING_SOON_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing';
+
+// URL Google Drive berbeda untuk masing-masing 6 modul Coming Soon
+const COMING_SOON_FOLDERS = {
+    1: 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
+    2: 'https://drive.google.com/drive/folders/2xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
+    3: 'https://drive.google.com/drive/folders/3xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
+    4: 'https://drive.google.com/drive/folders/4xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
+    5: 'https://drive.google.com/drive/folders/5xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
+    6: 'https://drive.google.com/drive/folders/6xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing'
+};
 
 let userProfile = {
     logoLeft: DEFAULT_INHU_DRIVE_URL,
@@ -11,55 +20,212 @@ let userProfile = {
     jabatan: 'Staff Program dan Keuangan'
 };
 
-// State Terpisah untuk SiLAHAPP
+// SiLAHAPP States
 let uploadedPhotos = [];
 let anggotaListContainer, lokasiListContainer, hasilListContainer;
 
-// State Terpisah untuk Coming Soon
-let csUploadedPhotos = [];
-let csAnggotaPhotos = [];
-let csLokasiListContainer, csHasilListContainer;
+// Coming Soon States (Dikelola dalam objek dinamis id 1-6)
+let csData = {};
 
 let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v15_date_first_no_sig') {
+    if (cacheVersion !== 'v16_six_coming_soon') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v15_date_first_no_sig');
+        localStorage.setItem('satpol_app_version', 'v16_six_coming_soon');
     }
 
     settingsModal = document.getElementById('settingsModal');
     driveNoticeModal = document.getElementById('driveNoticeModal');
     inputNip = document.getElementById('inputSettingNip');
 
-    // Inisialisasi Container SiLAHAPP
+    // Generate HTML untuk 6 modul Coming Soon secara dinamis
+    generateComingSoonViews();
+
     lokasiListContainer = document.getElementById('lokasiList');
     hasilListContainer = document.getElementById('hasilList');
     anggotaListContainer = document.getElementById('anggotaList');
-
-    // Inisialisasi Container Coming Soon
-    csLokasiListContainer = document.getElementById('csLokasiList');
-    csHasilListContainer = document.getElementById('csHasilList');
 
     lucide.createIcons();
     loadSettings();
     initDefaultDate();
     
-    // SiLAHAPP Default Inputs
     addLokasiInput();
     addHasilInput();
     addAnggotaInput();
 
-    // Coming Soon Default Inputs
-    addCsLokasiInput();
-    addCsHasilInput();
+    // Inisialisasi data dan event untuk 6 modul Coming Soon
+    for (let i = 1; i <= 6; i++) {
+        csData[i] = {
+            uploadedPhotos: [],
+            anggotaPhotos: []
+        };
+        addCsLokasiInput(i);
+        addCsHasilInput(i);
+        initCsModuleEvents(i);
+    }
     
     bindEvents();
     updatePreview();
-    updateCsPreview();
     initSidebarNavigation();
 });
+
+function generateComingSoonViews() {
+    const container = document.getElementById('comingSoonContainer');
+    let htmlContent = '';
+
+    for (let i = 1; i <= 6; i++) {
+        htmlContent += `
+            <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex flex-col">
+                <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center gap-2">
+                                <img src="${DEFAULT_INHU_DRIVE_URL}" class="w-8 h-8 object-contain bg-white rounded p-0.5">
+                                <img src="${DEFAULT_SATPOL_PP_DRIVE_URL}" class="w-8 h-8 object-contain bg-white rounded p-0.5">
+                            </div>
+                            <div>
+                                <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">Coming Soon ${i}</h1>
+                                <p class="text-[11px] text-indigo-400 font-semibold tracking-wider">Modul Pengembangan Lanjutan ${i}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button id="btnSettings" class="flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
+                                <i data-lucide="settings" class="w-4 h-4"></i>
+                                <span class="hidden sm:inline">Pengaturan Profil</span>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1.5 rounded-2xl backdrop-blur-md mb-2 no-print border border-slate-700/60 shadow-xl">
+                        <button id="csTabFormBtn-${i}" class="flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-indigo-500 text-white shadow-md transition">Isi Laporan</button>
+                        <button id="csTabPreviewBtn-${i}" class="flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300 transition">Pratinjau</button>
+                    </div>
+
+                    <!-- FORM CS -->
+                    <section id="csFormSection-${i}" class="lg:col-span-5 space-y-6 no-print">
+                        <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
+                            <div class="flex items-center justify-between mb-5 border-b border-slate-200 pb-3">
+                                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                    <i data-lucide="rocket" class="w-5 h-5 text-indigo-600"></i> Formulir Coming Soon ${i}
+                                </h2>
+                                <span class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">CS ${i}</span>
+                            </div>
+
+                            <form class="space-y-4" onsubmit="event.preventDefault();">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">1. Tanggal Laporan</label>
+                                    <input type="date" id="csInputTanggal-${i}" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-semibold shadow-sm">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Dasar Pelaksanaan & Lokasi</label>
+                                        <button type="button" id="csBtnAddLokasi-${i}" class="text-xs font-bold text-indigo-800 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition border border-indigo-300">+ Tambah Lokasi</button>
+                                    </div>
+                                    <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner space-y-3">
+                                        <textarea id="csInputDasar-${i}" rows="2" placeholder="Dasar Pelaksanaan..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-sm outline-none shadow-sm"></textarea>
+                                        <div class="pt-1 border-t border-indigo-200">
+                                            <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1.5">Daftar Tempat / Lokasi Patroli:</label>
+                                            <div id="csLokasiList-${i}" class="space-y-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. Uraian Kegiatan Patroli</label>
+                                        <button type="button" id="csBtnAddHasil-${i}" class="text-xs font-bold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition border border-indigo-300">+ Tambah Poin</button>
+                                    </div>
+                                    <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner">
+                                        <div id="csHasilList-${i}" class="space-y-2"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">4. Hasil Kegiatan Patroli</label>
+                                    <div class="bg-slate-100 p-3 rounded-2xl border border-slate-300 shadow-inner">
+                                        <textarea id="csInputKegiatan-${i}" rows="3" placeholder="Deskripsikan rincian..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-sm outline-none shadow-sm"></textarea>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">5. Foto Anggota Satgas</label>
+                                        <span id="csAnggotaPhotoCount-${i}" class="text-[11px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                    </div>
+                                    <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
+                                        <input type="file" id="csInputAnggotaFoto-${i}" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                        <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Anggota Satgas</p>
+                                    </div>
+                                    <div id="csAnggotaPhotoPreview-${i}" class="grid grid-cols-4 gap-2 mt-3"></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">6. Foto Dokumentasi</label>
+                                        <span id="csPhotoCount-${i}" class="text-[11px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                    </div>
+                                    <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
+                                        <input type="file" id="csInputDokumentasi-${i}" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                        <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Dokumentasi</p>
+                                    </div>
+                                    <div id="csPhotoPreview-${i}" class="grid grid-cols-4 gap-2 mt-3"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- PREVIEW CS -->
+                    <section id="csPreviewSection-${i}" class="lg:col-span-7 hidden lg:block space-y-4">
+                        <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
+                            <span class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (Coming Soon ${i})
+                            </span>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <button id="csBtnDownloadPDF-${i}" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Download PDF</button>
+                                <button id="csBtnUploadDrive-${i}" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Google Drive</button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto pb-6">
+                            <div id="csPdfContent-${i}" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
+                                        <div class="flex-shrink-0 flex items-center justify-center"><img src="${DEFAULT_INHU_DRIVE_URL}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;"></div>
+                                        <div class="flex-1 text-center px-1">
+                                            <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
+                                            <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
+                                            <div class="w-full h-0.5 bg-slate-900 my-1"></div>
+                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN COMING SOON ${i}</h1>
+                                        </div>
+                                        <div class="flex-shrink-0 flex items-center justify-center"><img src="${DEFAULT_SATPOL_PP_DRIVE_URL}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;"></div>
+                                    </div>
+                                    <div class="preview-block pdf-box shadow-sm mb-4">
+                                        <div class="grid grid-cols-2 gap-2 text-[11px]">
+                                            <div><span class="font-semibold text-slate-500 block text-[10px]">Nama Lengkap:</span><span id="csViewNama-${i}" class="font-bold text-slate-900 text-xs">-</span></div>
+                                            <div><span class="font-semibold text-slate-500 block text-[10px]">NIP:</span><span id="csViewNip-${i}" class="font-semibold text-slate-800">-</span></div>
+                                            <div class="col-span-2 border-t border-slate-200 pt-1.5 mt-0.5"><span class="font-semibold text-slate-500 block text-[10px]">Jabatan / Unit Kerja:</span><span id="csViewJabatan-${i}" class="font-semibold text-slate-800">-</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
+                                            <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span><span class="text-slate-400">:</span><span id="csViewTanggal-${i}" class="font-bold text-slate-950 text-xs"></span>
+                                        </div>
+                                        <div id="csBlockDasar-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">1. Dasar Pelaksanaan</label><div id="csViewDasar-${i}" class="pdf-box min-h-[42px] whitespace-pre-line">-</div></div>
+                                        <div id="csBlockLokasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">2. Tempat Pelaksanaan</label><div class="pdf-box min-h-[42px]"><div id="csViewTempat-${i}" class="space-y-1"></div></div></div>
+                                        <div id="csBlockHasil-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">3. Hasil Kegiatan Patroli</label><div class="pdf-box min-h-[48px]"><div id="csViewHasil-${i}" class="space-y-1"></div></div></div>
+                                        <div id="csBlockKegiatan-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">4. Uraian Kegiatan Patroli</label><div id="csViewKegiatan-${i}" class="pdf-box min-h-[48px] whitespace-pre-line">-</div></div>
+                                        <div id="csBlockAnggota-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">5. Dokumentasi Foto Anggota Satgas</label><div class="pdf-box min-h-[90px]"><div id="csViewAnggota-${i}" class="grid grid-cols-2 gap-3"></div></div></div>
+                                        <div id="csBlockDokumentasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">6. Dokumentasi Foto Kegiatan</label><div class="pdf-box min-h-[90px]"><div id="csViewDokumentasi-${i}" class="grid grid-cols-2 gap-3"></div></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        `;
+    }
+    container.innerHTML = htmlContent;
+}
 
 function initSidebarNavigation() {
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
@@ -68,7 +234,6 @@ function initSidebarNavigation() {
     sidebarBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const target = btn.getAttribute('data-target');
-            
             sidebarBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
@@ -89,63 +254,45 @@ function initSidebarNavigation() {
 function initDefaultDate() {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('inputTanggal').value = today;
-    document.getElementById('csInputTanggal').value = today;
+    for (let i = 1; i <= 6; i++) {
+        const dateInput = document.getElementById(`csInputTanggal-${i}`);
+        if (dateInput) dateInput.value = today;
+    }
 }
 
 function formatIndonesianDate(dateStr) {
     if (!dateStr) return '-';
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateStr).toLocaleDateString('id-ID', options);
+    return new Date(dateStr).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-// Fungsi pembantu untuk membuat nama file PDF dengan urutan Tanggal terlebih dahulu
 function generatePdfFilename(modulePrefix, inputDateId) {
     const rawDate = document.getElementById(inputDateId).value || new Date().toISOString().split('T')[0];
-    const rawNama = userProfile.nama || 'Petugas';
-    const cleanNama = rawNama.trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '');
+    const cleanNama = (userProfile.nama || 'Petugas').trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '');
     return `${rawDate}_${modulePrefix}_${cleanNama}.pdf`;
 }
 
 function createPdfListItem(index, text) {
     const row = document.createElement('div');
     row.className = 'pdf-list-item';
-    
-    const numSpan = document.createElement('span');
-    numSpan.className = 'pdf-list-num';
-    numSpan.textContent = `${index}.`;
-
-    const textSpan = document.createElement('span');
-    textSpan.className = 'pdf-list-text';
-    textSpan.textContent = text;
-
-    row.appendChild(numSpan);
-    row.appendChild(textSpan);
+    row.innerHTML = `<span class="pdf-list-num">${index}.</span><span class="pdf-list-text">${text}</span>`;
     return row;
 }
 
-// ==========================================
-// LOGIKA SILAHAPP
-// ==========================================
+// ================= SILAHAPP LOGIC =================
 function addLokasiInput(value = '') {
     const div = document.createElement('div');
     div.className = 'flex items-center gap-2 class-lokasi-item';
     div.innerHTML = `
         <span class="text-xs font-bold text-slate-400 w-4 text-center lokasi-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tempat / Lokasi Patroli..." class="input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
-        <button type="button" class="btn-remove-lokasi text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
+        <input type="text" value="${value}" placeholder="Tempat / Lokasi..." class="input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
+        <button type="button" class="btn-remove-lokasi text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
     `;
     lokasiListContainer.appendChild(div);
     lucide.createIcons();
     updateLokasiIndexes();
     div.querySelector('.input-lokasi').addEventListener('input', updatePreview);
     div.querySelector('.btn-remove-lokasi').addEventListener('click', () => {
-        if (lokasiListContainer.children.length > 1) {
-            div.remove();
-            updateLokasiIndexes();
-            updatePreview();
-        }
+        if (lokasiListContainer.children.length > 1) { div.remove(); updateLokasiIndexes(); updatePreview(); }
     });
 }
 function updateLokasiIndexes() {
@@ -159,21 +306,15 @@ function addHasilInput(value = '') {
     div.className = 'flex items-center gap-2 class-hasil-item';
     div.innerHTML = `
         <span class="text-xs font-bold text-slate-400 w-4 text-center item-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tuliskan poin hasil patroli..." class="input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 outline-none font-semibold">
-        <button type="button" class="btn-remove-hasil text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
+        <input type="text" value="${value}" placeholder="Poin hasil patroli..." class="input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
+        <button type="button" class="btn-remove-hasil text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
     `;
     hasilListContainer.appendChild(div);
     lucide.createIcons();
     updateHasilIndexes();
     div.querySelector('.input-hasil').addEventListener('input', updatePreview);
     div.querySelector('.btn-remove-hasil').addEventListener('click', () => {
-        if (hasilListContainer.children.length > 1) {
-            div.remove();
-            updateHasilIndexes();
-            updatePreview();
-        }
+        if (hasilListContainer.children.length > 1) { div.remove(); updateHasilIndexes(); updatePreview(); }
     });
 }
 function updateHasilIndexes() {
@@ -187,21 +328,15 @@ function addAnggotaInput(value = '') {
     div.className = 'flex items-center gap-2 class-anggota-item';
     div.innerHTML = `
         <span class="text-xs font-bold text-slate-400 w-4 text-center anggota-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tuliskan nama lengkap anggota..." class="input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
-        <button type="button" class="btn-remove-anggota text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
+        <input type="text" value="${value}" placeholder="Nama lengkap anggota..." class="input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
+        <button type="button" class="btn-remove-anggota text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
     `;
     anggotaListContainer.appendChild(div);
     lucide.createIcons();
     updateAnggotaIndexes();
     div.querySelector('.input-anggota').addEventListener('input', updatePreview);
     div.querySelector('.btn-remove-anggota').addEventListener('click', () => {
-        if (anggotaListContainer.children.length > 1) {
-            div.remove();
-            updateAnggotaIndexes();
-            updatePreview();
-        }
+        if (anggotaListContainer.children.length > 1) { div.remove(); updateAnggotaIndexes(); updatePreview(); }
     });
 }
 function updateAnggotaIndexes() {
@@ -214,54 +349,37 @@ function updatePreview() {
     const rawDate = document.getElementById('inputTanggal').value;
     document.getElementById('viewTanggal').textContent = formatIndonesianDate(rawDate);
 
-    const blockDasar = document.getElementById('blockDasar');
     const dasarVal = document.getElementById('inputDasar').value.trim();
-    blockDasar.style.display = dasarVal ? 'block' : 'none';
+    document.getElementById('blockDasar').style.display = dasarVal ? 'block' : 'none';
     document.getElementById('viewDasar').textContent = dasarVal;
 
-    const blockLokasi = document.getElementById('blockLokasi');
     const viewTempat = document.getElementById('viewTempat');
     viewTempat.innerHTML = '';
-    let lokasiCount = 0;
-    document.querySelectorAll('.input-lokasi').forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            lokasiCount++;
-            viewTempat.appendChild(createPdfListItem(lokasiCount, val));
-        }
+    let lCount = 0;
+    document.querySelectorAll('.input-lokasi').forEach(inp => {
+        if (inp.value.trim()) viewTempat.appendChild(createPdfListItem(++lCount, inp.value.trim()));
     });
-    blockLokasi.style.display = lokasiCount > 0 ? 'block' : 'none';
+    document.getElementById('blockLokasi').style.display = lCount > 0 ? 'block' : 'none';
 
-    const blockHasil = document.getElementById('blockHasil');
     const viewHasil = document.getElementById('viewHasil');
     viewHasil.innerHTML = '';
-    let hasilCount = 0;
-    document.querySelectorAll('.input-hasil').forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            hasilCount++;
-            viewHasil.appendChild(createPdfListItem(hasilCount, val));
-        }
+    let hCount = 0;
+    document.querySelectorAll('.input-hasil').forEach(inp => {
+        if (inp.value.trim()) viewHasil.appendChild(createPdfListItem(++hCount, inp.value.trim()));
     });
-    blockHasil.style.display = hasilCount > 0 ? 'block' : 'none';
+    document.getElementById('blockHasil').style.display = hCount > 0 ? 'block' : 'none';
 
-    const blockKegiatan = document.getElementById('blockKegiatan');
-    const kegiatanVal = document.getElementById('inputKegiatan').value.trim();
-    blockKegiatan.style.display = kegiatanVal ? 'block' : 'none';
-    document.getElementById('viewKegiatan').textContent = kegiatanVal;
+    const kVal = document.getElementById('inputKegiatan').value.trim();
+    document.getElementById('blockKegiatan').style.display = kVal ? 'block' : 'none';
+    document.getElementById('viewKegiatan').textContent = kVal;
 
-    const blockAnggota = document.getElementById('blockAnggota');
     const viewAnggota = document.getElementById('viewAnggota');
     viewAnggota.innerHTML = '';
-    let anggotaCount = 0;
-    document.querySelectorAll('.input-anggota').forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            anggotaCount++;
-            viewAnggota.appendChild(createPdfListItem(anggotaCount, val));
-        }
+    let aCount = 0;
+    document.querySelectorAll('.input-anggota').forEach(inp => {
+        if (inp.value.trim()) viewAnggota.appendChild(createPdfListItem(++aCount, inp.value.trim()));
     });
-    blockAnggota.style.display = anggotaCount > 0 ? 'block' : 'none';
+    document.getElementById('blockAnggota').style.display = aCount > 0 ? 'block' : 'none';
 
     renderPhotoPreview();
 }
@@ -269,232 +387,236 @@ function updatePreview() {
 function renderPhotoPreview() {
     const container = document.getElementById('photoPreview');
     const viewContainer = document.getElementById('viewDokumentasi');
-    const countLabel = document.getElementById('photoCount');
-    const blockDokumentasi = document.getElementById('blockDokumentasi');
+    document.getElementById('photoCount').textContent = `${uploadedPhotos.length} / 4 Foto`;
+    document.getElementById('blockDokumentasi').style.display = uploadedPhotos.length === 0 ? 'none' : 'block';
     
     container.innerHTML = '';
     viewContainer.innerHTML = '';
-    countLabel.textContent = `${uploadedPhotos.length} / 4 Foto`;
-    blockDokumentasi.style.display = uploadedPhotos.length === 0 ? 'none' : 'block';
 
     uploadedPhotos.forEach((src, idx) => {
         const thumb = document.createElement('div');
-        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
-        thumb.innerHTML = `
-            <img src="${src}" class="w-full h-full object-cover">
-            <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
-                <i data-lucide="x" class="w-3 h-3"></i>
-            </button>
-        `;
+        thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
+        thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>`;
         container.appendChild(thumb);
 
         const pdfCard = document.createElement('div');
-        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-        pdfCard.innerHTML = `
-            <div class="photo-wrapper"><img src="${src}" alt="Dokumentasi ${idx + 1}"></div>
-            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
-        `;
+        pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+        pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>`;
         viewContainer.appendChild(pdfCard);
     });
     lucide.createIcons();
 }
 
-window.removePhoto = function(index) {
-    uploadedPhotos.splice(index, 1);
-    renderPhotoPreview();
-}
+window.removePhoto = (i) => { uploadedPhotos.splice(i, 1); renderPhotoPreview(); };
 
 
-// ==========================================
-// LOGIKA COMING SOON
-// ==========================================
-function addCsLokasiInput(value = '') {
+// ================= COMING SOON DYNAMIC LOGIC (i = 1 s.d. 6) =================
+function addCsLokasiInput(i, value = '') {
+    const container = document.getElementById(`csLokasiList-${i}`);
     const div = document.createElement('div');
     div.className = 'flex items-center gap-2 cs-lokasi-item';
     div.innerHTML = `
         <span class="text-xs font-bold text-slate-400 w-4 text-center cs-lokasi-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tempat / Lokasi Patroli..." class="cs-input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
-        <button type="button" class="cs-btn-remove-lokasi text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
+        <input type="text" value="${value}" placeholder="Tempat / Lokasi..." class="cs-input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
+        <button type="button" class="cs-btn-remove-lokasi text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
     `;
-    csLokasiListContainer.appendChild(div);
+    container.appendChild(div);
     lucide.createIcons();
-    updateCsLokasiIndexes();
-    div.querySelector('.cs-input-lokasi').addEventListener('input', updateCsPreview);
+    updateCsLokasiIndexes(i);
+    div.querySelector('.cs-input-lokasi').addEventListener('input', () => updateCsPreview(i));
     div.querySelector('.cs-btn-remove-lokasi').addEventListener('click', () => {
-        if (csLokasiListContainer.children.length > 1) {
-            div.remove();
-            updateCsLokasiIndexes();
-            updateCsPreview();
-        }
+        if (container.children.length > 1) { div.remove(); updateCsLokasiIndexes(i); updateCsPreview(i); }
     });
 }
-function updateCsLokasiIndexes() {
-    csLokasiListContainer.querySelectorAll('.cs-lokasi-item').forEach((item, index) => {
+function updateCsLokasiIndexes(i) {
+    document.querySelectorAll(`#csLokasiList-${i} .cs-lokasi-item`).forEach((item, index) => {
         item.querySelector('.cs-lokasi-index').textContent = `${index + 1}.`;
     });
 }
 
-function addCsHasilInput(value = '') {
+function addCsHasilInput(i, value = '') {
+    const container = document.getElementById(`csHasilList-${i}`);
     const div = document.createElement('div');
     div.className = 'flex items-center gap-2 cs-hasil-item';
     div.innerHTML = `
         <span class="text-xs font-bold text-slate-400 w-4 text-center cs-item-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tuliskan poin hasil..." class="cs-input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none font-semibold">
-        <button type="button" class="cs-btn-remove-hasil text-slate-400 hover:text-red-600 p-1 rounded-lg transition">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
+        <input type="text" value="${value}" placeholder="Poin hasil..." class="cs-input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
+        <button type="button" class="cs-btn-remove-hasil text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
     `;
-    csHasilListContainer.appendChild(div);
+    container.appendChild(div);
     lucide.createIcons();
-    updateCsHasilIndexes();
-    div.querySelector('.cs-input-hasil').addEventListener('input', updateCsPreview);
+    updateCsHasilIndexes(i);
+    div.querySelector('.cs-input-hasil').addEventListener('input', () => updateCsPreview(i));
     div.querySelector('.cs-btn-remove-hasil').addEventListener('click', () => {
-        if (csHasilListContainer.children.length > 1) {
-            div.remove();
-            updateCsHasilIndexes();
-            updateCsPreview();
-        }
+        if (container.children.length > 1) { div.remove(); updateCsHasilIndexes(i); updateCsPreview(i); }
     });
 }
-function updateCsHasilIndexes() {
-    csHasilListContainer.querySelectorAll('.cs-hasil-item').forEach((item, index) => {
+function updateCsHasilIndexes(i) {
+    document.querySelectorAll(`#csHasilList-${i} .cs-hasil-item`).forEach((item, index) => {
         item.querySelector('.cs-item-index').textContent = `${index + 1}.`;
     });
 }
 
-function updateCsPreview() {
-    const rawDate = document.getElementById('csInputTanggal').value;
-    document.getElementById('csViewTanggal').textContent = formatIndonesianDate(rawDate);
+function updateCsPreview(i) {
+    const rawDate = document.getElementById(`csInputTanggal-${i}`).value;
+    document.getElementById(`csViewTanggal-${i}`).textContent = formatIndonesianDate(rawDate);
 
-    const blockDasar = document.getElementById('csBlockDasar');
-    const dasarVal = document.getElementById('csInputDasar').value.trim();
-    blockDasar.style.display = dasarVal ? 'block' : 'none';
-    document.getElementById('csViewDasar').textContent = dasarVal;
+    const dVal = document.getElementById(`csInputDasar-${i}`).value.trim();
+    document.getElementById(`csBlockDasar-${i}`).style.display = dVal ? 'block' : 'none';
+    document.getElementById(`csViewDasar-${i}`).textContent = dVal;
 
-    const blockLokasi = document.getElementById('csBlockLokasi');
-    const viewTempat = document.getElementById('csViewTempat');
+    const viewTempat = document.getElementById(`csViewTempat-${i}`);
     viewTempat.innerHTML = '';
-    let lokasiCount = 0;
-    document.querySelectorAll('.cs-input-lokasi').forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            lokasiCount++;
-            viewTempat.appendChild(createPdfListItem(lokasiCount, val));
-        }
+    let lCount = 0;
+    document.querySelectorAll(`#view-coming-soon-${i} .cs-input-lokasi`).forEach(inp => {
+        if (inp.value.trim()) viewTempat.appendChild(createPdfListItem(++lCount, inp.value.trim()));
     });
-    blockLokasi.style.display = lokasiCount > 0 ? 'block' : 'none';
+    document.getElementById(`csBlockLokasi-${i}`).style.display = lCount > 0 ? 'block' : 'none';
 
-    const blockHasil = document.getElementById('csBlockHasil');
-    const viewHasil = document.getElementById('csViewHasil');
+    const viewHasil = document.getElementById(`csViewHasil-${i}`);
     viewHasil.innerHTML = '';
-    let hasilCount = 0;
-    document.querySelectorAll('.cs-input-hasil').forEach(input => {
-        const val = input.value.trim();
-        if (val) {
-            hasilCount++;
-            viewHasil.appendChild(createPdfListItem(hasilCount, val));
-        }
+    let hCount = 0;
+    document.querySelectorAll(`#view-coming-soon-${i} .cs-input-hasil`).forEach(inp => {
+        if (inp.value.trim()) viewHasil.appendChild(createPdfListItem(++hCount, inp.value.trim()));
     });
-    blockHasil.style.display = hasilCount > 0 ? 'block' : 'none';
+    document.getElementById(`csBlockHasil-${i}`).style.display = hCount > 0 ? 'block' : 'none';
 
-    const blockKegiatan = document.getElementById('csBlockKegiatan');
-    const kegiatanVal = document.getElementById('csInputKegiatan').value.trim();
-    blockKegiatan.style.display = kegiatanVal ? 'block' : 'none';
-    document.getElementById('csViewKegiatan').textContent = kegiatanVal;
+    const kVal = document.getElementById(`csInputKegiatan-${i}`).value.trim();
+    document.getElementById(`csBlockKegiatan-${i}`).style.display = kVal ? 'block' : 'none';
+    document.getElementById(`csViewKegiatan-${i}`).textContent = kVal;
 
-    renderCsAnggotaPhotoPreview();
-    renderCsPhotoPreview();
+    renderCsPhotoPreviews(i);
 }
 
-function renderCsAnggotaPhotoPreview() {
-    const container = document.getElementById('csAnggotaPhotoPreview');
-    const viewContainer = document.getElementById('csViewAnggota');
-    const countLabel = document.getElementById('csAnggotaPhotoCount');
-    const blockAnggota = document.getElementById('csBlockAnggota');
+function renderCsPhotoPreviews(i) {
+    const data = csData[i];
     
-    container.innerHTML = '';
-    viewContainer.innerHTML = '';
-    countLabel.textContent = `${csAnggotaPhotos.length} / 4 Foto`;
-    blockAnggota.style.display = csAnggotaPhotos.length === 0 ? 'none' : 'block';
-
-    csAnggotaPhotos.forEach((src, idx) => {
+    // Render Anggota Foto
+    const aContainer = document.getElementById(`csAnggotaPhotoPreview-${i}`);
+    const aViewContainer = document.getElementById(`csViewAnggota-${i}`);
+    document.getElementById(`csAnggotaPhotoCount-${i}`).textContent = `${data.anggotaPhotos.length} / 4 Foto`;
+    document.getElementById(`csBlockAnggota-${i}`).style.display = data.anggotaPhotos.length === 0 ? 'none' : 'block';
+    
+    aContainer.innerHTML = '';
+    aViewContainer.innerHTML = '';
+    data.anggotaPhotos.forEach((src, idx) => {
         const thumb = document.createElement('div');
-        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
-        thumb.innerHTML = `
-            <img src="${src}" class="w-full h-full object-cover">
-            <button type="button" onclick="removeCsAnggotaPhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
-                <i data-lucide="x" class="w-3 h-3"></i>
-            </button>
-        `;
-        container.appendChild(thumb);
+        thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
+        thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><button type="button" onclick="removeCsAnggotaPhoto(${i}, ${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>`;
+        aContainer.appendChild(thumb);
 
         const pdfCard = document.createElement('div');
-        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-        pdfCard.innerHTML = `
-            <div class="photo-wrapper"><img src="${src}" alt="Anggota CS ${idx + 1}"></div>
-            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Anggota Satgas ${idx + 1}</span>
-        `;
-        viewContainer.appendChild(pdfCard);
+        pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+        pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Anggota Satgas ${idx + 1}</span>`;
+        aViewContainer.appendChild(pdfCard);
+    });
+
+    // Render Dokumentasi Foto
+    const dContainer = document.getElementById(`csPhotoPreview-${i}`);
+    const dViewContainer = document.getElementById(`csViewDokumentasi-${i}`);
+    document.getElementById(`csPhotoCount-${i}`).textContent = `${data.uploadedPhotos.length} / 4 Foto`;
+    document.getElementById(`csBlockDokumentasi-${i}`).style.display = data.uploadedPhotos.length === 0 ? 'none' : 'block';
+
+    dContainer.innerHTML = '';
+    dViewContainer.innerHTML = '';
+    data.uploadedPhotos.forEach((src, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
+        thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><button type="button" onclick="removeCsPhoto(${i}, ${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>`;
+        dContainer.appendChild(thumb);
+
+        const pdfCard = document.createElement('div');
+        pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+        pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>`;
+        dViewContainer.appendChild(pdfCard);
     });
     lucide.createIcons();
 }
 
-window.removeCsAnggotaPhoto = function(index) {
-    csAnggotaPhotos.splice(index, 1);
-    renderCsAnggotaPhotoPreview();
-}
+window.removeCsAnggotaPhoto = (i, idx) => { csData[i].anggotaPhotos.splice(idx, 1); renderCsPhotoPreviews(i); };
+window.removeCsPhoto = (i, idx) => { csData[i].uploadedPhotos.splice(idx, 1); renderCsPhotoPreviews(i); };
 
-function renderCsPhotoPreview() {
-    const container = document.getElementById('csPhotoPreview');
-    const viewContainer = document.getElementById('csViewDokumentasi');
-    const countLabel = document.getElementById('csPhotoCount');
-    const blockDokumentasi = document.getElementById('csBlockDokumentasi');
-    
-    container.innerHTML = '';
-    viewContainer.innerHTML = '';
-    countLabel.textContent = `${csUploadedPhotos.length} / 4 Foto`;
-    blockDokumentasi.style.display = csUploadedPhotos.length === 0 ? 'none' : 'block';
+function initCsModuleEvents(i) {
+    document.getElementById(`csInputTanggal-${i}`).addEventListener('input', () => updateCsPreview(i));
+    document.getElementById(`csInputDasar-${i}`).addEventListener('input', () => updateCsPreview(i));
+    document.getElementById(`csBtnAddLokasi-${i}`).addEventListener('click', () => addCsLokasiInput(i));
+    document.getElementById(`csInputKegiatan-${i}`).addEventListener('input', () => updateCsPreview(i));
+    document.getElementById(`csBtnAddHasil-${i}`).addEventListener('click', () => addCsHasilInput(i));
 
-    csUploadedPhotos.forEach((src, idx) => {
-        const thumb = document.createElement('div');
-        thumb.className = 'relative aspect-square border border-slate-300 rounded-xl overflow-hidden group shadow-sm bg-white';
-        thumb.innerHTML = `
-            <img src="${src}" class="w-full h-full object-cover">
-            <button type="button" onclick="removeCsPhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-90 hover:opacity-100 shadow-md">
-                <i data-lucide="x" class="w-3 h-3"></i>
-            </button>
-        `;
-        container.appendChild(thumb);
-
-        const pdfCard = document.createElement('div');
-        pdfCard.className = 'border border-slate-200 rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-        pdfCard.innerHTML = `
-            <div class="photo-wrapper"><img src="${src}" alt="Dokumentasi CS ${idx + 1}"></div>
-            <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
-        `;
-        viewContainer.appendChild(pdfCard);
+    document.getElementById(`csInputAnggotaFoto-${i}`).addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (csData[i].anggotaPhotos.length + files.length > 4) { alert('Maksimal 4 foto anggota!'); return; }
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    if (csData[i].anggotaPhotos.length < 4) {
+                        csData[i].anggotaPhotos.push(ev.target.result);
+                        renderCsPhotoPreviews(i);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        e.target.value = '';
     });
-    lucide.createIcons();
+
+    document.getElementById(`csInputDokumentasi-${i}`).addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (csData[i].uploadedPhotos.length + files.length > 4) { alert('Maksimal 4 foto dokumentasi!'); return; }
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    if (csData[i].uploadedPhotos.length < 4) {
+                        csData[i].uploadedPhotos.push(ev.target.result);
+                        renderCsPhotoPreviews(i);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        e.target.value = '';
+    });
+
+    document.getElementById(`csTabFormBtn-${i}`).addEventListener('click', () => {
+        document.getElementById(`csFormSection-${i}`).classList.remove('hidden');
+        document.getElementById(`csPreviewSection-${i}`).classList.add('hidden');
+        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-indigo-500 text-white shadow-md';
+        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300';
+    });
+
+    document.getElementById(`csTabPreviewBtn-${i}`).addEventListener('click', () => {
+        document.getElementById(`csPreviewSection-${i}`).classList.remove('hidden');
+        document.getElementById(`csFormSection-${i}`).classList.add('hidden');
+        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-indigo-500 text-white shadow-md';
+        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300';
+    });
+
+    document.getElementById(`csBtnDownloadPDF-${i}`).addEventListener('click', () => {
+        const element = document.getElementById(`csPdfContent-${i}`);
+        const filename = generatePdfFilename(`ComingSoon_${i}`, `csInputTanggal-${i}`);
+        html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
+    });
+
+    document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', () => {
+        const filename = generatePdfFilename(`ComingSoon_${i}`, `csInputTanggal-${i}`);
+        document.getElementById('driveFilenameLabel').textContent = filename;
+        const element = document.getElementById(`csPdfContent-${i}`);
+        html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
+        window.open(COMING_SOON_FOLDERS[i], '_blank');
+        driveNoticeModal.classList.remove('hidden');
+    });
+
+    updateCsPreview(i);
 }
 
-window.removeCsPhoto = function(index) {
-    csUploadedPhotos.splice(index, 1);
-    renderCsPhotoPreview();
-}
 
-
-// ==========================================
-// SETTINGS & PROFILES
-// ==========================================
+// ================= PROFILES & GLOBAL EVENTS =================
 function loadSettings() {
     const saved = localStorage.getItem('satpolpp_inhu_trantibum_profile');
     if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            userProfile = { ...userProfile, ...parsed };
-        } catch(e) {}
+        try { userProfile = { ...userProfile, ...JSON.parse(saved) }; } catch(e){}
     }
     userProfile.logoLeft = DEFAULT_INHU_DRIVE_URL;
     userProfile.logoRight = DEFAULT_SATPOL_PP_DRIVE_URL;
@@ -503,27 +625,28 @@ function loadSettings() {
 
 function applyUserProfileUI() {
     document.getElementById('viewNama').textContent = userProfile.nama || '-';
-    document.getElementById('csViewNama').textContent = userProfile.nama || '-';
-    
+    for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById(`csViewNama-${i}`);
+        if (el) el.textContent = userProfile.nama || '-';
+    }
+
     const cleanNip = userProfile.nip ? userProfile.nip.replace(/\D/g, '') : '';
-    const formattedNip = cleanNip.length === 18 ? `NIP. ${cleanNip}` : (cleanNip ? `NIP. ${cleanNip}` : '-');
+    const formattedNip = cleanNip ? `NIP. ${cleanNip}` : '-';
     document.getElementById('viewNip').textContent = formattedNip;
-    document.getElementById('csViewNip').textContent = formattedNip;
+    for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById(`csViewNip-${i}`);
+        if (el) el.textContent = formattedNip;
+    }
 
     document.getElementById('viewJabatan').textContent = userProfile.jabatan || '-';
-    document.getElementById('csViewJabatan').textContent = userProfile.jabatan || '-';
-
-    document.getElementById('headerLogoLeft').src = DEFAULT_INHU_DRIVE_URL;
-    document.getElementById('headerLogoRight').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-    document.getElementById('previewLogoLeft').src = DEFAULT_INHU_DRIVE_URL;
-    document.getElementById('previewLogoRight').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-    document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_DRIVE_URL;
-    document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_DRIVE_URL;
+    for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById(`csViewJabatan-${i}`);
+        if (el) el.textContent = userProfile.jabatan || '-';
+    }
 
     document.getElementById('inputSettingNama').value = userProfile.nama || '';
     inputNip.value = cleanNip;
     document.getElementById('inputSettingJabatan').value = userProfile.jabatan || '';
-    
     updateNipCounter();
 }
 
@@ -536,10 +659,8 @@ function saveSettings() {
     if (nipVal && nipVal.length !== 18) {
         document.getElementById('nipError').classList.remove('hidden');
         return;
-    } else {
-        document.getElementById('nipError').classList.add('hidden');
     }
-
+    document.getElementById('nipError').classList.add('hidden');
     userProfile.nama = document.getElementById('inputSettingNama').value.trim();
     userProfile.nip = nipVal;
     userProfile.jabatan = document.getElementById('inputSettingJabatan').value.trim();
@@ -547,16 +668,11 @@ function saveSettings() {
     localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
     applyUserProfileUI();
     updatePreview();
-    updateCsPreview();
+    for (let i = 1; i <= 6; i++) updateCsPreview(i);
     settingsModal.classList.add('hidden');
 }
 
-
-// ==========================================
-// EVENT BINDINGS
-// ==========================================
 function bindEvents() {
-    // SiLAHAPP Events
     document.getElementById('inputTanggal').addEventListener('input', updatePreview);
     document.getElementById('inputDasar').addEventListener('input', updatePreview);
     document.getElementById('btnAddLokasi').addEventListener('click', () => addLokasiInput());
@@ -566,18 +682,12 @@ function bindEvents() {
 
     document.getElementById('inputDokumentasi').addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
-        if (uploadedPhotos.length + files.length > 4) {
-            alert('Maksimal foto dokumentasi adalah 4 foto!');
-            return;
-        }
+        if (uploadedPhotos.length + files.length > 4) { alert('Maksimal 4 foto dokumentasi!'); return; }
         files.forEach(file => {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
-                reader.onload = (event) => {
-                    if (uploadedPhotos.length < 4) {
-                        uploadedPhotos.push(event.target.result);
-                        renderPhotoPreview();
-                    }
+                reader.onload = (ev) => {
+                    if (uploadedPhotos.length < 4) { uploadedPhotos.push(ev.target.result); renderPhotoPreview(); }
                 };
                 reader.readAsDataURL(file);
             }
@@ -588,186 +698,44 @@ function bindEvents() {
     document.getElementById('tabFormBtn').addEventListener('click', () => {
         document.getElementById('formSection').classList.remove('hidden');
         document.getElementById('previewSection').classList.add('hidden');
-        document.getElementById('tabFormBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
-        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
+        document.getElementById('tabFormBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-amber-500 text-slate-950 shadow-md';
+        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300';
     });
 
     document.getElementById('tabPreviewBtn').addEventListener('click', () => {
         document.getElementById('previewSection').classList.remove('hidden');
         document.getElementById('formSection').classList.add('hidden');
-        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-amber-500 text-slate-950 shadow-md transition';
-        document.getElementById('tabFormBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
+        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-amber-500 text-slate-950 shadow-md';
+        document.getElementById('tabFormBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300';
     });
 
     document.getElementById('btnDownloadPDF').addEventListener('click', () => {
         const element = document.getElementById('pdfContent');
         const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
-        const opt = {
-            margin: [0, 0, 0, 0],
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.92 },
-            html2canvas: { scale: 1.5, useCORS: true, logging: false },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
+        html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
     });
 
     document.getElementById('btnUploadDrive').addEventListener('click', () => {
         const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
         document.getElementById('driveFilenameLabel').textContent = filename;
-        
         const element = document.getElementById('pdfContent');
-        const opt = {
-            margin: [0, 0, 0, 0],
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.92 },
-            html2canvas: { scale: 1.5, useCORS: true, logging: false },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
-
+        html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
         window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
         driveNoticeModal.classList.remove('hidden');
     });
 
-
-    // Coming Soon Events
-    document.getElementById('csInputTanggal').addEventListener('input', updateCsPreview);
-    document.getElementById('csInputDasar').addEventListener('input', updateCsPreview);
-    document.getElementById('csBtnAddLokasi').addEventListener('click', () => addCsLokasiInput());
-    document.getElementById('csInputKegiatan').addEventListener('input', updateCsPreview);
-    document.getElementById('csBtnAddHasil').addEventListener('click', () => addCsHasilInput());
-
-    document.getElementById('csInputAnggotaFoto').addEventListener('change', (e) => {
-        const files = Array.from(e.target.files);
-        if (csAnggotaPhotos.length + files.length > 4) {
-            alert('Maksimal foto anggota adalah 4 foto!');
-            return;
-        }
-        files.forEach(file => {
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    if (csAnggotaPhotos.length < 4) {
-                        csAnggotaPhotos.push(event.target.result);
-                        renderCsAnggotaPhotoPreview();
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        e.target.value = '';
-    });
-
-    document.getElementById('csInputDokumentasi').addEventListener('change', (e) => {
-        const files = Array.from(e.target.files);
-        if (csUploadedPhotos.length + files.length > 4) {
-            alert('Maksimal foto dokumentasi adalah 4 foto!');
-            return;
-        }
-        files.forEach(file => {
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    if (csUploadedPhotos.length < 4) {
-                        csUploadedPhotos.push(event.target.result);
-                        renderCsPhotoPreview();
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        e.target.value = '';
-    });
-
-    document.getElementById('csTabFormBtn').addEventListener('click', () => {
-        document.getElementById('csFormSection').classList.remove('hidden');
-        document.getElementById('csPreviewSection').classList.add('hidden');
-        document.getElementById('csTabFormBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-indigo-500 text-white shadow-md transition';
-        document.getElementById('csTabPreviewBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
-    });
-
-    document.getElementById('csTabPreviewBtn').addEventListener('click', () => {
-        document.getElementById('csPreviewSection').classList.remove('hidden');
-        document.getElementById('csFormSection').classList.add('hidden');
-        document.getElementById('csTabPreviewBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs sm:text-sm rounded-xl bg-indigo-500 text-white shadow-md transition';
-        document.getElementById('csTabFormBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs sm:text-sm rounded-xl text-slate-300 transition';
-    });
-
-    document.getElementById('csBtnDownloadPDF').addEventListener('click', () => {
-        const element = document.getElementById('csPdfContent');
-        const filename = generatePdfFilename('ComingSoon', 'csInputTanggal');
-        const opt = {
-            margin: [0, 0, 0, 0],
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.92 },
-            html2canvas: { scale: 1.5, useCORS: true, logging: false },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
-    });
-
-    document.getElementById('csBtnUploadDrive').addEventListener('click', () => {
-        const filename = generatePdfFilename('ComingSoon', 'csInputTanggal');
-        document.getElementById('driveFilenameLabel').textContent = filename;
-        
-        const element = document.getElementById('csPdfContent');
-        const opt = {
-            margin: [0, 0, 0, 0],
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.92 },
-            html2canvas: { scale: 1.5, useCORS: true, logging: false },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
-
-        window.open(COMING_SOON_DRIVE_FOLDER_URL, '_blank');
-        driveNoticeModal.classList.remove('hidden');
-    });
-
-
-    // Global Settings & Modals
     inputNip.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/\D/g, '');
         updateNipCounter();
-        if (e.target.value.length === 18) {
-            document.getElementById('nipError').classList.add('hidden');
-        }
+        if (e.target.value.length === 18) document.getElementById('nipError').classList.add('hidden');
     });
 
     document.querySelectorAll('#btnSettings').forEach(btn => {
-        btn.addEventListener('click', () => {
-            applyUserProfileUI();
-            settingsModal.classList.remove('hidden');
-        });
+        btn.addEventListener('click', () => { applyUserProfileUI(); settingsModal.classList.remove('hidden'); });
     });
 
     document.getElementById('btnCloseSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
     document.getElementById('btnCancelSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
     document.getElementById('btnSaveSettings').addEventListener('click', saveSettings);
-
-    document.getElementById('btnResetLogoLeft').addEventListener('click', () => {
-        userProfile.logoLeft = DEFAULT_INHU_DRIVE_URL;
-        document.getElementById('inputSettingLogoLeft').value = '';
-        document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_DRIVE_URL;
-    });
-
-    document.getElementById('btnResetLogoRight').addEventListener('click', () => {
-        userProfile.logoRight = DEFAULT_SATPOL_PP_DRIVE_URL;
-        document.getElementById('inputSettingLogoRight').value = '';
-        document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-    });
-
-    document.getElementById('btnResetBothLogos').addEventListener('click', () => {
-        userProfile.logoLeft = DEFAULT_INHU_DRIVE_URL;
-        userProfile.logoRight = DEFAULT_SATPOL_PP_DRIVE_URL;
-        document.getElementById('inputSettingLogoLeft').value = '';
-        document.getElementById('inputSettingLogoRight').value = '';
-        document.getElementById('settingLogoLeftPreview').src = DEFAULT_INHU_DRIVE_URL;
-        document.getElementById('settingLogoRightPreview').src = DEFAULT_SATPOL_PP_DRIVE_URL;
-    });
-
-    document.getElementById('btnCloseDriveNotice').addEventListener('click', () => {
-        driveNoticeModal.classList.add('hidden');
-    });
+    document.getElementById('btnCloseDriveNotice').addEventListener('click', () => driveNoticeModal.classList.add('hidden'));
 }
