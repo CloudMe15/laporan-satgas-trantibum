@@ -36,8 +36,24 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Pengaturan latar belakang putih bersih dan proporsional untuk logo di Pratinjau KOP Surat A4 & Modal Setting */
-#previewLogoLeft, #previewLogoRight, #settingLogoLeftPreview, #settingLogoRightPreview {
+/* MEMPERBESAR LOGO DI KOP SURAT A4/PDF */
+.a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
+.a4-page .flex.items-center.justify-between.border-b-4 > div:last-child {
+    width: 24mm !important; /* Memperlebar wadah logo */
+    height: 28mm !important; /* Mempertinggi wadah logo */
+}
+
+#previewLogoLeft, #previewLogoRight {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #ffffff !important;
+    padding: 6px !important;
+    border-radius: 8px !important;
+    object-fit: contain !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+#settingLogoLeftPreview, #settingLogoRightPreview {
     background-color: #ffffff !important;
     padding: 4px !important;
     max-height: 100% !important;
