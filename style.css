@@ -5,8 +5,8 @@ body {
     background-color: #0f172a;
     background-image: url('https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO');
     background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
+    background-position: center top; /* Dioptimalkan untuk orientasi portrait agar bagian atas/tengah gambar tetap fokus */
+    background-size: cover;          /* Menyesuaikan lebar layar secara proporsional */
     background-attachment: fixed;
 }
 
@@ -61,7 +61,7 @@ body {
     border-radius: 4px;
 }
 
-/* Panel Formulir: Efek Kaca Dihapus, Tanpa Background Solid, Hanya Border & Teks */
+/* Panel Formulir: Tanpa Background, Tanpa Efek Kaca, Hanya Border & Teks */
 .glass-panel {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -123,7 +123,7 @@ body {
     margin: 20mm 16mm;
 }
 
-/* Dokumen A4: Tanpa Background Solid & Tanpa Efek Kaca, Hanya Tinggal Ketikan dan Garis Dokumen */
+/* Dokumen A4: Tanpa Background & Tanpa Efek Kaca */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
