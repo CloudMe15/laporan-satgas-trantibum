@@ -28,9 +28,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v28_clipboard_icons') {
+    if (cacheVersion !== 'v29_dual_anggota_mode') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v28_clipboard_icons');
+        localStorage.setItem('satpol_app_version', 'v29_dual_anggota_mode');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -52,9 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
     addAnggotaInput();
 
     for (let i = 1; i <= 2; i++) {
-        csData[i] = { uploadedPhotos: [], anggotaPhotos: [] };
+        csData[i] = { uploadedPhotos: [], anggotaPhotos: [], manualAnggota: [] };
         addCsLokasiInput(i);
         addCsHasilInput(i);
+        addCsManualAnggotaInput(i);
         initCsModuleEvents(i);
     }
     
@@ -168,15 +169,37 @@ function generateComingSoonViews() {
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">5. Foto Anggota Satgas</label>
-                                        <span id="csAnggotaPhotoCount-${i}" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                    <div class="flex items-center justify-between mb-1.5">
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">5. Anggota Satgas (Pilih Opsi)</label>
                                     </div>
-                                    <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
-                                        <input type="file" id="csInputAnggotaFoto-${i}" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                        <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Anggota Satgas</p>
+                                    <div class="flex bg-slate-200 p-1 rounded-xl mb-3">
+                                        <button type="button" id="csAnggotaModeFotoBtn-${i}" class="flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition">Upload Foto</button>
+                                        <button type="button" id="csAnggotaModeManualBtn-${i}" class="flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition">Tambah Manual</button>
                                     </div>
-                                    <div id="csAnggotaPhotoPreview-${i}" class="grid grid-cols-4 gap-2 mt-3"></div>
+
+                                    <!-- Mode 1: Foto -->
+                                    <div id="csAnggotaFotoWrapper-${i}" class="space-y-2">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-[11px] font-bold text-slate-600">Foto Anggota</span>
+                                            <span id="csAnggotaPhotoCount-${i}" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                        </div>
+                                        <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
+                                            <input type="file" id="csInputAnggotaFoto-${i}" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                            <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Anggota Satgas</p>
+                                        </div>
+                                        <div id="csAnggotaPhotoPreview-${i}" class="grid grid-cols-4 gap-2 mt-2"></div>
+                                    </div>
+
+                                    <!-- Mode 2: Manual -->
+                                    <div id="csAnggotaManualWrapper-${i}" class="space-y-2 hidden">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-[11px] font-bold text-slate-600">Daftar Nama Anggota</span>
+                                            <button type="button" id="csBtnAddManualAnggota-${i}" class="text-[11px] font-bold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Nama</button>
+                                        </div>
+                                        <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner">
+                                            <div id="csManualAnggotaList-${i}" class="space-y-2"></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
@@ -232,7 +255,7 @@ function generateComingSoonViews() {
                                         <div id="csBlockLokasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">2. Tempat Pelaksanaan</label><div class="pdf-box min-h-[42px]"><div id="csViewTempat-${i}" class="space-y-1"></div></div></div>
                                         <div id="csBlockHasil-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">3. Hasil Kegiatan</label><div class="pdf-box min-h-[48px]"><div id="csViewHasil-${i}" class="space-y-1"></div></div></div>
                                         <div id="csBlockKegiatan-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">4. Uraian Kegiatan</label><div id="csViewKegiatan-${i}" class="pdf-box min-h-[48px] whitespace-pre-line">-</div></div>
-                                        <div id="csBlockAnggota-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">5. Dokumentasi Foto Anggota Satgas</label><div class="pdf-box min-h-[90px]"><div id="csViewAnggota-${i}" class="grid grid-cols-2 gap-3"></div></div></div>
+                                        <div id="csBlockAnggota-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1" id="csLabelAnggotaTitle-${i}">5. Dokumentasi Foto Anggota Satgas</label><div class="pdf-box min-h-[50px]"><div id="csViewAnggota-${i}"></div></div></div>
                                         <div id="csBlockDokumentasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">6. Dokumentasi Foto Kegiatan</label><div class="pdf-box min-h-[90px]"><div id="csViewDokumentasi-${i}" class="grid grid-cols-2 gap-3"></div></div></div>
                                     </div>
                                 </div>
@@ -452,6 +475,29 @@ function updateCsHasilIndexes(i) {
     });
 }
 
+function addCsManualAnggotaInput(i, value = '') {
+    const container = document.getElementById(`csManualAnggotaList-${i}`);
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2 cs-manual-anggota-item';
+    div.innerHTML = `
+        <span class="text-xs font-bold text-slate-400 w-4 text-center cs-manual-anggota-index">1.</span>
+        <input type="text" value="${value}" placeholder="Nama lengkap anggota..." class="cs-input-manual-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
+        <button type="button" class="cs-btn-remove-manual-anggota text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+    `;
+    container.appendChild(div);
+    lucide.createIcons();
+    updateCsManualAnggotaIndexes(i);
+    div.querySelector('.cs-input-manual-anggota').addEventListener('input', () => updateCsPreview(i));
+    div.querySelector('.cs-btn-remove-manual-anggota').addEventListener('click', () => {
+        if (container.children.length > 1) { div.remove(); updateCsManualAnggotaIndexes(i); updateCsPreview(i); }
+    });
+}
+function updateCsManualAnggotaIndexes(i) {
+    document.querySelectorAll(`#csManualAnggotaList-${i} .cs-manual-anggota-item`).forEach((item, index) => {
+        item.querySelector('.cs-manual-anggota-index').textContent = `${index + 1}.`;
+    });
+}
+
 function updateCsPreview(i) {
     const rawDate = document.getElementById(`csInputTanggal-${i}`).value;
     document.getElementById(`csViewTanggal-${i}`).textContent = formatIndonesianDate(rawDate);
@@ -485,24 +531,50 @@ function updateCsPreview(i) {
 
 function renderCsPhotoPreviews(i) {
     const data = csData[i];
-    
+    const isManualMode = !document.getElementById(`csAnggotaManualWrapper-${i}`).classList.contains('hidden');
+
+    const titleEl = document.getElementById(`csLabelAnggotaTitle-${i}`);
+    const viewAnggotaContainer = document.getElementById(`csViewAnggota-${i}`);
+    viewAnggotaContainer.innerHTML = '';
+
+    if (isManualMode) {
+        titleEl.textContent = '5. Daftar Nama Anggota Satgas';
+        let mCount = 0;
+        let hasContent = false;
+        const manualItems = document.querySelectorAll(`#csManualAnggotaList-${i} .cs-input-manual-anggota`);
+        
+        const listDiv = document.createElement('div');
+        manualItems.forEach(inp => {
+            if (inp.value.trim()) {
+                hasContent = true;
+                listDiv.appendChild(createPdfListItem(++mCount, inp.value.trim()));
+            }
+        });
+        viewAnggotaContainer.appendChild(listDiv);
+        document.getElementById(`csBlockAnggota-${i}`).style.display = hasContent ? 'block' : 'none';
+    } else {
+        titleEl.textContent = '5. Dokumentasi Foto Anggota Satgas';
+        document.getElementById(`csAnggotaPhotoCount-${i}`).textContent = `${data.anggotaPhotos.length} / 4 Foto`;
+        document.getElementById(`csBlockAnggota-${i}`).style.display = data.anggotaPhotos.length === 0 ? 'none' : 'block';
+
+        const gridDiv = document.createElement('div');
+        gridDiv.className = 'grid grid-cols-2 gap-3';
+        data.anggotaPhotos.forEach((src, idx) => {
+            const pdfCard = document.createElement('div');
+            pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+            pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Anggota Satgas ${idx + 1}</span>`;
+            gridDiv.appendChild(pdfCard);
+        });
+        viewAnggotaContainer.appendChild(gridDiv);
+    }
+
     const aContainer = document.getElementById(`csAnggotaPhotoPreview-${i}`);
-    const aViewContainer = document.getElementById(`csViewAnggota-${i}`);
-    document.getElementById(`csAnggotaPhotoCount-${i}`).textContent = `${data.anggotaPhotos.length} / 4 Foto`;
-    document.getElementById(`csBlockAnggota-${i}`).style.display = data.anggotaPhotos.length === 0 ? 'none' : 'block';
-    
     aContainer.innerHTML = '';
-    aViewContainer.innerHTML = '';
     data.anggotaPhotos.forEach((src, idx) => {
         const thumb = document.createElement('div');
         thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
         thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><button type="button" onclick="removeCsAnggotaPhoto(${i}, ${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>`;
         aContainer.appendChild(thumb);
-
-        const pdfCard = document.createElement('div');
-        pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-        pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Anggota Satgas ${idx + 1}</span>`;
-        aViewContainer.appendChild(pdfCard);
     });
 
     const dContainer = document.getElementById(`csPhotoPreview-${i}`);
@@ -535,6 +607,28 @@ function initCsModuleEvents(i) {
     document.getElementById(`csBtnAddLokasi-${i}`).addEventListener('click', () => addCsLokasiInput(i));
     document.getElementById(`csInputKegiatan-${i}`).addEventListener('input', () => updateCsPreview(i));
     document.getElementById(`csBtnAddHasil-${i}`).addEventListener('click', () => addCsHasilInput(i));
+    document.getElementById(`csBtnAddManualAnggota-${i}`).addEventListener('click', () => addCsManualAnggotaInput(i));
+
+    const fotoBtn = document.getElementById(`csAnggotaModeFotoBtn-${i}`);
+    const manualBtn = document.getElementById(`csAnggotaModeManualBtn-${i}`);
+    const fotoWrapper = document.getElementById(`csAnggotaFotoWrapper-${i}`);
+    const manualWrapper = document.getElementById(`csAnggotaManualWrapper-${i}`);
+
+    fotoBtn.addEventListener('click', () => {
+        fotoBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
+        manualBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
+        fotoWrapper.classList.remove('hidden');
+        manualWrapper.classList.add('hidden');
+        renderCsPhotoPreviews(i);
+    });
+
+    manualBtn.addEventListener('click', () => {
+        manualBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
+        fotoBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
+        manualWrapper.classList.remove('hidden');
+        fotoWrapper.classList.add('hidden');
+        renderCsPhotoPreviews(i);
+    });
 
     document.getElementById(`csInputAnggotaFoto-${i}`).addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
