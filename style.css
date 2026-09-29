@@ -21,6 +21,27 @@ body {
     margin-left: 0 !important;
 }
 
+.sidebar-logo-clean {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    background: transparent !important;
+    mix-blend-mode: luminosity;
+    transition: filter 0.3s ease;
+}
+
+.top-nav-btn:hover .sidebar-logo-clean,
+.top-nav-btn.active .sidebar-logo-clean {
+    mix-blend-mode: normal;
+}
+
+.custom-sidebar-logo {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    border-radius: 4px;
+}
+
 .glass-panel {
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(16px);
