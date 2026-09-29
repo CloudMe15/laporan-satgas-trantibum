@@ -36,9 +36,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v18_custom_silahapp_icon') {
+    if (cacheVersion !== 'v19_clean_silahapp_icon') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v18_custom_silahapp_icon');
+        localStorage.setItem('satpol_app_version', 'v19_clean_silahapp_icon');
     }
 
     settingsModal = document.getElementById('settingsModal');
