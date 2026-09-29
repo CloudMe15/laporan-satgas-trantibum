@@ -26,6 +26,13 @@ body {
     margin-left: 76px;
 }
 
+.custom-sidebar-logo {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    border-radius: 4px;
+}
+
 .glass-panel {
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(16px);
