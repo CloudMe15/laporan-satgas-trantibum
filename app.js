@@ -28,9 +28,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v23_clean_menu_top') {
+    if (cacheVersion !== 'v24_topnav_clean') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v23_clean_menu_top');
+        localStorage.setItem('satpol_app_version', 'v24_topnav_clean');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -60,47 +60,30 @@ document.addEventListener('DOMContentLoaded', () => {
     
     bindEvents();
     updatePreview();
-    initSidebarNavigation();
-    initSidebarToggle();
+    initTopNavNavigation();
 });
 
-function initSidebarToggle() {
-    const sidebar = document.getElementById('appSidebar');
-    const menuList = document.getElementById('sidebarMenuList');
-    const btnToggle = document.getElementById('btnToggleMenu');
+function initTopNavNavigation() {
+    const navBtns = document.querySelectorAll('.top-nav-btn');
+    const appViews = document.querySelectorAll('.app-view');
 
-    if (!btnToggle || !menuList) return;
-
-    // Saat pertama kali dimuat di layar kecil/handphone, menu list disembunyikan agar form tidak mengecil
-    if (window.innerWidth < 768) {
-        menuList.classList.add('hidden');
-        sidebar.classList.add('menu-collapsed');
-    }
-
-    // Toggle buka/tutup menu saat tombol MENU di sebelah kiri atas diklik
-    btnToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        menuList.classList.toggle('hidden');
-        sidebar.classList.toggle('menu-collapsed');
-    });
-
-    // Ketika salah satu menu/ikon modul diklik, otomatis menu list tertutup kembali
-    const sidebarBtns = document.querySelectorAll('.sidebar-btn');
-    sidebarBtns.forEach(btn => {
+    navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            if (window.innerWidth < 768) {
-                menuList.classList.add('hidden');
-                sidebar.classList.add('menu-collapsed');
+            const target = btn.getAttribute('data-target');
+            navBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            appViews.forEach(view => {
+                view.classList.add('hidden');
+                view.classList.remove('active-view');
+            });
+
+            const targetView = document.getElementById(`view-${target}`);
+            if (targetView) {
+                targetView.classList.remove('hidden');
+                targetView.classList.add('active-view');
             }
         });
-    });
-
-    // Klik di luar area sidebar di perangkat mobile akan menutup menu
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth < 768 && !sidebar.contains(e.target)) {
-            menuList.classList.add('hidden');
-            sidebar.classList.add('menu-collapsed');
-        }
     });
 }
 
@@ -111,7 +94,7 @@ function generateComingSoonViews() {
     for (let i = 1; i <= 2; i++) {
         htmlContent += `
             <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex flex-col">
-                <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
+                <header class="glass-header text-white sticky top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
                         <div class="flex items-center space-x-3">
                             <div class="flex items-center gap-2">
@@ -258,30 +241,6 @@ function generateComingSoonViews() {
         `;
     }
     container.innerHTML = htmlContent;
-}
-
-function initSidebarNavigation() {
-    const sidebarBtns = document.querySelectorAll('.sidebar-btn');
-    const appViews = document.querySelectorAll('.app-view');
-
-    sidebarBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const target = btn.getAttribute('data-target');
-            sidebarBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            appViews.forEach(view => {
-                view.classList.add('hidden');
-                view.classList.remove('active-view');
-            });
-
-            const targetView = document.getElementById(`view-${target}`);
-            if (targetView) {
-                targetView.classList.remove('hidden');
-                targetView.classList.add('active-view');
-            }
-        });
-    });
 }
 
 function initDefaultDate() {
