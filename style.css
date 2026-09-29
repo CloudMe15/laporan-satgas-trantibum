@@ -1,270 +1,193 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Satgas Patroli Trantibum - Satpol PP Kab. Indragiri Hulu</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- html2pdf.js CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- CSS Terpisah -->
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between relative selection:bg-amber-500 selection:text-slate-950">
-    <div class="fixed inset-0 bg-slate-950/40 pointer-events-none z-0"></div>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
-    <!-- MAIN APP WRAPPER -->
-    <div class="app-layout flex-1 flex flex-col relative z-10 w-full">
-        
-        <!-- MENU NAVIGASI UTAMA -->
-        <nav class="top-navbar no-print bg-slate-900 border-b border-slate-800 sticky top-0 z-40 px-3 py-2 shadow-lg">
-            <div class="max-w-7xl mx-auto flex items-center justify-center gap-1 bg-slate-800/90 p-1 rounded-xl border border-slate-700 w-full sm:w-auto overflow-x-auto">
-                <button class="top-nav-btn active px-3 py-1.5 rounded-lg text-xs font-extrabold text-slate-200 transition text-center" data-target="silahapp">SiLAHAPP</button>
-                <button class="top-nav-btn px-3 py-1.5 rounded-lg text-xs font-extrabold text-slate-300 transition text-center" data-target="coming-soon-1">Pelaporan Surat Tugas</button>
-                <button class="top-nav-btn px-3 py-1.5 rounded-lg text-xs font-extrabold text-slate-300 transition text-center" data-target="coming-soon-2">Coming Soon</button>
-            </div>
-        </nav>
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #0f172a;
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)),
+                       url('https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1920&q=80');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+}
 
-        <!-- KONTEN UTAMA -->
-        <div class="main-content-wrapper flex-1 flex flex-col justify-between">
-            
-            <!-- ================= VIEW 1: SILAHAPP ================= -->
-            <div id="view-silahapp" class="app-view active-view flex-1 flex flex-col">
-                <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
-                    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
-                        <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
-                            <div class="flex items-center gap-2">
-                                <img id="headerLogoLeft" src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" alt="Indragiri Hulu" class="w-8 h-8 object-contain">
-                                <img id="headerLogoRight" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" alt="Satpol PP" class="w-8 h-8 object-contain">
-                            </div>
-                            <div>
-                                <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">SiLAHAPP</h1>
-                                <p class="text-[10px] sm:text-[11px] text-amber-400 font-semibold tracking-wider">Sistem Laporan Harian Piket dan Patroli</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-end w-full sm:w-auto">
-                            <button id="btnSettings" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
-                                <i data-lucide="settings" class="w-4 h-4"></i>
-                                <span>Pengaturan Profil</span>
-                            </button>
-                        </div>
-                    </div>
-                </header>
+.top-nav-btn.active {
+    background-color: rgba(245, 158, 11, 0.9);
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
 
-                <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1 rounded-xl backdrop-blur-md mb-2 no-print border border-slate-700/60 shadow-xl">
-                        <button id="tabFormBtn" class="flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow-md transition">Isi Laporan</button>
-                        <button id="tabPreviewBtn" class="flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300 transition">Pratinjau</button>
-                    </div>
+.main-content-wrapper {
+    margin-left: 0 !important;
+}
 
-                    <!-- FORM SILAHAPP -->
-                    <section id="formSection" class="lg:col-span-5 space-y-6 no-print">
-                        <div class="glass-panel p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
-                            <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
-                                <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                                    <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600"></i> Formulir Patroli Trantibum
-                                </h2>
-                                <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">SiLAHAPP</span>
-                            </div>
+.glass-panel {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
 
-                            <form id="reportForm" class="space-y-4" onsubmit="event.preventDefault();">
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">1. Tanggal Laporan</label>
-                                    <input type="date" id="inputTanggal" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-xs sm:text-sm font-semibold shadow-sm">
-                                </div>
-                                <div>
-                                    <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Dasar Pelaksanaan & Lokasi</label>
-                                        <button type="button" id="btnAddLokasi" class="text-[11px] font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 px-2 py-1 rounded-lg transition border border-amber-300">+ Tambah Lokasi</button>
-                                    </div>
-                                    <div class="bg-amber-50/80 p-3 rounded-2xl border border-amber-200 shadow-inner space-y-3">
-                                        <textarea id="inputDasar" rows="2" placeholder="Dasar Pelaksanaan..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
-                                        <div class="pt-1 border-t border-amber-200">
-                                            <label class="block text-[11px] font-bold text-amber-900 uppercase mb-1.5">Daftar Tempat / Lokasi Patroli:</label>
-                                            <div id="lokasiList" class="space-y-2"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. Uraian Kegiatan Patroli</label>
-                                        <button type="button" id="btnAddHasil" class="text-[11px] font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 px-2 py-1 rounded-lg transition border border-emerald-300">+ Tambah Poin</button>
-                                    </div>
-                                    <div class="bg-emerald-50/80 p-3 rounded-2xl border border-emerald-200 shadow-inner">
-                                        <div id="hasilList" class="space-y-2"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">4. Hasil Kegiatan Patroli</label>
-                                    <div class="bg-slate-100 p-3 rounded-2xl border border-slate-300 shadow-inner">
-                                        <textarea id="inputKegiatan" rows="3" placeholder="Deskripsikan rincian..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">5. Daftar Nama Anggota Satgas</label>
-                                        <button type="button" id="btnAddAnggota" class="text-[11px] font-bold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Anggota</button>
-                                    </div>
-                                    <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner">
-                                        <div id="anggotaList" class="space-y-2"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">6. Foto Dokumentasi</label>
-                                        <span id="photoCount" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
-                                    </div>
-                                    <div class="border-2 border-dashed border-amber-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
-                                        <input type="file" id="inputDokumentasi" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                        <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Dokumentasi</p>
-                                    </div>
-                                    <div id="photoPreview" class="grid grid-cols-4 gap-2 mt-3"></div>
-                                </div>
-                            </form>
-                        </div>
-                    </section>
+.glass-header {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
 
-                    <!-- PREVIEW SILAHAPP -->
-                    <section id="previewSection" class="lg:col-span-7 hidden lg:block space-y-4">
-                        <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
-                            <span class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (SiLAHAPP)
-                            </span>
-                            <div class="flex items-center gap-2 w-full sm:w-auto">
-                                <button id="btnDownloadPDF" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Download PDF</button>
-                                <button id="btnUploadDrive" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Google Drive</button>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto pb-6">
-                            <div id="pdfContent" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
-                                <div>
-                                    <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
-                                        <div class="flex-shrink-0 flex items-center justify-center"><img id="previewLogoLeft" src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" class="object-contain"></div>
-                                        <div class="flex-1 text-center px-1">
-                                            <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
-                                            <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
-                                            <div class="w-full h-0.5 bg-slate-900 my-1"></div>
-                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN SATGAS PATROLI TRANTIBUM</h1>
-                                        </div>
-                                        <div class="flex-shrink-0 flex items-center justify-center"><img id="previewLogoRight" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="object-contain"></div>
-                                    </div>
-                                    <div class="preview-block pdf-box shadow-sm mb-4">
-                                        <div class="grid grid-cols-2 gap-2 text-[11px]">
-                                            <div><span class="font-semibold text-slate-500 block text-[10px]">Nama Lengkap:</span><span id="viewNama" class="font-bold text-slate-900 text-xs">-</span></div>
-                                            <div><span class="font-semibold text-slate-500 block text-[10px]">NIP:</span><span id="viewNip" class="font-semibold text-slate-800">-</span></div>
-                                            <div class="col-span-2 border-t border-slate-200 pt-1.5 mt-0.5"><span class="font-semibold text-slate-500 block text-[10px]">Jabatan / Unit Kerja:</span><span id="viewJabatan" class="font-semibold text-slate-800">-</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-3">
-                                        <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
-                                            <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span><span class="text-slate-400">:</span><span id="viewTanggal" class="font-bold text-slate-950 text-xs"></span>
-                                        </div>
-                                        <div id="blockDasar" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">1. Dasar Pelaksanaan</label><div id="viewDasar" class="pdf-box min-h-[42px] whitespace-pre-line">-</div></div>
-                                        <div id="blockLokasi" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">2. Tempat Pelaksanaan</label><div class="pdf-box min-h-[42px]"><div id="viewTempat" class="space-y-1"></div></div></div>
-                                        <div id="blockHasil" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">3. Hasil Kegiatan Patroli</label><div class="pdf-box min-h-[48px]"><div id="viewHasil" class="space-y-1"></div></div></div>
-                                        <div id="blockKegiatan" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">4. Uraian Kegiatan Patroli</label><div id="viewKegiatan" class="pdf-box min-h-[48px] whitespace-pre-line">-</div></div>
-                                        <div id="blockAnggota" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">5. Daftar Nama Anggota Satgas</label><div class="pdf-box min-h-[42px]"><div id="viewAnggota" class="space-y-1"></div></div></div>
-                                        <div id="blockDokumentasi" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">6. Dokumentasi Foto Kegiatan</label><div class="pdf-box min-h-[90px]"><div id="viewDokumentasi" class="grid grid-cols-2 gap-3"></div></div></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </main>
-            </div>
+#headerLogoLeft, #headerLogoRight {
+    background-color: #ffffff !important;
+    padding: 3px !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 6px !important;
+    object-fit: contain !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
 
-            <!-- CONTAINER MODUL LANJUTAN -->
-            <div id="comingSoonContainer"></div>
+@media (min-width: 640px) {
+    #headerLogoLeft, #headerLogoRight {
+        width: 36px !important;
+        height: 36px !important;
+    }
+}
 
-            <!-- FOOTER -->
-            <footer class="relative z-10 w-full py-4 text-center text-xs text-slate-200 font-semibold no-print bg-slate-950/90 backdrop-blur-md border-t border-slate-800/80 mt-auto shadow-2xl">
-                <div class="max-w-7xl mx-auto px-4">
-                    CloudMe - Bag. Program Satuan Polisi Pamong Praja - 2026
-                </div>
-            </footer>
-        </div>
-    </div>
+.a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
+.a4-page .flex.items-center.justify-between.border-b-4 > div:last-child {
+    width: 24mm !important;
+    height: 28mm !important;
+}
 
-    <!-- SETTINGS MODAL -->
-    <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
-                    <i data-lucide="sliders" class="w-5 h-5 text-amber-600"></i> Pengaturan Profil
-                </h3>
-                <button id="btnCloseSettings" class="text-slate-400 hover:text-slate-600 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <form id="settingsForm" class="space-y-4" onsubmit="event.preventDefault();">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="block text-xs font-bold text-slate-700">Logo Kiri (Inhu)</label>
-                            <button type="button" id="btnResetLogoLeft" class="text-[10px] text-emerald-600 font-bold underline">Reset</button>
-                        </div>
-                        <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
-                            <div class="w-10 h-10 rounded-lg border bg-white flex items-center justify-center overflow-hidden flex-shrink-0 p-1">
-                                <img id="settingLogoLeftPreview" src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" class="max-w-full max-h-full object-contain">
-                            </div>
-                            <input type="file" id="inputSettingLogoLeft" accept="image/*" class="text-[10px] text-slate-500 cursor-pointer">
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="block text-xs font-bold text-slate-700">Logo Kanan (Satpol)</label>
-                            <button type="button" id="btnResetLogoRight" class="text-[10px] text-indigo-600 font-bold underline">Reset</button>
-                        </div>
-                        <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
-                            <div class="w-10 h-10 rounded-lg border bg-white flex items-center justify-center overflow-hidden flex-shrink-0 p-1">
-                                <img id="settingLogoRightPreview" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="max-w-full max-h-full object-contain">
-                            </div>
-                            <input type="file" id="inputSettingLogoRight" accept="image/*" class="text-[10px] text-slate-500 cursor-pointer">
-                        </div>
-                    </div>
-                </div>
+#previewLogoLeft, #previewLogoRight {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #ffffff !important;
+    padding: 6px !important;
+    border-radius: 8px !important;
+    object-fit: contain !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+}
 
-                <div class="space-y-3 pt-2 border-t">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
-                        <input type="text" id="inputSettingNama" placeholder="Fajar Ari Prakoso" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold outline-none">
-                    </div>
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="block text-xs font-bold text-slate-700">NIP / ID Pegawai</label>
-                            <span id="nipCounter" class="text-[10px] font-bold text-slate-500">0 / 18 Digit</span>
-                        </div>
-                        <input type="text" id="inputSettingNip" maxlength="18" placeholder="18 digit angka" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold outline-none tracking-wider">
-                        <p id="nipError" class="text-[10px] text-red-500 mt-1 hidden font-semibold">NIP harus 18 digit angka!</p>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Jabatan / Unit Kerja</label>
-                        <input type="text" id="inputSettingJabatan" placeholder="Jabatan" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold outline-none">
-                    </div>
-                </div>
-                <div class="flex justify-end gap-2 pt-3 border-t">
-                    <button type="button" id="btnCancelSettings" class="px-4 py-2 border rounded-xl text-xs font-bold text-slate-700">Batal</button>
-                    <button type="button" id="btnSaveSettings" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-xl text-xs shadow-md">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
+#settingLogoLeftPreview, #settingLogoRightPreview {
+    background-color: #ffffff !important;
+    padding: 4px !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    border-radius: 6px !important;
+    object-fit: contain !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
 
-    <!-- GOOGLE DRIVE NOTICE MODAL -->
-    <div id="driveNoticeModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border text-center space-y-4">
-            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto"><i data-lucide="hard-drive" class="w-6 h-6"></i></div>
-            <h3 class="text-base font-extrabold text-slate-900">Petunjuk Upload Google Drive</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">
-                File PDF laporan Anda telah diunduh dengan nama:<br>
-                <strong id="driveFilenameLabel" class="text-indigo-700 font-bold block mt-1 bg-indigo-50 p-2 rounded-xl border border-indigo-100 break-all">Laporan.pdf</strong>
-            </p>
-            <p class="text-xs text-slate-500 leading-relaxed">Folder Google Drive khusus modul ini telah dibuka di tab baru. Silahkan unggah file PDF tersebut ke dalamnya.</p>
-            <div class="pt-2"><button id="btnCloseDriveNotice" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-lg">Mengerti & Lanjutkan</button></div>
-        </div>
-    </div>
+@page {
+    size: A4 portrait;
+    margin: 20mm 16mm;
+}
 
-    <script src="app.js"></script>
-</body>
-</html>
+.a4-page {
+    width: 210mm;
+    min-height: 297mm;
+    height: auto;
+    padding: 20mm 16mm !important;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    color: #0f172a;
+}
+
+.preview-block {
+    margin-bottom: 0.5rem !important;
+    break-inside: avoid-page !important;
+    page-break-inside: avoid !important;
+}
+
+.pdf-box {
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 0.5rem !important;
+    padding: 0.5rem 0.75rem !important;
+    color: #1e293b !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    display: block !important;
+    overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.pdf-list-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    margin-bottom: 0.35rem !important;
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.pdf-list-item:last-child {
+    margin-bottom: 0 !important;
+}
+
+.pdf-list-num {
+    font-weight: 700 !important;
+    color: #475569 !important;
+    min-width: 1.25rem !important;
+    flex-shrink: 0 !important;
+    text-align: left !important;
+}
+
+.pdf-list-text {
+    flex: 1 1 auto !important;
+    word-break: break-word !important;
+    color: #0f172a !important;
+}
+
+.photo-wrapper {
+    width: 100%;
+    height: 135px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.photo-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.1);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(202, 138, 4, 0.5);
+    border-radius: 9999px;
+}
+
+@media print {
+    body { background: none !important; }
+    .no-print { display: none !important; }
+    .main-content-wrapper { margin-left: 0 !important; }
+    .a4-page {
+        box-shadow: none !important;
+        margin: 0 !important;
+        width: 100% !important;
+        padding: 20mm 16mm !important;
+    }
+}
