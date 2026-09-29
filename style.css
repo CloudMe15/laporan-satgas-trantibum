@@ -3,37 +3,18 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: url('https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO');
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)),
+                       url('https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1920&q=80');
     background-repeat: no-repeat;
-    background-position: center top; /* Dioptimalkan untuk orientasi portrait agar bagian atas/tengah gambar tetap fokus */
-    background-size: cover;          /* Menyesuaikan lebar layar secara proporsional */
+    background-position: center center;
+    background-size: cover;
     background-attachment: fixed;
 }
 
-/* Navigasi Atas Transparan Murni */
-.top-navbar {
-    background: transparent !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-.top-navbar .max-w-7xl {
-    background: transparent !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-.top-nav-btn {
-    background: rgba(255, 255, 255, 0.05);
-    color: #cbd5e1;
-}
-
-.top-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-}
-
 .top-nav-btn.active {
-    background-color: rgba(245, 158, 11, 0.85);
+    background-color: rgba(245, 158, 11, 0.9);
     color: #0f172a;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
 
 .main-content-wrapper {
@@ -61,30 +42,27 @@ body {
     border-radius: 4px;
 }
 
-/* Panel Formulir: Tanpa Background, Tanpa Efek Kaca, Hanya Border & Teks */
 .glass-panel {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow: none !important;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* Header Transparan Murni */
 .glass-header {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 #headerLogoLeft, #headerLogoRight {
-    background-color: rgba(255, 255, 255, 0.85) !important;
+    background-color: #ffffff !important;
     padding: 3px !important;
     width: 32px !important;
     height: 32px !important;
     border-radius: 6px !important;
     object-fit: contain !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 @media (min-width: 640px) {
@@ -107,6 +85,7 @@ body {
     padding: 6px !important;
     border-radius: 8px !important;
     object-fit: contain !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
 }
 
 #settingLogoLeftPreview, #settingLogoRightPreview {
@@ -116,6 +95,7 @@ body {
     max-width: 100% !important;
     border-radius: 6px !important;
     object-fit: contain !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 @page {
@@ -123,20 +103,16 @@ body {
     margin: 20mm 16mm;
 }
 
-/* Dokumen A4: Tanpa Background & Tanpa Efek Kaca */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: none !important;
+    background: #ffffff;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
-    color: #ffffff;
+    color: #0f172a;
 }
 
 .preview-block {
@@ -146,11 +122,11 @@ body {
 }
 
 .pdf-box {
-    background-color: transparent !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
     border-radius: 0.5rem !important;
     padding: 0.5rem 0.75rem !important;
-    color: #ffffff !important;
+    color: #1e293b !important;
     box-sizing: border-box !important;
     width: 100% !important;
     display: block !important;
@@ -178,7 +154,7 @@ body {
 
 .pdf-list-num {
     font-weight: 700 !important;
-    color: #cbd5e1 !important;
+    color: #475569 !important;
     min-width: 1.25rem !important;
     flex-shrink: 0 !important;
     text-align: left !important;
@@ -187,7 +163,7 @@ body {
 .pdf-list-text {
     flex: 1 1 auto !important;
     word-break: break-word !important;
-    color: #ffffff !important;
+    color: #0f172a !important;
 }
 
 .photo-wrapper {
@@ -196,8 +172,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: transparent !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
     border-radius: 0.5rem;
     overflow: hidden;
     -webkit-print-color-adjust: exact !important;
@@ -221,7 +197,7 @@ body {
     background: rgba(15, 23, 42, 0.1);
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(245, 158, 11, 0.5);
+    background: rgba(202, 138, 4, 0.5);
     border-radius: 9999px;
 }
 
@@ -234,18 +210,5 @@ body {
         margin: 0 !important;
         width: 100% !important;
         padding: 20mm 16mm !important;
-        background: #ffffff !important;
-        color: #0f172a !important;
-    }
-    .pdf-box {
-        background-color: #f8fafc !important;
-        color: #1e293b !important;
-        border: 1px solid #cbd5e1 !important;
-    }
-    .pdf-list-text {
-        color: #0f172a !important;
-    }
-    .pdf-list-num {
-        color: #475569 !important;
     }
 }
