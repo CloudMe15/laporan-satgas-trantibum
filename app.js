@@ -5,11 +5,7 @@ const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrt
 
 const COMING_SOON_FOLDERS = {
     1: 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
-    2: 'https://drive.google.com/drive/folders/2xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
-    3: 'https://drive.google.com/drive/folders/3xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
-    4: 'https://drive.google.com/drive/folders/4xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
-    5: 'https://drive.google.com/drive/folders/5xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
-    6: 'https://drive.google.com/drive/folders/6xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing'
+    2: 'https://drive.google.com/drive/folders/2xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing'
 };
 
 let userProfile = {
@@ -18,11 +14,7 @@ let userProfile = {
     sidebarIcons: {
         'silahapp': SILAHAPP_DEFAULT_ICON_URL,
         '1': DEFAULT_INHU_DRIVE_URL,
-        '2': DEFAULT_SATPOL_PP_DRIVE_URL,
-        '3': DEFAULT_INHU_DRIVE_URL,
-        '4': DEFAULT_SATPOL_PP_DRIVE_URL,
-        '5': DEFAULT_INHU_DRIVE_URL,
-        '6': DEFAULT_SATPOL_PP_DRIVE_URL
+        '2': DEFAULT_SATPOL_PP_DRIVE_URL
     },
     nama: 'Fajar Ari Prakoso',
     nip: '199507102025211095',
@@ -36,9 +28,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v19_clean_silahapp_icon') {
+    if (cacheVersion !== 'v20_cs1_cs2_only') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v19_clean_silahapp_icon');
+        localStorage.setItem('satpol_app_version', 'v20_cs1_cs2_only');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -59,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addHasilInput();
     addAnggotaInput();
 
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 2; i++) {
         csData[i] = { uploadedPhotos: [], anggotaPhotos: [] };
         addCsLokasiInput(i);
         addCsHasilInput(i);
@@ -75,7 +67,7 @@ function generateComingSoonViews() {
     const container = document.getElementById('comingSoonContainer');
     let htmlContent = '';
 
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 2; i++) {
         htmlContent += `
             <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex flex-col">
                 <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
@@ -254,7 +246,7 @@ function initSidebarNavigation() {
 function initDefaultDate() {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('inputTanggal').value = today;
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 2; i++) {
         const dateInput = document.getElementById(`csInputTanggal-${i}`);
         if (dateInput) dateInput.value = today;
     }
@@ -410,7 +402,7 @@ function renderPhotoPreview() {
 window.removePhoto = (i) => { uploadedPhotos.splice(i, 1); renderPhotoPreview(); };
 
 
-// ================= COMING SOON LOGIC =================
+// ================= COMING SOON LOGIC (CS 1 & CS 2) =================
 function addCsLokasiInput(i, value = '') {
     const container = document.getElementById(`csLokasiList-${i}`);
     const div = document.createElement('div');
@@ -623,7 +615,7 @@ function loadSettings() {
 
 function applyUserProfileUI() {
     document.getElementById('viewNama').textContent = userProfile.nama || '-';
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 2; i++) {
         const el = document.getElementById(`csViewNama-${i}`);
         if (el) el.textContent = userProfile.nama || '-';
     }
@@ -631,13 +623,13 @@ function applyUserProfileUI() {
     const cleanNip = userProfile.nip ? userProfile.nip.replace(/\D/g, '') : '';
     const formattedNip = cleanNip ? `NIP. ${cleanNip}` : '-';
     document.getElementById('viewNip').textContent = formattedNip;
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 2; i++) {
         const el = document.getElementById(`csViewNip-${i}`);
         if (el) el.textContent = formattedNip;
     }
 
     document.getElementById('viewJabatan').textContent = userProfile.jabatan || '-';
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 2; i++) {
         const el = document.getElementById(`csViewJabatan-${i}`);
         if (el) el.textContent = userProfile.jabatan || '-';
     }
@@ -648,7 +640,7 @@ function applyUserProfileUI() {
     updateNipCounter();
 
     if (userProfile.sidebarIcons) {
-        ['silahapp', '1', '2', '3', '4', '5', '6'].forEach(key => {
+        ['silahapp', '1', '2'].forEach(key => {
             const iconImg = document.getElementById(`sidebarIcon-${key}`);
             if (iconImg && userProfile.sidebarIcons[key]) {
                 iconImg.src = userProfile.sidebarIcons[key];
@@ -675,7 +667,7 @@ function saveSettings() {
     localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
     applyUserProfileUI();
     updatePreview();
-    for (let i = 1; i <= 6; i++) updateCsPreview(i);
+    for (let i = 1; i <= 2; i++) updateCsPreview(i);
     settingsModal.classList.add('hidden');
 }
 
@@ -702,7 +694,7 @@ function bindEvents() {
         e.target.value = '';
     });
 
-    ['silahapp', '1', '2', '3', '4', '5', '6'].forEach(key => {
+    ['silahapp', '1', '2'].forEach(key => {
         const fileInp = document.getElementById(`inputSidebarLogo-${key}`);
         if (fileInp) {
             fileInp.addEventListener('change', (e) => {
