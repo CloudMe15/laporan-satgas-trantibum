@@ -3,7 +3,7 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.35)),
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.25)),
                        url('https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO');
     background-repeat: no-repeat;
     background-position: center center;
@@ -11,16 +11,16 @@ body {
     background-attachment: fixed;
 }
 
-/* Navigasi Atas Sangat Transparan */
+/* Navigasi Atas Transparan */
 .top-navbar {
-    background: rgba(15, 23, 42, 0.3) !important;
+    background: rgba(15, 23, 42, 0.25) !important;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .top-navbar .max-w-7xl {
-    background: rgba(15, 23, 42, 0.25) !important;
+    background: rgba(15, 23, 42, 0.2) !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
@@ -65,18 +65,18 @@ body {
     border-radius: 4px;
 }
 
-/* Panel Formulir Dibuat Transparan */
+/* Panel Formulir Dibuat Lebih Transparan */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.65) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 /* Header Transparan */
 .glass-header {
-    background: rgba(15, 23, 42, 0.4) !important;
+    background: rgba(15, 23, 42, 0.3) !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -127,17 +127,18 @@ body {
     margin: 20mm 16mm;
 }
 
-/* Dokumen A4 Dibuat Semi-Transparan agar Background Menembus, namun Tetap Jelas untuk Cetak PDF */
+/* Pratinjau Dokumen A4 Dibuat Transparan / Efek Kaca agar Background Terlihat */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.88) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
     color: #0f172a;
 }
@@ -149,8 +150,8 @@ body {
 }
 
 .pdf-box {
-    background-color: rgba(248, 250, 252, 0.8) !important;
-    border: 1px solid rgba(203, 213, 225, 0.8) !important;
+    background-color: rgba(248, 250, 252, 0.6) !important;
+    border: 1px solid rgba(203, 213, 225, 0.6) !important;
     border-radius: 0.5rem !important;
     padding: 0.5rem 0.75rem !important;
     color: #1e293b !important;
@@ -199,8 +200,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(248, 250, 252, 0.8) !important;
-    border: 1px solid rgba(203, 213, 225, 0.8) !important;
+    background-color: rgba(248, 250, 252, 0.6) !important;
+    border: 1px solid rgba(203, 213, 225, 0.6) !important;
     border-radius: 0.5rem;
     overflow: hidden;
     -webkit-print-color-adjust: exact !important;
@@ -238,5 +239,6 @@ body {
         width: 100% !important;
         padding: 20mm 16mm !important;
         background: #ffffff !important;
+        backdrop-filter: none !important;
     }
 }
