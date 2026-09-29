@@ -3,7 +3,7 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.70), rgba(15, 23, 42, 0.80)),
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.78)),
                        url('https://lh3.googleusercontent.com/d/1lU-PcawNqUuzPh_HYya0fxFMcy4D_yHX');
     background-repeat: no-repeat;
     background-position: center center;
@@ -42,18 +42,18 @@ body {
     border-radius: 4px;
 }
 
-/* Panel Form Transparan agar Background Terlihat */
+/* Panel Form Transparan (Glassmorphism) */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .glass-header {
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(15, 23, 42, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 #headerLogoLeft, #headerLogoRight {
@@ -104,17 +104,17 @@ body {
     margin: 20mm 16mm;
 }
 
-/* Kertas Dokumen A4 Transparan */
+/* Kertas Dokumen A4 Sedikit Transparan */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.92) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.90) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.4);
     box-sizing: border-box;
     color: #0f172a;
 }
@@ -126,7 +126,7 @@ body {
 }
 
 .pdf-box {
-    background-color: rgba(248, 250, 252, 0.9) !important;
+    background-color: rgba(248, 250, 252, 0.85) !important;
     border: 1px solid #cbd5e1 !important;
     border-radius: 0.5rem !important;
     padding: 0.5rem 0.75rem !important;
@@ -176,7 +176,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f8fafc !important;
+    background-color: rgba(248, 250, 252, 0.9) !important;
     border: 1px solid #cbd5e1 !important;
     border-radius: 0.5rem;
     overflow: hidden;
@@ -212,7 +212,8 @@ body {
     .a4-page {
         box-shadow: none !important;
         margin: 0 !important;
-        width: 100% !important.a4-page { background: #ffffff !important; }
+        width: 100% !important;
+        background: #ffffff !important;
         padding: 20mm 16mm !important;
     }
 }
