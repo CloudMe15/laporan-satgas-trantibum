@@ -3,7 +3,7 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.25), rgba(15, 23, 42, 0.45)),
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.15), rgba(15, 23, 42, 0.3)),
                        url('https://lh3.googleusercontent.com/d/1aG61Nm8bMLfZVZj3Kv94YyLKScMjBzhS');
     background-repeat: no-repeat;
     background-position: center center;
@@ -11,31 +11,31 @@ body {
     background-attachment: fixed;
 }
 
-/* Navigasi Atas Efek Kaca Jelas */
+/* Navigasi Atas Efek Kaca Transparan */
 .top-navbar {
-    background: rgba(15, 23, 42, 0.5) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(15, 23, 42, 0.35) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 .top-navbar .max-w-7xl {
-    background: rgba(15, 23, 42, 0.4) !important;
+    background: rgba(15, 23, 42, 0.25) !important;
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
 }
 
 .top-nav-btn {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
     color: #cbd5e1;
 }
 
 .top-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.18);
     color: #ffffff;
 }
 
 .top-nav-btn.active {
-    background-color: rgba(245, 158, 11, 0.95);
+    background-color: rgba(245, 158, 11, 0.9);
     color: #0f172a;
     box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
 }
@@ -65,20 +65,20 @@ body {
     border-radius: 4px;
 }
 
-/* Panel Formulir: Efek Kaca Lebih Diperjelas */
+/* Panel Formulir: Dibuat Lebih Transparan dengan Efek Kaca Menonjol */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
 
-/* Header Efek Kaca Jelas */
+/* Header Efek Kaca Transparan */
 .glass-header {
-    background: rgba(15, 23, 42, 0.6) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(15, 23, 42, 0.4) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
@@ -127,18 +127,18 @@ body {
     margin: 20mm 16mm;
 }
 
-/* Pratinjau Dokumen A4: Efek Kaca Lebih Pekat & Elegan */
+/* Pratinjau Dokumen A4: Lebih Transparan namun Efek Kaca & Blur Tetap Jelas */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.9) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
     color: #0f172a;
 }
@@ -150,8 +150,8 @@ body {
 }
 
 .pdf-box {
-    background-color: rgba(248, 250, 252, 0.85) !important;
-    border: 1px solid rgba(203, 213, 225, 0.8) !important;
+    background-color: rgba(248, 250, 252, 0.5) !important;
+    border: 1px solid rgba(203, 213, 225, 0.6) !important;
     border-radius: 0.5rem !important;
     padding: 0.5rem 0.75rem !important;
     color: #1e293b !important;
@@ -200,8 +200,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(248, 250, 252, 0.85) !important;
-    border: 1px solid rgba(203, 213, 225, 0.8) !important;
+    background-color: rgba(248, 250, 252, 0.5) !important;
+    border: 1px solid rgba(203, 213, 225, 0.6) !important;
     border-radius: 0.5rem;
     overflow: hidden;
     -webkit-print-color-adjust: exact !important;
