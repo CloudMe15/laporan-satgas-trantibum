@@ -1,5 +1,6 @@
 const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
+const SILAHAPP_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313';
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
 
 const COMING_SOON_FOLDERS = {
@@ -10,6 +11,11 @@ const COMING_SOON_FOLDERS = {
 let userProfile = {
     logoLeft: DEFAULT_INHU_DRIVE_URL,
     logoRight: DEFAULT_SATPOL_PP_DRIVE_URL,
+    sidebarIcons: {
+        'silahapp': SILAHAPP_DEFAULT_ICON_URL,
+        '1': DEFAULT_INHU_DRIVE_URL,
+        '2': DEFAULT_SATPOL_PP_DRIVE_URL
+    },
     nama: 'Fajar Ari Prakoso',
     nip: '199507102025211095',
     jabatan: 'Staff Program dan Keuangan'
@@ -22,9 +28,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v25_pesut_comingsoon') {
+    if (cacheVersion !== 'v27_surat_tugas_icons') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v25_pesut_comingsoon');
+        localStorage.setItem('satpol_app_version', 'v27_surat_tugas_icons');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -85,7 +91,8 @@ function generateComingSoonViews() {
     const container = document.getElementById('comingSoonContainer');
     let htmlContent = '';
 
-    const moduleTitles = { 1: 'PESUT', 2: 'Coming Soon' };
+    const moduleTitles = { 1: 'Pelaporan Surat Tugas', 2: 'Coming Soon' };
+    const moduleSubtitles = { 1: 'Sistem Pelaporan Surat Tugas Perjalanan Dinas', 2: 'Modul Pengembangan Lanjutan 2' };
 
     for (let i = 1; i <= 2; i++) {
         htmlContent += `
@@ -99,7 +106,7 @@ function generateComingSoonViews() {
                             </div>
                             <div>
                                 <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">${moduleTitles[i]}</h1>
-                                <p class="text-[10px] sm:text-[11px] text-indigo-400 font-semibold tracking-wider">Modul Pengembangan Lanjutan ${i}</p>
+                                <p class="text-[10px] sm:text-[11px] text-indigo-400 font-semibold tracking-wider">${moduleSubtitles[i]}</p>
                             </div>
                         </div>
                         <div class="flex items-center justify-end w-full sm:w-auto">
@@ -206,7 +213,7 @@ function generateComingSoonViews() {
                                             <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
                                             <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
                                             <div class="w-full h-0.5 bg-slate-900 my-1"></div>
-                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN ${moduleTitles[i]}</h1>
+                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN ${moduleTitles[i].toUpperCase()}</h1>
                                         </div>
                                         <div class="flex-shrink-0 flex items-center justify-center"><img src="${DEFAULT_SATPOL_PP_DRIVE_URL}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;"></div>
                                     </div>
@@ -398,7 +405,7 @@ function renderPhotoPreview() {
 window.removePhoto = (i) => { uploadedPhotos.splice(i, 1); renderPhotoPreview(); };
 
 
-// ================= PESUT & COMING SOON LOGIC =================
+// ================= MODUL LANJUTAN LOGIC =================
 function addCsLokasiInput(i, value = '') {
     const container = document.getElementById(`csLokasiList-${i}`);
     const div = document.createElement('div');
@@ -580,14 +587,14 @@ function initCsModuleEvents(i) {
     });
 
     document.getElementById(`csBtnDownloadPDF-${i}`).addEventListener('click', () => {
-        const modulePrefix = i === 1 ? 'PESUT' : 'ComingSoon';
+        const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
         const element = document.getElementById(`csPdfContent-${i}`);
         const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
         html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
     });
 
     document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', () => {
-        const modulePrefix = i === 1 ? 'PESUT' : 'ComingSoon';
+        const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
         const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
         document.getElementById('driveFilenameLabel').textContent = filename;
         const element = document.getElementById(`csPdfContent-${i}`);
@@ -636,6 +643,15 @@ function applyUserProfileUI() {
     inputNip.value = cleanNip;
     document.getElementById('inputSettingJabatan').value = userProfile.jabatan || '';
     updateNipCounter();
+
+    if (userProfile.sidebarIcons) {
+        ['silahapp', '1', '2'].forEach(key => {
+            const iconImg = document.getElementById(`sidebarIcon-${key}`);
+            if (iconImg && userProfile.sidebarIcons[key]) {
+                iconImg.src = userProfile.sidebarIcons[key];
+            }
+        });
+    }
 }
 
 function updateNipCounter() {
@@ -681,6 +697,24 @@ function bindEvents() {
             }
         });
         e.target.value = '';
+    });
+
+    ['silahapp', '1', '2'].forEach(key => {
+        const fileInp = document.getElementById(`inputSidebarLogo-${key}`);
+        if (fileInp) {
+            fileInp.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        userProfile.sidebarIcons[key] = ev.target.result;
+                        const iconImg = document.getElementById(`sidebarIcon-${key}`);
+                        if (iconImg) iconImg.src = ev.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
     });
 
     document.getElementById('tabFormBtn').addEventListener('click', () => {
