@@ -1,6 +1,5 @@
 const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
-const SILAHAPP_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313';
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
 
 const COMING_SOON_FOLDERS = {
@@ -11,11 +10,6 @@ const COMING_SOON_FOLDERS = {
 let userProfile = {
     logoLeft: DEFAULT_INHU_DRIVE_URL,
     logoRight: DEFAULT_SATPOL_PP_DRIVE_URL,
-    sidebarIcons: {
-        'silahapp': SILAHAPP_DEFAULT_ICON_URL,
-        '1': DEFAULT_INHU_DRIVE_URL,
-        '2': DEFAULT_SATPOL_PP_DRIVE_URL
-    },
     nama: 'Fajar Ari Prakoso',
     nip: '199507102025211095',
     jabatan: 'Staff Program dan Keuangan'
@@ -28,9 +22,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v24_topnav_clean') {
+    if (cacheVersion !== 'v25_pesut_comingsoon') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v24_topnav_clean');
+        localStorage.setItem('satpol_app_version', 'v25_pesut_comingsoon');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -91,10 +85,12 @@ function generateComingSoonViews() {
     const container = document.getElementById('comingSoonContainer');
     let htmlContent = '';
 
+    const moduleTitles = { 1: 'PESUT', 2: 'Coming Soon' };
+
     for (let i = 1; i <= 2; i++) {
         htmlContent += `
             <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex flex-col">
-                <header class="glass-header text-white sticky top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
+                <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
                         <div class="flex items-center space-x-3">
                             <div class="flex items-center gap-2">
@@ -102,11 +98,19 @@ function generateComingSoonViews() {
                                 <img src="${DEFAULT_SATPOL_PP_DRIVE_URL}" class="w-8 h-8 object-contain bg-white rounded p-0.5">
                             </div>
                             <div>
-                                <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">Coming Soon ${i}</h1>
+                                <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">${moduleTitles[i]}</h1>
                                 <p class="text-[11px] text-indigo-400 font-semibold tracking-wider">Modul Pengembangan Lanjutan ${i}</p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
+                            <div class="flex items-center gap-1.5 bg-slate-800/90 p-1 rounded-xl border border-slate-700">
+                                <button class="top-nav-btn px-2.5 py-1.5 rounded-lg text-xs font-extrabold text-slate-300 transition" data-target="silahapp">SiLAHAPP</button>
+                                <button class="top-nav-btn ${i===1?'active':''} px-2.5 py-1.5 rounded-lg text-xs font-extrabold text-slate-300 transition" data-target="coming-soon-1">PESUT</button>
+                                <button class="top-nav-btn ${i===2?'active':''} px-2 py-1 rounded-lg text-[10px] font-extrabold text-slate-300 transition text-center leading-tight" data-target="coming-soon-2">
+                                    <span class="block">Coming</span>
+                                    <span class="block">Soon</span>
+                                </button>
+                            </div>
                             <button id="btnSettings" class="flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
                                 <i data-lucide="settings" class="w-4 h-4"></i>
                                 <span class="hidden sm:inline">Pengaturan Profil</span>
@@ -126,9 +130,9 @@ function generateComingSoonViews() {
                         <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
                             <div class="flex items-center justify-between mb-5 border-b border-slate-200 pb-3">
                                 <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                                    <i data-lucide="rocket" class="w-5 h-5 text-indigo-600"></i> Formulir Coming Soon ${i}
+                                    <i data-lucide="rocket" class="w-5 h-5 text-indigo-600"></i> Formulir ${moduleTitles[i]}
                                 </h2>
-                                <span class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">CS ${i}</span>
+                                <span class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">${moduleTitles[i]}</span>
                             </div>
 
                             <form class="space-y-4" onsubmit="event.preventDefault();">
@@ -194,7 +198,7 @@ function generateComingSoonViews() {
                     <section id="csPreviewSection-${i}" class="lg:col-span-7 hidden lg:block space-y-4">
                         <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
                             <span class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (Coming Soon ${i})
+                                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (${moduleTitles[i]})
                             </span>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
                                 <button id="csBtnDownloadPDF-${i}" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Download PDF</button>
@@ -210,7 +214,7 @@ function generateComingSoonViews() {
                                             <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
                                             <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
                                             <div class="w-full h-0.5 bg-slate-900 my-1"></div>
-                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN COMING SOON ${i}</h1>
+                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN ${moduleTitles[i]}</h1>
                                         </div>
                                         <div class="flex-shrink-0 flex items-center justify-center"><img src="${DEFAULT_SATPOL_PP_DRIVE_URL}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;"></div>
                                     </div>
@@ -402,7 +406,7 @@ function renderPhotoPreview() {
 window.removePhoto = (i) => { uploadedPhotos.splice(i, 1); renderPhotoPreview(); };
 
 
-// ================= COMING SOON LOGIC (CS 1 & CS 2) =================
+// ================= PESUT & COMING SOON LOGIC =================
 function addCsLokasiInput(i, value = '') {
     const container = document.getElementById(`csLokasiList-${i}`);
     const div = document.createElement('div');
@@ -584,13 +588,15 @@ function initCsModuleEvents(i) {
     });
 
     document.getElementById(`csBtnDownloadPDF-${i}`).addEventListener('click', () => {
+        const modulePrefix = i === 1 ? 'PESUT' : 'ComingSoon';
         const element = document.getElementById(`csPdfContent-${i}`);
-        const filename = generatePdfFilename(`ComingSoon_${i}`, `csInputTanggal-${i}`);
+        const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
         html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
     });
 
     document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', () => {
-        const filename = generatePdfFilename(`ComingSoon_${i}`, `csInputTanggal-${i}`);
+        const modulePrefix = i === 1 ? 'PESUT' : 'ComingSoon';
+        const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
         document.getElementById('driveFilenameLabel').textContent = filename;
         const element = document.getElementById(`csPdfContent-${i}`);
         html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
@@ -638,15 +644,6 @@ function applyUserProfileUI() {
     inputNip.value = cleanNip;
     document.getElementById('inputSettingJabatan').value = userProfile.jabatan || '';
     updateNipCounter();
-
-    if (userProfile.sidebarIcons) {
-        ['silahapp', '1', '2'].forEach(key => {
-            const iconImg = document.getElementById(`sidebarIcon-${key}`);
-            if (iconImg && userProfile.sidebarIcons[key]) {
-                iconImg.src = userProfile.sidebarIcons[key];
-            }
-        });
-    }
 }
 
 function updateNipCounter() {
@@ -692,24 +689,6 @@ function bindEvents() {
             }
         });
         e.target.value = '';
-    });
-
-    ['silahapp', '1', '2'].forEach(key => {
-        const fileInp = document.getElementById(`inputSidebarLogo-${key}`);
-        if (fileInp) {
-            fileInp.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        userProfile.sidebarIcons[key] = ev.target.result;
-                        const iconImg = document.getElementById(`sidebarIcon-${key}`);
-                        if (iconImg) iconImg.src = ev.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
     });
 
     document.getElementById('tabFormBtn').addEventListener('click', () => {
