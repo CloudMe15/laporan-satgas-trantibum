@@ -28,9 +28,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v21_clean_final') {
+    if (cacheVersion !== 'v22_clean_menu_final') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v21_clean_final');
+        localStorage.setItem('satpol_app_version', 'v22_clean_menu_final');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -61,7 +61,38 @@ document.addEventListener('DOMContentLoaded', () => {
     bindEvents();
     updatePreview();
     initSidebarNavigation();
+    initSidebarToggle();
 });
+
+function initSidebarToggle() {
+    const sidebar = document.getElementById('appSidebar');
+    const menuList = document.getElementById('sidebarMenuList');
+    const btnToggle = document.getElementById('btnToggleMenu');
+
+    if (!btnToggle || !menuList) return;
+
+    // Saat pertama kali dimuat di layar kecil/handphone, menu disembunyikan agar form tidak mengecil
+    if (window.innerWidth < 768) {
+        menuList.classList.add('hidden');
+        sidebar.classList.add('menu-collapsed');
+    }
+
+    btnToggle.addEventListener('click', () => {
+        menuList.classList.toggle('hidden');
+        sidebar.classList.toggle('menu-collapsed');
+    });
+
+    // Otomatis tutup menu navigasi di handphone setelah salah satu ikon modul diklik
+    const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+    sidebarBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (window.innerWidth < 768) {
+                menuList.classList.add('hidden');
+                sidebar.classList.add('menu-collapsed');
+            }
+        });
+    });
+}
 
 function generateComingSoonViews() {
     const container = document.getElementById('comingSoonContainer');
@@ -631,7 +662,7 @@ function applyUserProfileUI() {
     document.getElementById('viewJabatan').textContent = userProfile.jabatan || '-';
     for (let i = 1; i <= 2; i++) {
         const el = document.getElementById(`csViewJabatan-${i}`);
-        if (el) el.textContent = userProfile.jabatan || '-';
+        if (el) el.textContent = formattedNip;
     }
 
     document.getElementById('inputSettingNama').value = userProfile.nama || '';
