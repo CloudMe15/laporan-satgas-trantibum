@@ -1,8 +1,8 @@
 const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
+const SILAHAPP_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313';
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
 
-// URL Google Drive berbeda untuk masing-masing 6 modul Coming Soon
 const COMING_SOON_FOLDERS = {
     1: 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
     2: 'https://drive.google.com/drive/folders/2xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
@@ -15,32 +15,36 @@ const COMING_SOON_FOLDERS = {
 let userProfile = {
     logoLeft: DEFAULT_INHU_DRIVE_URL,
     logoRight: DEFAULT_SATPOL_PP_DRIVE_URL,
+    sidebarIcons: {
+        'silahapp': SILAHAPP_DEFAULT_ICON_URL,
+        '1': DEFAULT_INHU_DRIVE_URL,
+        '2': DEFAULT_SATPOL_PP_DRIVE_URL,
+        '3': DEFAULT_INHU_DRIVE_URL,
+        '4': DEFAULT_SATPOL_PP_DRIVE_URL,
+        '5': DEFAULT_INHU_DRIVE_URL,
+        '6': DEFAULT_SATPOL_PP_DRIVE_URL
+    },
     nama: 'Fajar Ari Prakoso',
     nip: '199507102025211095',
     jabatan: 'Staff Program dan Keuangan'
 };
 
-// SiLAHAPP States
 let uploadedPhotos = [];
 let anggotaListContainer, lokasiListContainer, hasilListContainer;
-
-// Coming Soon States (Dikelola dalam objek dinamis id 1-6)
 let csData = {};
-
 let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v16_six_coming_soon') {
+    if (cacheVersion !== 'v18_custom_silahapp_icon') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v16_six_coming_soon');
+        localStorage.setItem('satpol_app_version', 'v18_custom_silahapp_icon');
     }
 
     settingsModal = document.getElementById('settingsModal');
     driveNoticeModal = document.getElementById('driveNoticeModal');
     inputNip = document.getElementById('inputSettingNip');
 
-    // Generate HTML untuk 6 modul Coming Soon secara dinamis
     generateComingSoonViews();
 
     lokasiListContainer = document.getElementById('lokasiList');
@@ -55,12 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
     addHasilInput();
     addAnggotaInput();
 
-    // Inisialisasi data dan event untuk 6 modul Coming Soon
     for (let i = 1; i <= 6; i++) {
-        csData[i] = {
-            uploadedPhotos: [],
-            anggotaPhotos: []
-        };
+        csData[i] = { uploadedPhotos: [], anggotaPhotos: [] };
         addCsLokasiInput(i);
         addCsHasilInput(i);
         initCsModuleEvents(i);
@@ -410,7 +410,7 @@ function renderPhotoPreview() {
 window.removePhoto = (i) => { uploadedPhotos.splice(i, 1); renderPhotoPreview(); };
 
 
-// ================= COMING SOON DYNAMIC LOGIC (i = 1 s.d. 6) =================
+// ================= COMING SOON LOGIC =================
 function addCsLokasiInput(i, value = '') {
     const container = document.getElementById(`csLokasiList-${i}`);
     const div = document.createElement('div');
@@ -491,7 +491,6 @@ function updateCsPreview(i) {
 function renderCsPhotoPreviews(i) {
     const data = csData[i];
     
-    // Render Anggota Foto
     const aContainer = document.getElementById(`csAnggotaPhotoPreview-${i}`);
     const aViewContainer = document.getElementById(`csViewAnggota-${i}`);
     document.getElementById(`csAnggotaPhotoCount-${i}`).textContent = `${data.anggotaPhotos.length} / 4 Foto`;
@@ -511,7 +510,6 @@ function renderCsPhotoPreviews(i) {
         aViewContainer.appendChild(pdfCard);
     });
 
-    // Render Dokumentasi Foto
     const dContainer = document.getElementById(`csPhotoPreview-${i}`);
     const dViewContainer = document.getElementById(`csViewDokumentasi-${i}`);
     document.getElementById(`csPhotoCount-${i}`).textContent = `${data.uploadedPhotos.length} / 4 Foto`;
@@ -648,6 +646,15 @@ function applyUserProfileUI() {
     inputNip.value = cleanNip;
     document.getElementById('inputSettingJabatan').value = userProfile.jabatan || '';
     updateNipCounter();
+
+    if (userProfile.sidebarIcons) {
+        ['silahapp', '1', '2', '3', '4', '5', '6'].forEach(key => {
+            const iconImg = document.getElementById(`sidebarIcon-${key}`);
+            if (iconImg && userProfile.sidebarIcons[key]) {
+                iconImg.src = userProfile.sidebarIcons[key];
+            }
+        });
+    }
 }
 
 function updateNipCounter() {
@@ -693,6 +700,24 @@ function bindEvents() {
             }
         });
         e.target.value = '';
+    });
+
+    ['silahapp', '1', '2', '3', '4', '5', '6'].forEach(key => {
+        const fileInp = document.getElementById(`inputSidebarLogo-${key}`);
+        if (fileInp) {
+            fileInp.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        userProfile.sidebarIcons[key] = ev.target.result;
+                        const iconImg = document.getElementById(`sidebarIcon-${key}`);
+                        if (iconImg) iconImg.src = ev.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
     });
 
     document.getElementById('tabFormBtn').addEventListener('click', () => {
