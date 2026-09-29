@@ -19,13 +19,13 @@
     <!-- MAIN APP WRAPPER (SIDEBAR + CONTENT) -->
     <div class="app-layout flex min-h-screen relative z-10">
         
-        <!-- SIDEBAR MENU DI SEBELAH KIRI -->
+        <!-- SIDEBAR MENU DI SEBELAH KIRI (3 Ikon: SiLAHAPP, CS 1, CS 2) -->
         <aside class="sidebar no-print flex flex-col items-center py-6 bg-slate-900 border-r border-slate-800 fixed h-screen z-40 overflow-y-auto">
             <div class="sidebar-logo mb-6">
                 <img src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" alt="Logo Satpol" class="w-10 h-10 object-contain p-1 bg-white rounded-xl shadow">
             </div>
             <ul class="sidebar-menu space-y-3 w-full px-2 pb-10">
-                <!-- Icon 0: SiLAHAPP (Tanpa Latar Putih) -->
+                <!-- Icon 0: SiLAHAPP -->
                 <li>
                     <button class="sidebar-btn active flex flex-col items-center justify-center w-full py-2.5 px-2 rounded-2xl text-slate-400 hover:text-white hover:bg-slate-800 transition group" data-target="silahapp" title="SiLAHAPP">
                         <div class="w-8 h-8 flex items-center justify-center mb-1 overflow-hidden">
@@ -50,42 +50,6 @@
                             <img id="sidebarIcon-2" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="w-full h-full object-contain custom-sidebar-logo" alt="CS 2">
                         </div>
                         <span class="text-[9px] font-bold tracking-tight">CS 2</span>
-                    </button>
-                </li>
-                <!-- Icon 3: Coming Soon 3 -->
-                <li>
-                    <button class="sidebar-btn flex flex-col items-center justify-center w-full py-2.5 px-2 rounded-2xl text-slate-400 hover:text-white hover:bg-slate-800 transition group" data-target="coming-soon-3" title="Coming Soon 3">
-                        <div class="w-7 h-7 flex items-center justify-center mb-1 overflow-hidden rounded-lg bg-slate-800 p-0.5">
-                            <img id="sidebarIcon-3" src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" class="w-full h-full object-contain custom-sidebar-logo" alt="CS 3">
-                        </div>
-                        <span class="text-[9px] font-bold tracking-tight">CS 3</span>
-                    </button>
-                </li>
-                <!-- Icon 4: Coming Soon 4 -->
-                <li>
-                    <button class="sidebar-btn flex flex-col items-center justify-center w-full py-2.5 px-2 rounded-2xl text-slate-400 hover:text-white hover:bg-slate-800 transition group" data-target="coming-soon-4" title="Coming Soon 4">
-                        <div class="w-7 h-7 flex items-center justify-center mb-1 overflow-hidden rounded-lg bg-slate-800 p-0.5">
-                            <img id="sidebarIcon-4" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="w-full h-full object-contain custom-sidebar-logo" alt="CS 4">
-                        </div>
-                        <span class="text-[9px] font-bold tracking-tight">CS 4</span>
-                    </button>
-                </li>
-                <!-- Icon 5: Coming Soon 5 -->
-                <li>
-                    <button class="sidebar-btn flex flex-col items-center justify-center w-full py-2.5 px-2 rounded-2xl text-slate-400 hover:text-white hover:bg-slate-800 transition group" data-target="coming-soon-5" title="Coming Soon 5">
-                        <div class="w-7 h-7 flex items-center justify-center mb-1 overflow-hidden rounded-lg bg-slate-800 p-0.5">
-                            <img id="sidebarIcon-5" src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" class="w-full h-full object-contain custom-sidebar-logo" alt="CS 5">
-                        </div>
-                        <span class="text-[9px] font-bold tracking-tight">CS 5</span>
-                    </button>
-                </li>
-                <!-- Icon 6: Coming Soon 6 -->
-                <li>
-                    <button class="sidebar-btn flex flex-col items-center justify-center w-full py-2.5 px-2 rounded-2xl text-slate-400 hover:text-white hover:bg-slate-800 transition group" data-target="coming-soon-6" title="Coming Soon 6">
-                        <div class="w-7 h-7 flex items-center justify-center mb-1 overflow-hidden rounded-lg bg-slate-800 p-0.5">
-                            <img id="sidebarIcon-6" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="w-full h-full object-contain custom-sidebar-logo" alt="CS 6">
-                        </div>
-                        <span class="text-[9px] font-bold tracking-tight">CS 6</span>
                     </button>
                 </li>
             </ul>
@@ -239,7 +203,7 @@
                 </main>
             </div>
 
-            <!-- RENDER COMING SOON CONTAINER -->
+            <!-- RENDER COMING SOON CONTAINER (CS 1 & CS 2) -->
             <div id="comingSoonContainer"></div>
 
             <!-- COPYRIGHT FOOTER -->
@@ -261,7 +225,6 @@
                 <button id="btnCloseSettings" class="text-slate-400 hover:text-slate-600 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="settingsForm" class="space-y-4" onsubmit="event.preventDefault();">
-                <!-- Dual Logo Utama -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <div class="flex justify-between items-center mb-1">
@@ -289,10 +252,10 @@
                     </div>
                 </div>
 
-                <!-- Custom Logo Sidebar Selector -->
+                <!-- Custom Logo Sidebar Selector (SiLAHAPP, CS 1, CS 2) -->
                 <div class="border-t pt-3">
-                    <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2">Custom Logo Sidebar (SiLAHAPP & CS 1-6)</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2">Custom Logo Sidebar</label>
+                    <div class="grid grid-cols-3 gap-2 text-xs">
                         <div class="bg-slate-50 p-2 rounded-xl border">
                             <span class="block font-bold text-[10px] text-slate-600 mb-1">SiLAHAPP</span>
                             <input type="file" id="inputSidebarLogo-silahapp" accept="image/*" class="text-[9px] w-full">
@@ -304,22 +267,6 @@
                         <div class="bg-slate-50 p-2 rounded-xl border">
                             <span class="block font-bold text-[10px] text-slate-600 mb-1">CS 2</span>
                             <input type="file" id="inputSidebarLogo-2" accept="image/*" class="text-[9px] w-full">
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded-xl border">
-                            <span class="block font-bold text-[10px] text-slate-600 mb-1">CS 3</span>
-                            <input type="file" id="inputSidebarLogo-3" accept="image/*" class="text-[9px] w-full">
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded-xl border">
-                            <span class="block font-bold text-[10px] text-slate-600 mb-1">CS 4</span>
-                            <input type="file" id="inputSidebarLogo-4" accept="image/*" class="text-[9px] w-full">
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded-xl border">
-                            <span class="block font-bold text-[10px] text-slate-600 mb-1">CS 5</span>
-                            <input type="file" id="inputSidebarLogo-5" accept="image/*" class="text-[9px] w-full">
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded-xl border">
-                            <span class="block font-bold text-[10px] text-slate-600 mb-1">CS 6</span>
-                            <input type="file" id="inputSidebarLogo-6" accept="image/*" class="text-[9px] w-full">
                         </div>
                     </div>
                 </div>
