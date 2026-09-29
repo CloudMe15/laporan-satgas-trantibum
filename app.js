@@ -28,9 +28,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v27_surat_tugas_icons') {
+    if (cacheVersion !== 'v28_clipboard_icons') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v27_surat_tugas_icons');
+        localStorage.setItem('satpol_app_version', 'v28_clipboard_icons');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -129,7 +129,7 @@ function generateComingSoonViews() {
                         <div class="glass-panel p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
                             <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
                                 <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                                    <i data-lucide="rocket" class="w-5 h-5 text-indigo-600"></i> Formulir ${moduleTitles[i]}
+                                    <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600"></i> Formulir ${moduleTitles[i]}
                                 </h2>
                                 <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">${moduleTitles[i]}</span>
                             </div>
