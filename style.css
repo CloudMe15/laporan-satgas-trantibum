@@ -16,6 +16,15 @@ body {
     transition: width 0.3s ease;
 }
 
+/* Modifikasi agar saat menu tertutup di HP, tampilan form tidak mengecil */
+.sidebar.menu-collapsed {
+    width: 64px;
+}
+
+.sidebar.menu-collapsed .sidebar-menu {
+    display: none;
+}
+
 .sidebar-btn.active {
     background-color: rgba(51, 65, 85, 0.9);
     color: #ffffff;
@@ -24,6 +33,7 @@ body {
 
 .main-content-wrapper {
     margin-left: 76px;
+    transition: margin-left 0.3s ease;
 }
 
 .sidebar-logo-clean {
