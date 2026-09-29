@@ -19,14 +19,32 @@
     <!-- MAIN APP WRAPPER -->
     <div class="app-layout flex-1 flex flex-col relative z-10 w-full">
         
-        <!-- MENU NAVIGASI UTAMA -->
+        <!-- MENU NAVIGASI UTAMA DENGAN ICON -->
         <nav class="top-navbar no-print bg-slate-900 border-b border-slate-800 sticky top-0 z-40 px-3 py-2 shadow-lg">
-            <div class="max-w-7xl mx-auto flex items-center justify-center gap-1 bg-slate-800/90 p-1 rounded-xl border border-slate-700 w-full sm:w-auto overflow-x-auto">
-                <button class="top-nav-btn active px-3 py-1.5 rounded-lg text-xs font-extrabold text-slate-200 transition text-center" data-target="silahapp">SiLAHAPP</button>
-                <button class="top-nav-btn px-3 py-1.5 rounded-lg text-xs font-extrabold text-slate-300 transition text-center" data-target="coming-soon-1">PESUT</button>
-                <button class="top-nav-btn px-2 py-1 rounded-lg text-[10px] font-extrabold text-slate-300 transition text-center leading-tight" data-target="coming-soon-2">
-                    <span class="block">Coming</span>
-                    <span class="block">Soon</span>
+            <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 bg-slate-800/90 p-1.5 rounded-2xl border border-slate-700 w-full sm:w-auto overflow-x-auto">
+                <!-- Tombol 1: SiLAHAPP -->
+                <button class="top-nav-btn active flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-extrabold text-slate-200 transition text-center" data-target="silahapp">
+                    <div class="w-5 h-5 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <img id="sidebarIcon-silahapp" src="https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313" class="w-full h-full object-contain sidebar-logo-clean" alt="SiLAHAPP">
+                    </div>
+                    <span>SiLAHAPP</span>
+                </button>
+                <!-- Tombol 2: Pelaporan Surat Tugas (PESUT) -->
+                <button class="top-nav-btn flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-extrabold text-slate-300 transition text-center" data-target="coming-soon-1">
+                    <div class="w-5 h-5 flex items-center justify-center overflow-hidden rounded bg-slate-800 p-0.5 flex-shrink-0">
+                        <img id="sidebarIcon-1" src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" class="w-full h-full object-contain custom-sidebar-logo" alt="PESUT">
+                    </div>
+                    <span>PESUT</span>
+                </button>
+                <!-- Tombol 3: Coming Soon -->
+                <button class="top-nav-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-xl text-[10px] font-extrabold text-slate-300 transition text-center leading-tight" data-target="coming-soon-2">
+                    <div class="w-5 h-5 flex items-center justify-center overflow-hidden rounded bg-slate-800 p-0.5 flex-shrink-0">
+                        <img id="sidebarIcon-2" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="w-full h-full object-contain custom-sidebar-logo" alt="Coming Soon">
+                    </div>
+                    <span class="text-left">
+                        <span class="block">Coming</span>
+                        <span class="block">Soon</span>
+                    </span>
                 </button>
             </div>
         </nav>
@@ -179,10 +197,10 @@
                 </main>
             </div>
 
-            <!-- RENDER COMING SOON CONTAINER (PESUT & COMING SOON) -->
+            <!-- CONTAINER MODUL LANJUTAN -->
             <div id="comingSoonContainer"></div>
 
-            <!-- COPYRIGHT FOOTER -->
+            <!-- FOOTER -->
             <footer class="relative z-10 w-full py-4 text-center text-xs text-slate-200 font-semibold no-print bg-slate-950/90 backdrop-blur-md border-t border-slate-800/80 mt-auto shadow-2xl">
                 <div class="max-w-7xl mx-auto px-4">
                     CloudMe - Bag. Program Satuan Polisi Pamong Praja - 2026
@@ -224,6 +242,25 @@
                                 <img id="settingLogoRightPreview" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="max-w-full max-h-full object-contain">
                             </div>
                             <input type="file" id="inputSettingLogoRight" accept="image/*" class="text-[10px] text-slate-500 cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Icon / Logo Selector Navigasi Atas -->
+                <div class="border-t pt-3">
+                    <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2">Custom Logo Menu Navigasi Atas</label>
+                    <div class="grid grid-cols-3 gap-2 text-xs">
+                        <div class="bg-slate-50 p-2 rounded-xl border">
+                            <span class="block font-bold text-[10px] text-slate-600 mb-1">SiLAHAPP</span>
+                            <input type="file" id="inputSidebarLogo-silahapp" accept="image/*" class="text-[9px] w-full">
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded-xl border">
+                            <span class="block font-bold text-[10px] text-slate-600 mb-1">PESUT</span>
+                            <input type="file" id="inputSidebarLogo-1" accept="image/*" class="text-[9px] w-full">
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded-xl border">
+                            <span class="block font-bold text-[10px] text-slate-600 mb-1">Coming Soon</span>
+                            <input type="file" id="inputSidebarLogo-2" accept="image/*" class="text-[9px] w-full">
                         </div>
                     </div>
                 </div>
