@@ -3,8 +3,8 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)),
-                       url('https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1920&q=80');
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.90)),
+                       url('https://lh3.googleusercontent.com/d/1lU-PcawNqUuzPh_HYya0fxFMcy4D_yHX');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
