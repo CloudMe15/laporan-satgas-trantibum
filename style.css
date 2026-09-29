@@ -3,39 +3,36 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.05), rgba(15, 23, 42, 0.15)),
-                       url('https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO');
+    background-image: url('https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
     background-attachment: fixed;
 }
 
-/* Navigasi Atas Sangat Transparan */
+/* Navigasi Atas Transparan Murni */
 .top-navbar {
-    background: rgba(15, 23, 42, 0.1) !important;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 .top-navbar .max-w-7xl {
-    background: rgba(15, 23, 42, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 .top-nav-btn {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.05);
     color: #cbd5e1;
 }
 
 .top-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     color: #ffffff;
 }
 
 .top-nav-btn.active {
-    background-color: rgba(245, 158, 11, 0.75);
+    background-color: rgba(245, 158, 11, 0.85);
     color: #0f172a;
 }
 
@@ -64,25 +61,25 @@ body {
     border-radius: 4px;
 }
 
-/* Panel Formulir Dibuat Super Transparan (Hampir Tak Terlihat, Hanya Sisa Ketikan & Border) */
+/* Panel Formulir: Efek Kaca Dihapus, Tanpa Background Solid, Hanya Border & Teks */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: none !important;
 }
 
-/* Header Super Transparan */
+/* Header Transparan Murni */
 .glass-header {
-    background: rgba(15, 23, 42, 0.15) !important;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 #headerLogoLeft, #headerLogoRight {
-    background-color: rgba(255, 255, 255, 0.7) !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
     padding: 3px !important;
     width: 32px !important;
     height: 32px !important;
@@ -126,20 +123,20 @@ body {
     margin: 20mm 16mm;
 }
 
-/* Dokumen A4 Dibuat Super Transparan (Hanya Tinggal Ketikan dan Garis Dokumen) */
+/* Dokumen A4: Tanpa Background Solid & Tanpa Efek Kaca, Hanya Tinggal Ketikan dan Garis Dokumen */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: none !important;
     box-sizing: border-box;
-    color: #0f172a;
+    color: #ffffff;
 }
 
 .preview-block {
@@ -149,11 +146,11 @@ body {
 }
 
 .pdf-box {
-    background-color: rgba(248, 250, 252, 0.25) !important;
-    border: 1px solid rgba(203, 213, 225, 0.3) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
     border-radius: 0.5rem !important;
     padding: 0.5rem 0.75rem !important;
-    color: #1e293b !important;
+    color: #ffffff !important;
     box-sizing: border-box !important;
     width: 100% !important;
     display: block !important;
@@ -181,7 +178,7 @@ body {
 
 .pdf-list-num {
     font-weight: 700 !important;
-    color: #475569 !important;
+    color: #cbd5e1 !important;
     min-width: 1.25rem !important;
     flex-shrink: 0 !important;
     text-align: left !important;
@@ -190,7 +187,7 @@ body {
 .pdf-list-text {
     flex: 1 1 auto !important;
     word-break: break-word !important;
-    color: #0f172a !important;
+    color: #ffffff !important;
 }
 
 .photo-wrapper {
@@ -199,8 +196,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(248, 250, 252, 0.25) !important;
-    border: 1px solid rgba(203, 213, 225, 0.3) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
     border-radius: 0.5rem;
     overflow: hidden;
     -webkit-print-color-adjust: exact !important;
@@ -221,10 +218,10 @@ body {
     height: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.05);
+    background: rgba(15, 23, 42, 0.1);
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(202, 138, 4, 0.3);
+    background: rgba(245, 158, 11, 0.5);
     border-radius: 9999px;
 }
 
@@ -238,6 +235,17 @@ body {
         width: 100% !important;
         padding: 20mm 16mm !important;
         background: #ffffff !important;
-        backdrop-filter: none !important;
+        color: #0f172a !important;
+    }
+    .pdf-box {
+        background-color: #f8fafc !important;
+        color: #1e293b !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+    .pdf-list-text {
+        color: #0f172a !important;
+    }
+    .pdf-list-num {
+        color: #475569 !important;
     }
 }
