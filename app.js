@@ -28,9 +28,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v22_clean_menu_final') {
+    if (cacheVersion !== 'v23_clean_menu_top') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v22_clean_menu_final');
+        localStorage.setItem('satpol_app_version', 'v23_clean_menu_top');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -71,18 +71,20 @@ function initSidebarToggle() {
 
     if (!btnToggle || !menuList) return;
 
-    // Saat pertama kali dimuat di layar kecil/handphone, menu disembunyikan agar form tidak mengecil
+    // Saat pertama kali dimuat di layar kecil/handphone, menu list disembunyikan agar form tidak mengecil
     if (window.innerWidth < 768) {
         menuList.classList.add('hidden');
         sidebar.classList.add('menu-collapsed');
     }
 
-    btnToggle.addEventListener('click', () => {
+    // Toggle buka/tutup menu saat tombol MENU di sebelah kiri atas diklik
+    btnToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
         menuList.classList.toggle('hidden');
         sidebar.classList.toggle('menu-collapsed');
     });
 
-    // Otomatis tutup menu navigasi di handphone setelah salah satu ikon modul diklik
+    // Ketika salah satu menu/ikon modul diklik, otomatis menu list tertutup kembali
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
     sidebarBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -91,6 +93,14 @@ function initSidebarToggle() {
                 sidebar.classList.add('menu-collapsed');
             }
         });
+    });
+
+    // Klik di luar area sidebar di perangkat mobile akan menutup menu
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth < 768 && !sidebar.contains(e.target)) {
+            menuList.classList.add('hidden');
+            sidebar.classList.add('menu-collapsed');
+        }
     });
 }
 
