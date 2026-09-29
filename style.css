@@ -37,11 +37,18 @@ body {
 #headerLogoLeft, #headerLogoRight {
     background-color: #ffffff !important;
     padding: 3px !important;
-    width: 36px !important;
-    height: 36px !important;
+    width: 32px !important;
+    height: 32px !important;
     border-radius: 6px !important;
     object-fit: contain !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+@media (min-width: 640px) {
+    #headerLogoLeft, #headerLogoRight {
+        width: 36px !important;
+        height: 36px !important;
+    }
 }
 
 .a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
