@@ -1,61 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 20px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #0f172a;
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)),
+                       url('https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1920&q=80');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
-.container {
-    max-width: 600px;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: auto;
+.sidebar {
+    width: 76px;
+    transition: width 0.3s ease;
 }
 
-.logo-container {
-    text-align: center;
-    margin-bottom: 20px;
+.sidebar-btn.active {
+    background-color: rgba(51, 65, 85, 0.9);
+    color: #ffffff;
+    box-shadow: inset 3px 0 0 #f59e0b;
 }
 
-.logo-container img {
-    height: 50px;
-    margin: 0 10px;
+.main-content-wrapper {
+    margin-left: 76px;
 }
 
-h1 {
-    text-align: center;
-    color: #333;
+.glass-panel {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-form {
+.glass-header {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+#headerLogoLeft, #headerLogoRight {
+    background-color: #ffffff !important;
+    padding: 3px !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 6px !important;
+    object-fit: contain !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
+.a4-page .flex.items-center.justify-between.border-b-4 > div:last-child {
+    width: 24mm !important;
+    height: 28mm !important;
+}
+
+#previewLogoLeft, #previewLogoRight {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #ffffff !important;
+    padding: 6px !important;
+    border-radius: 8px !important;
+    object-fit: contain !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+#settingLogoLeftPreview, #settingLogoRightPreview {
+    background-color: #ffffff !important;
+    padding: 4px !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    border-radius: 6px !important;
+    object-fit: contain !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+@page {
+    size: A4 portrait;
+    margin: 20mm 16mm;
+}
+
+.a4-page {
+    width: 210mm;
+    min-height: 297mm;
+    height: auto;
+    padding: 20mm 16mm !important;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    color: #0f172a;
+}
+
+.preview-block {
+    margin-bottom: 0.5rem !important;
+    break-inside: avoid-page !important;
+    page-break-inside: avoid !important;
+}
+
+.pdf-box {
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 0.5rem !important;
+    padding: 0.5rem 0.75rem !important;
+    color: #1e293b !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    display: block !important;
+    overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.pdf-list-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    margin-bottom: 0.35rem !important;
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.pdf-list-item:last-child {
+    margin-bottom: 0 !important;
+}
+
+.pdf-list-num {
+    font-weight: 700 !important;
+    color: #475569 !important;
+    min-width: 1.25rem !important;
+    flex-shrink: 0 !important;
+    text-align: left !important;
+}
+
+.pdf-list-text {
+    flex: 1 1 auto !important;
+    word-break: break-word !important;
+    color: #0f172a !important;
+}
+
+.photo-wrapper {
+    width: 100%;
+    height: 135px;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
 }
 
-label {
-    margin-top: 10px;
-    font-weight: bold;
-    color: #555;
+.photo-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
-input, textarea, button {
-    margin-top: 5px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.1);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(202, 138, 4, 0.5);
+    border-radius: 9999px;
 }
 
-button {
-    margin-top: 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #218838;
+@media print {
+    body { background: none !important; }
+    .no-print { display: none !important; }
+    .main-content-wrapper { margin-left: 0 !important; }
+    .a4-page {
+        box-shadow: none !important;
+        margin: 0 !important;
+        width: 100% !important;
+        padding: 20mm 16mm !important;
+    }
 }
