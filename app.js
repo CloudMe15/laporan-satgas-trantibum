@@ -28,9 +28,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v29_dual_anggota_mode') {
+    if (cacheVersion !== 'v30_max_10_photos') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v29_dual_anggota_mode');
+        localStorage.setItem('satpol_app_version', 'v30_max_10_photos');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -181,7 +181,7 @@ function generateComingSoonViews() {
                                     <div id="csAnggotaFotoWrapper-${i}" class="space-y-2">
                                         <div class="flex justify-between items-center">
                                             <span class="text-[11px] font-bold text-slate-600">Foto Anggota</span>
-                                            <span id="csAnggotaPhotoCount-${i}" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                            <span id="csAnggotaPhotoCount-${i}" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 10 Foto</span>
                                         </div>
                                         <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
                                             <input type="file" id="csInputAnggotaFoto-${i}" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
@@ -204,7 +204,7 @@ function generateComingSoonViews() {
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">6. Foto Dokumentasi</label>
-                                        <span id="csPhotoCount-${i}" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                        <span id="csPhotoCount-${i}" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 10 Foto</span>
                                     </div>
                                     <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
                                         <input type="file" id="csInputDokumentasi-${i}" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
@@ -405,7 +405,7 @@ function updatePreview() {
 function renderPhotoPreview() {
     const container = document.getElementById('photoPreview');
     const viewContainer = document.getElementById('viewDokumentasi');
-    document.getElementById('photoCount').textContent = `${uploadedPhotos.length} / 4 Foto`;
+    document.getElementById('photoCount').textContent = `${uploadedPhotos.length} / 10 Foto`;
     document.getElementById('blockDokumentasi').style.display = uploadedPhotos.length === 0 ? 'none' : 'block';
     
     container.innerHTML = '';
@@ -554,7 +554,7 @@ function renderCsPhotoPreviews(i) {
         document.getElementById(`csBlockAnggota-${i}`).style.display = hasContent ? 'block' : 'none';
     } else {
         titleEl.textContent = '5. Dokumentasi Foto Anggota Satgas';
-        document.getElementById(`csAnggotaPhotoCount-${i}`).textContent = `${data.anggotaPhotos.length} / 4 Foto`;
+        document.getElementById(`csAnggotaPhotoCount-${i}`).textContent = `${data.anggotaPhotos.length} / 10 Foto`;
         document.getElementById(`csBlockAnggota-${i}`).style.display = data.anggotaPhotos.length === 0 ? 'none' : 'block';
 
         const gridDiv = document.createElement('div');
@@ -579,7 +579,7 @@ function renderCsPhotoPreviews(i) {
 
     const dContainer = document.getElementById(`csPhotoPreview-${i}`);
     const dViewContainer = document.getElementById(`csViewDokumentasi-${i}`);
-    document.getElementById(`csPhotoCount-${i}`).textContent = `${data.uploadedPhotos.length} / 4 Foto`;
+    document.getElementById(`csPhotoCount-${i}`).textContent = `${data.uploadedPhotos.length} / 10 Foto`;
     document.getElementById(`csBlockDokumentasi-${i}`).style.display = data.uploadedPhotos.length === 0 ? 'none' : 'block';
 
     dContainer.innerHTML = '';
@@ -632,12 +632,12 @@ function initCsModuleEvents(i) {
 
     document.getElementById(`csInputAnggotaFoto-${i}`).addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
-        if (csData[i].anggotaPhotos.length + files.length > 4) { alert('Maksimal 4 foto anggota!'); return; }
+        if (csData[i].anggotaPhotos.length + files.length > 10) { alert('Maksimal 10 foto anggota!'); return; }
         files.forEach(file => {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (ev) => {
-                    if (csData[i].anggotaPhotos.length < 4) {
+                    if (csData[i].anggotaPhotos.length < 10) {
                         csData[i].anggotaPhotos.push(ev.target.result);
                         renderCsPhotoPreviews(i);
                     }
@@ -650,12 +650,12 @@ function initCsModuleEvents(i) {
 
     document.getElementById(`csInputDokumentasi-${i}`).addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
-        if (csData[i].uploadedPhotos.length + files.length > 4) { alert('Maksimal 4 foto dokumentasi!'); return; }
+        if (csData[i].uploadedPhotos.length + files.length > 10) { alert('Maksimal 10 foto dokumentasi!'); return; }
         files.forEach(file => {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (ev) => {
-                    if (csData[i].uploadedPhotos.length < 4) {
+                    if (csData[i].uploadedPhotos.length < 10) {
                         csData[i].uploadedPhotos.push(ev.target.result);
                         renderCsPhotoPreviews(i);
                     }
@@ -780,12 +780,12 @@ function bindEvents() {
 
     document.getElementById('inputDokumentasi').addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
-        if (uploadedPhotos.length + files.length > 4) { alert('Maksimal 4 foto dokumentasi!'); return; }
+        if (uploadedPhotos.length + files.length > 10) { alert('Maksimal 10 foto dokumentasi!'); return; }
         files.forEach(file => {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (ev) => {
-                    if (uploadedPhotos.length < 4) { uploadedPhotos.push(ev.target.result); renderPhotoPreview(); }
+                    if (uploadedPhotos.length < 10) { uploadedPhotos.push(ev.target.result); renderPhotoPreview(); }
                 };
                 reader.readAsDataURL(file);
             }
