@@ -3,7 +3,7 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.25)),
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.05), rgba(15, 23, 42, 0.15)),
                        url('https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO');
     background-repeat: no-repeat;
     background-position: center center;
@@ -11,33 +11,32 @@ body {
     background-attachment: fixed;
 }
 
-/* Navigasi Atas Transparan */
+/* Navigasi Atas Sangat Transparan */
 .top-navbar {
-    background: rgba(15, 23, 42, 0.25) !important;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(15, 23, 42, 0.1) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
 .top-navbar .max-w-7xl {
-    background: rgba(15, 23, 42, 0.2) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(15, 23, 42, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .top-nav-btn {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
     color: #cbd5e1;
 }
 
 .top-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
 .top-nav-btn.active {
-    background-color: rgba(245, 158, 11, 0.85);
+    background-color: rgba(245, 158, 11, 0.75);
     color: #0f172a;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
 }
 
 .main-content-wrapper {
@@ -65,25 +64,25 @@ body {
     border-radius: 4px;
 }
 
-/* Panel Formulir Dibuat Lebih Transparan */
+/* Panel Formulir Dibuat Super Transparan (Hampir Tak Terlihat, Hanya Sisa Ketikan & Border) */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.45) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Header Transparan */
+/* Header Super Transparan */
 .glass-header {
-    background: rgba(15, 23, 42, 0.3) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(15, 23, 42, 0.15) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 #headerLogoLeft, #headerLogoRight {
-    background-color: rgba(255, 255, 255, 0.85) !important;
+    background-color: rgba(255, 255, 255, 0.7) !important;
     padding: 3px !important;
     width: 32px !important;
     height: 32px !important;
@@ -127,18 +126,18 @@ body {
     margin: 20mm 16mm;
 }
 
-/* Pratinjau Dokumen A4 Dibuat Transparan / Efek Kaca agar Background Terlihat */
+/* Dokumen A4 Dibuat Super Transparan (Hanya Tinggal Ketikan dan Garis Dokumen) */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     color: #0f172a;
 }
@@ -150,8 +149,8 @@ body {
 }
 
 .pdf-box {
-    background-color: rgba(248, 250, 252, 0.6) !important;
-    border: 1px solid rgba(203, 213, 225, 0.6) !important;
+    background-color: rgba(248, 250, 252, 0.25) !important;
+    border: 1px solid rgba(203, 213, 225, 0.3) !important;
     border-radius: 0.5rem !important;
     padding: 0.5rem 0.75rem !important;
     color: #1e293b !important;
@@ -200,8 +199,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(248, 250, 252, 0.6) !important;
-    border: 1px solid rgba(203, 213, 225, 0.6) !important;
+    background-color: rgba(248, 250, 252, 0.25) !important;
+    border: 1px solid rgba(203, 213, 225, 0.3) !important;
     border-radius: 0.5rem;
     overflow: hidden;
     -webkit-print-color-adjust: exact !important;
@@ -222,10 +221,10 @@ body {
     height: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.1);
+    background: rgba(15, 23, 42, 0.05);
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(202, 138, 4, 0.5);
+    background: rgba(202, 138, 4, 0.3);
     border-radius: 9999px;
 }
 
