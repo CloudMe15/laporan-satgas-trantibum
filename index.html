@@ -3,93 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Laporan Satgas Patroli Trantibum - Kab. Inhu</title>
+    <title>Laporan Satgas Trantibum</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <header>
-        <div class="logo-container">
-            <img src="logo-satpol.png" alt="Logo Satpol PP" onerror="this.style.display='none'">
-            <img src="logo-inhu.png" alt="Logo Indragiri Hulu" onerror="this.style.display='none'">
-        </div>
-        <h1>Satuan Polisi Pamong Praja</h1>
-        <p>Kabupaten Indragiri Hulu — Laporan Satgas Patroli Trantibum</p>
-    </header>
-
     <div class="container">
-        <!-- Formulir Input Laporan -->
-        <section class="form-section">
-            <h2>Formulir Laporan Harian Patroli</h2>
-            <form id="reportForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="tanggal">Tanggal Patroli:</label>
-                        <input type="date" id="tanggal" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="regu">Nama Komandan / Regu Satgas:</label>
-                        <input type="text" id="regu" placeholder="Contoh: Regu A / Danru Budi" required>
-                    </div>
-                </div>
+        <div class="logo-container">
+            <img src="logo-satpol.png" alt="Logo Satpol PP">
+            <img src="logo-inhu.png" alt="Logo Inhu">
+        </div>
+        <h1>Laporan Satgas Trantibum</h1>
+        <form id="reportForm">
+            <label for="tanggal">Tanggal:</label>
+            <input type="date" id="tanggal" required>
 
-                <div class="form-group">
-                    <label for="lokasi">Lokasi Sasaran Patroli:</label>
-                    <input type="text" id="lokasi" placeholder="Contoh: Pasar Pematang Reba, Ruas Jalan Utama" required>
-                </div>
+            <label for="lokasi">Lokasi:</label>
+            <input type="text" id="lokasi" required>
 
-                <div class="form-group">
-                    <label for="uraian">Uraian Kegiatan / Temuan & Penindakan:</label>
-                    <textarea id="uraian" rows="4" placeholder="Jelaskan hasil kegiatan patroli, situasi ketertiban, dan tindakan yang diambil..." required></textarea>
-                </div>
+            <label for="kegiatan">Uraian Kegiatan:</label>
+            <textarea id="kegiatan" rows="4" required></textarea>
 
-                <div class="form-group">
-                    <label for="dokumentasi">Unggah Foto Dokumentasi:</label>
-                    <input type="file" id="dokumentasi" accept="image/*">
-                    <small class="help-text">Format yang didukung: JPG, PNG (Maks. 5MB)</small>
-                </div>
+            <label for="foto">Dokumentasi Foto:</label>
+            <input type="file" id="foto" accept="image/*">
 
-                <div class="btn-group">
-                    <button type="submit" class="btn-primary">Simpan Laporan</button>
-                    <button type="button" class="btn-secondary" id="exportPdf">Cetak / Ekspor PDF</button>
-                </div>
-            </form>
-        </section>
-
-        <hr class="divider">
-
-        <!-- Modul Rekapitulasi / Riwayat Laporan -->
-        <section class="table-section">
-            <div class="table-header">
-                <h2>Riwayat Laporan Tersimpan</h2>
-                <input type="text" id="searchFilter" placeholder="Cari lokasi atau regu..." class="search-input">
-            </div>
-            <div class="table-responsive">
-                <table id="reportTable">
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Regu</th>
-                            <th>Lokasi</th>
-                            <th>Uraian Kegiatan</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="reportTableBody">
-                        <!-- Data laporan akan masuk secara dinamis di sini -->
-                        <tr class="empty-row">
-                            <td colspan="5" style="text-align: center; color: #777;">Belum ada data laporan yang tersimpan.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+            <button type="submit">Kirim Laporan</button>
+        </form>
     </div>
-
-    <footer>
-        <p>&copy; 2026 Satuan Polisi Pamong Praja Kabupaten Indragiri Hulu</p>
-    </footer>
-
     <script src="app.js"></script>
 </body>
 </html>
