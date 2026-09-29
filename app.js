@@ -28,9 +28,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v20_cs1_cs2_only') {
+    if (cacheVersion !== 'v21_clean_final') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v20_cs1_cs2_only');
+        localStorage.setItem('satpol_app_version', 'v21_clean_final');
     }
 
     settingsModal = document.getElementById('settingsModal');
