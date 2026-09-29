@@ -12,17 +12,13 @@ body {
 }
 
 .sidebar {
-    width: 76px;
+    width: 68px;
     transition: width 0.3s ease;
 }
 
-/* Modifikasi agar saat menu tertutup di HP, tampilan form tidak mengecil */
-.sidebar.menu-collapsed {
-    width: 64px;
-}
-
+/* Ketika menu list disembunyikan di handphone agar form tidak menyempit */
 .sidebar.menu-collapsed .sidebar-menu {
-    display: none;
+    display: none !important;
 }
 
 .sidebar-btn.active {
@@ -32,7 +28,7 @@ body {
 }
 
 .main-content-wrapper {
-    margin-left: 76px;
+    margin-left: 68px;
     transition: margin-left 0.3s ease;
 }
 
