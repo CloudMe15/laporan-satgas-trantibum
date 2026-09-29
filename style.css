@@ -3,7 +3,7 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)),
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.35)),
                        url('https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO');
     background-repeat: no-repeat;
     background-position: center center;
@@ -11,32 +11,33 @@ body {
     background-attachment: fixed;
 }
 
+/* Navigasi Atas Sangat Transparan */
 .top-navbar {
-    background: rgba(15, 23, 42, 0.65) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(15, 23, 42, 0.3) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .top-navbar .max-w-7xl {
-    background: rgba(15, 23, 42, 0.5) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: rgba(15, 23, 42, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 .top-nav-btn {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.05);
     color: #cbd5e1;
 }
 
 .top-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     color: #ffffff;
 }
 
 .top-nav-btn.active {
-    background-color: rgba(245, 158, 11, 0.95);
+    background-color: rgba(245, 158, 11, 0.85);
     color: #0f172a;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
 }
 
 .main-content-wrapper {
@@ -64,30 +65,30 @@ body {
     border-radius: 4px;
 }
 
-/* Panel Formulir Dibuat Lebih Transparan agar Background Terlihat Jelas */
+/* Panel Formulir Dibuat Transparan */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.88) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    background: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
+/* Header Transparan */
 .glass-header {
-    background: rgba(15, 23, 42, 0.75) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(15, 23, 42, 0.4) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 #headerLogoLeft, #headerLogoRight {
-    background-color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
     padding: 3px !important;
     width: 32px !important;
     height: 32px !important;
     border-radius: 6px !important;
     object-fit: contain !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 @media (min-width: 640px) {
@@ -110,7 +111,6 @@ body {
     padding: 6px !important;
     border-radius: 8px !important;
     object-fit: contain !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
 }
 
 #settingLogoLeftPreview, #settingLogoRightPreview {
@@ -120,7 +120,6 @@ body {
     max-width: 100% !important;
     border-radius: 6px !important;
     object-fit: contain !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 @page {
@@ -128,15 +127,17 @@ body {
     margin: 20mm 16mm;
 }
 
-/* Dokumen A4 Tetap Solid dan Jelas untuk Fungsi Cetak PDF */
+/* Dokumen A4 Dibuat Semi-Transparan agar Background Menembus, namun Tetap Jelas untuk Cetak PDF */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: #ffffff !important;
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
     box-sizing: border-box;
     color: #0f172a;
 }
@@ -148,8 +149,8 @@ body {
 }
 
 .pdf-box {
-    background-color: #f8fafc !important;
-    border: 1px solid #cbd5e1 !important;
+    background-color: rgba(248, 250, 252, 0.8) !important;
+    border: 1px solid rgba(203, 213, 225, 0.8) !important;
     border-radius: 0.5rem !important;
     padding: 0.5rem 0.75rem !important;
     color: #1e293b !important;
@@ -198,8 +199,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f8fafc !important;
-    border: 1px solid #cbd5e1 !important;
+    background-color: rgba(248, 250, 252, 0.8) !important;
+    border: 1px solid rgba(203, 213, 225, 0.8) !important;
     border-radius: 0.5rem;
     overflow: hidden;
     -webkit-print-color-adjust: exact !important;
@@ -236,5 +237,6 @@ body {
         margin: 0 !important;
         width: 100% !important;
         padding: 20mm 16mm !important;
+        background: #ffffff !important;
     }
 }
