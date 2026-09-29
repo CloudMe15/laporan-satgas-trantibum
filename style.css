@@ -3,7 +3,7 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)),
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)),
                        url('https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO');
     background-repeat: no-repeat;
     background-position: center center;
@@ -11,10 +11,32 @@ body {
     background-attachment: fixed;
 }
 
+.top-navbar {
+    background: rgba(15, 23, 42, 0.65) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.top-navbar .max-w-7xl {
+    background: rgba(15, 23, 42, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.top-nav-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+}
+
+.top-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
 .top-nav-btn.active {
-    background-color: rgba(245, 158, 11, 0.9);
+    background-color: rgba(245, 158, 11, 0.95);
     color: #0f172a;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
 }
 
 .main-content-wrapper {
@@ -42,17 +64,20 @@ body {
     border-radius: 4px;
 }
 
+/* Panel Formulir Dibuat Lebih Transparan agar Background Terlihat Jelas */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 .glass-header {
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(15, 23, 42, 0.75) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 #headerLogoLeft, #headerLogoRight {
@@ -103,14 +128,15 @@ body {
     margin: 20mm 16mm;
 }
 
+/* Dokumen A4 Tetap Solid dan Jelas untuk Fungsi Cetak PDF */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: #ffffff;
-    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+    background: #ffffff !important;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
     box-sizing: border-box;
     color: #0f172a;
 }
