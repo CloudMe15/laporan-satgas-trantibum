@@ -3,7 +3,7 @@
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.90)),
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.70), rgba(15, 23, 42, 0.80)),
                        url('https://lh3.googleusercontent.com/d/1lU-PcawNqUuzPh_HYya0fxFMcy4D_yHX');
     background-repeat: no-repeat;
     background-position: center center;
@@ -42,15 +42,16 @@ body {
     border-radius: 4px;
 }
 
+/* Panel Form Transparan agar Background Terlihat */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .glass-header {
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
 }
@@ -103,13 +104,16 @@ body {
     margin: 20mm 16mm;
 }
 
+/* Kertas Dokumen A4 Transparan */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     color: #0f172a;
@@ -122,7 +126,7 @@ body {
 }
 
 .pdf-box {
-    background-color: #f8fafc !important;
+    background-color: rgba(248, 250, 252, 0.9) !important;
     border: 1px solid #cbd5e1 !important;
     border-radius: 0.5rem !important;
     padding: 0.5rem 0.75rem !important;
@@ -208,7 +212,7 @@ body {
     .a4-page {
         box-shadow: none !important;
         margin: 0 !important;
-        width: 100% !important;
+        width: 100% !important.a4-page { background: #ffffff !important; }
         padding: 20mm 16mm !important;
     }
 }
