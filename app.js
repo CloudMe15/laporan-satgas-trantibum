@@ -22,9 +22,9 @@ let settingsModal, driveNoticeModal, inputNip;
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v25_pesut_comingsoon') {
+    if (cacheVersion !== 'v26_surat_tugas_uniform') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v25_pesut_comingsoon');
+        localStorage.setItem('satpol_app_version', 'v26_surat_tugas_uniform');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -85,93 +85,86 @@ function generateComingSoonViews() {
     const container = document.getElementById('comingSoonContainer');
     let htmlContent = '';
 
-    const moduleTitles = { 1: 'PESUT', 2: 'Coming Soon' };
+    const moduleTitles = { 1: 'Pelaporan Surat Tugas', 2: 'Coming Soon' };
+    const moduleSubtitles = { 1: 'Sistem Pelaporan Surat Tugas Perjalanan Dinas', 2: 'Modul Pengembangan Lanjutan 2' };
 
     for (let i = 1; i <= 2; i++) {
         htmlContent += `
             <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex flex-col">
-                <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
-                        <div class="flex items-center space-x-3">
+                <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
+                    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
+                        <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
                             <div class="flex items-center gap-2">
                                 <img src="${DEFAULT_INHU_DRIVE_URL}" class="w-8 h-8 object-contain bg-white rounded p-0.5">
                                 <img src="${DEFAULT_SATPOL_PP_DRIVE_URL}" class="w-8 h-8 object-contain bg-white rounded p-0.5">
                             </div>
                             <div>
                                 <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">${moduleTitles[i]}</h1>
-                                <p class="text-[11px] text-indigo-400 font-semibold tracking-wider">Modul Pengembangan Lanjutan ${i}</p>
+                                <p class="text-[10px] sm:text-[11px] text-indigo-400 font-semibold tracking-wider">${moduleSubtitles[i]}</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="flex items-center gap-1.5 bg-slate-800/90 p-1 rounded-xl border border-slate-700">
-                                <button class="top-nav-btn px-2.5 py-1.5 rounded-lg text-xs font-extrabold text-slate-300 transition" data-target="silahapp">SiLAHAPP</button>
-                                <button class="top-nav-btn ${i===1?'active':''} px-2.5 py-1.5 rounded-lg text-xs font-extrabold text-slate-300 transition" data-target="coming-soon-1">PESUT</button>
-                                <button class="top-nav-btn ${i===2?'active':''} px-2 py-1 rounded-lg text-[10px] font-extrabold text-slate-300 transition text-center leading-tight" data-target="coming-soon-2">
-                                    <span class="block">Coming</span>
-                                    <span class="block">Soon</span>
-                                </button>
-                            </div>
-                            <button id="btnSettings" class="flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
+                        <div class="flex items-center justify-end w-full sm:w-auto">
+                            <button id="btnSettings" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
                                 <i data-lucide="settings" class="w-4 h-4"></i>
-                                <span class="hidden sm:inline">Pengaturan Profil</span>
+                                <span>Pengaturan Profil</span>
                             </button>
                         </div>
                     </div>
                 </header>
 
-                <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1.5 rounded-2xl backdrop-blur-md mb-2 no-print border border-slate-700/60 shadow-xl">
-                        <button id="csTabFormBtn-${i}" class="flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-indigo-500 text-white shadow-md transition">Isi Laporan</button>
-                        <button id="csTabPreviewBtn-${i}" class="flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300 transition">Pratinjau</button>
+                <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1 rounded-xl backdrop-blur-md mb-2 no-print border border-slate-700/60 shadow-xl">
+                        <button id="csTabFormBtn-${i}" class="flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md transition">Isi Laporan</button>
+                        <button id="csTabPreviewBtn-${i}" class="flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300 transition">Pratinjau</button>
                     </div>
 
                     <!-- FORM CS -->
                     <section id="csFormSection-${i}" class="lg:col-span-5 space-y-6 no-print">
-                        <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
-                            <div class="flex items-center justify-between mb-5 border-b border-slate-200 pb-3">
-                                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <div class="glass-panel p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
+                            <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
+                                <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
                                     <i data-lucide="rocket" class="w-5 h-5 text-indigo-600"></i> Formulir ${moduleTitles[i]}
                                 </h2>
-                                <span class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">${moduleTitles[i]}</span>
+                                <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">${moduleTitles[i]}</span>
                             </div>
 
                             <form class="space-y-4" onsubmit="event.preventDefault();">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">1. Tanggal Laporan</label>
-                                    <input type="date" id="csInputTanggal-${i}" class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-semibold shadow-sm">
+                                    <input type="date" id="csInputTanggal-${i}" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-semibold shadow-sm">
                                 </div>
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Dasar Pelaksanaan & Lokasi</label>
-                                        <button type="button" id="csBtnAddLokasi-${i}" class="text-xs font-bold text-indigo-800 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition border border-indigo-300">+ Tambah Lokasi</button>
+                                        <button type="button" id="csBtnAddLokasi-${i}" class="text-[11px] font-bold text-indigo-800 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Lokasi</button>
                                     </div>
                                     <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner space-y-3">
-                                        <textarea id="csInputDasar-${i}" rows="2" placeholder="Dasar Pelaksanaan..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-sm outline-none shadow-sm"></textarea>
+                                        <textarea id="csInputDasar-${i}" rows="2" placeholder="Dasar Pelaksanaan..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
                                         <div class="pt-1 border-t border-indigo-200">
-                                            <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1.5">Daftar Tempat / Lokasi Patroli:</label>
+                                            <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1.5">Daftar Tempat / Lokasi:</label>
                                             <div id="csLokasiList-${i}" class="space-y-2"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. Uraian Kegiatan Patroli</label>
-                                        <button type="button" id="csBtnAddHasil-${i}" class="text-xs font-bold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition border border-indigo-300">+ Tambah Poin</button>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. Uraian Kegiatan</label>
+                                        <button type="button" id="csBtnAddHasil-${i}" class="text-[11px] font-bold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Poin</button>
                                     </div>
                                     <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner">
                                         <div id="csHasilList-${i}" class="space-y-2"></div>
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">4. Hasil Kegiatan Patroli</label>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">4. Hasil Kegiatan</label>
                                     <div class="bg-slate-100 p-3 rounded-2xl border border-slate-300 shadow-inner">
-                                        <textarea id="csInputKegiatan-${i}" rows="3" placeholder="Deskripsikan rincian..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-sm outline-none shadow-sm"></textarea>
+                                        <textarea id="csInputKegiatan-${i}" rows="3" placeholder="Deskripsikan rincian..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
                                     </div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">5. Foto Anggota Satgas</label>
-                                        <span id="csAnggotaPhotoCount-${i}" class="text-[11px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                        <span id="csAnggotaPhotoCount-${i}" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
                                     </div>
                                     <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
                                         <input type="file" id="csInputAnggotaFoto-${i}" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
@@ -182,7 +175,7 @@ function generateComingSoonViews() {
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">6. Foto Dokumentasi</label>
-                                        <span id="csPhotoCount-${i}" class="text-[11px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
+                                        <span id="csPhotoCount-${i}" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 4 Foto</span>
                                     </div>
                                     <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
                                         <input type="file" id="csInputDokumentasi-${i}" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
@@ -214,7 +207,7 @@ function generateComingSoonViews() {
                                             <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
                                             <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
                                             <div class="w-full h-0.5 bg-slate-900 my-1"></div>
-                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN ${moduleTitles[i]}</h1>
+                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN ${moduleTitles[i].toUpperCase()}</h1>
                                         </div>
                                         <div class="flex-shrink-0 flex items-center justify-center"><img src="${DEFAULT_SATPOL_PP_DRIVE_URL}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;"></div>
                                     </div>
@@ -231,8 +224,8 @@ function generateComingSoonViews() {
                                         </div>
                                         <div id="csBlockDasar-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">1. Dasar Pelaksanaan</label><div id="csViewDasar-${i}" class="pdf-box min-h-[42px] whitespace-pre-line">-</div></div>
                                         <div id="csBlockLokasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">2. Tempat Pelaksanaan</label><div class="pdf-box min-h-[42px]"><div id="csViewTempat-${i}" class="space-y-1"></div></div></div>
-                                        <div id="csBlockHasil-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">3. Hasil Kegiatan Patroli</label><div class="pdf-box min-h-[48px]"><div id="csViewHasil-${i}" class="space-y-1"></div></div></div>
-                                        <div id="csBlockKegiatan-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">4. Uraian Kegiatan Patroli</label><div id="csViewKegiatan-${i}" class="pdf-box min-h-[48px] whitespace-pre-line">-</div></div>
+                                        <div id="csBlockHasil-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">3. Hasil Kegiatan</label><div class="pdf-box min-h-[48px]"><div id="csViewHasil-${i}" class="space-y-1"></div></div></div>
+                                        <div id="csBlockKegiatan-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">4. Uraian Kegiatan</label><div id="csViewKegiatan-${i}" class="pdf-box min-h-[48px] whitespace-pre-line">-</div></div>
                                         <div id="csBlockAnggota-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">5. Dokumentasi Foto Anggota Satgas</label><div class="pdf-box min-h-[90px]"><div id="csViewAnggota-${i}" class="grid grid-cols-2 gap-3"></div></div></div>
                                         <div id="csBlockDokumentasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">6. Dokumentasi Foto Kegiatan</label><div class="pdf-box min-h-[90px]"><div id="csViewDokumentasi-${i}" class="grid grid-cols-2 gap-3"></div></div></div>
                                     </div>
@@ -406,7 +399,7 @@ function renderPhotoPreview() {
 window.removePhoto = (i) => { uploadedPhotos.splice(i, 1); renderPhotoPreview(); };
 
 
-// ================= PESUT & COMING SOON LOGIC =================
+// ================= MODUL LANJUTAN LOGIC =================
 function addCsLokasiInput(i, value = '') {
     const container = document.getElementById(`csLokasiList-${i}`);
     const div = document.createElement('div');
@@ -576,26 +569,26 @@ function initCsModuleEvents(i) {
     document.getElementById(`csTabFormBtn-${i}`).addEventListener('click', () => {
         document.getElementById(`csFormSection-${i}`).classList.remove('hidden');
         document.getElementById(`csPreviewSection-${i}`).classList.add('hidden');
-        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-indigo-500 text-white shadow-md';
-        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300';
+        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md';
+        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
     });
 
     document.getElementById(`csTabPreviewBtn-${i}`).addEventListener('click', () => {
         document.getElementById(`csPreviewSection-${i}`).classList.remove('hidden');
         document.getElementById(`csFormSection-${i}`).classList.add('hidden');
-        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-indigo-500 text-white shadow-md';
-        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300';
+        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md';
+        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
     });
 
     document.getElementById(`csBtnDownloadPDF-${i}`).addEventListener('click', () => {
-        const modulePrefix = i === 1 ? 'PESUT' : 'ComingSoon';
+        const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
         const element = document.getElementById(`csPdfContent-${i}`);
         const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
         html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
     });
 
     document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', () => {
-        const modulePrefix = i === 1 ? 'PESUT' : 'ComingSoon';
+        const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
         const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
         document.getElementById('driveFilenameLabel').textContent = filename;
         const element = document.getElementById(`csPdfContent-${i}`);
@@ -694,15 +687,15 @@ function bindEvents() {
     document.getElementById('tabFormBtn').addEventListener('click', () => {
         document.getElementById('formSection').classList.remove('hidden');
         document.getElementById('previewSection').classList.add('hidden');
-        document.getElementById('tabFormBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-amber-500 text-slate-950 shadow-md';
-        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300';
+        document.getElementById('tabFormBtn').className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow-md';
+        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
     });
 
     document.getElementById('tabPreviewBtn').addEventListener('click', () => {
         document.getElementById('previewSection').classList.remove('hidden');
         document.getElementById('formSection').classList.add('hidden');
-        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2.5 text-center font-bold text-xs rounded-xl bg-amber-500 text-slate-950 shadow-md';
-        document.getElementById('tabFormBtn').className = 'flex-1 py-2.5 text-center font-semibold text-xs rounded-xl text-slate-300';
+        document.getElementById('tabPreviewBtn').className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow-md';
+        document.getElementById('tabFormBtn').className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
     });
 
     document.getElementById('btnDownloadPDF').addEventListener('click', () => {
