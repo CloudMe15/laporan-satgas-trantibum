@@ -16,58 +16,15 @@
 <body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between relative selection:bg-amber-500 selection:text-slate-950">
     <div class="fixed inset-0 bg-slate-950/40 pointer-events-none z-0"></div>
 
-    <!-- MAIN APP WRAPPER (TANPA SIDEBAR, KONTEN FULL) -->
+    <!-- MAIN APP WRAPPER (TANPA MENU NAVIGASI) -->
     <div class="app-layout flex-1 flex flex-col relative z-10 w-full">
         
-        <!-- TOP NAVIGATION BAR (PENGGANTI SIDEBAR DI ATAS) -->
-        <nav class="top-navbar no-print bg-slate-900 border-b border-slate-800 sticky top-0 z-40 px-4 py-2.5 shadow-lg">
-            <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto no-scrollbar gap-2">
-                <div class="flex items-center space-x-2">
-                    <div class="w-9 h-9 bg-slate-800 rounded-xl flex items-center justify-center text-amber-400 font-bold shadow">
-                        <i data-lucide="menu" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-xs font-extrabold text-white uppercase tracking-wider hidden sm:inline">Navigasi Modul</span>
-                </div>
-
-                <!-- Daftar Menu Horizontal di Atas -->
-                <ul id="topNavbarMenuList" class="flex items-center space-x-2">
-                    <!-- Icon 0: SiLAHAPP -->
-                    <li>
-                        <button class="top-nav-btn active flex items-center space-x-2 py-2 px-3.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition group text-xs font-bold" data-target="silahapp" title="SiLAHAPP">
-                            <div class="w-5 h-5 flex items-center justify-center overflow-hidden">
-                                <img id="sidebarIcon-silahapp" src="https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313" class="w-full h-full object-contain sidebar-logo-clean" alt="SiLAHAPP">
-                            </div>
-                            <span>SiLAHAPP</span>
-                        </button>
-                    </li>
-                    <!-- Icon 1: Coming Soon 1 -->
-                    <li>
-                        <button class="top-nav-btn flex items-center space-x-2 py-2 px-3.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition group text-xs font-bold" data-target="coming-soon-1" title="Coming Soon 1">
-                            <div class="w-5 h-5 flex items-center justify-center overflow-hidden rounded bg-slate-800 p-0.5">
-                                <img id="sidebarIcon-1" src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" class="w-full h-full object-contain custom-sidebar-logo" alt="CS 1">
-                            </div>
-                            <span>CS 1</span>
-                        </button>
-                    </li>
-                    <!-- Icon 2: Coming Soon 2 -->
-                    <li>
-                        <button class="top-nav-btn flex items-center space-x-2 py-2 px-3.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition group" data-target="coming-soon-2" title="Coming Soon 2">
-                            <div class="w-5 h-5 flex items-center justify-center overflow-hidden rounded bg-slate-800 p-0.5">
-                                <img id="sidebarIcon-2" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="w-full h-full object-contain custom-sidebar-logo" alt="CS 2">
-                            </div>
-                            <span>CS 2</span>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
         <!-- KONTEN UTAMA -->
         <div class="main-content-wrapper flex-1 flex flex-col justify-between">
             
             <!-- ================= VIEW 1: SILAHAPP ================= -->
             <div id="view-silahapp" class="app-view active-view flex-1 flex flex-col">
-                <header class="glass-header text-white sticky top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
+                <header class="glass-header text-white sticky top-0 z-30 shadow-2xl border-b border-slate-700/60 no-print">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative z-10">
                         <div class="flex items-center space-x-3">
                             <div class="flex items-center gap-2">
@@ -80,6 +37,15 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
+                            <!-- Tombol Akses Cepat Modul PESUT & Coming Soon -->
+                            <div class="flex items-center gap-1.5 bg-slate-800/90 p-1 rounded-xl border border-slate-700">
+                                <button class="top-nav-btn active px-2.5 py-1.5 rounded-lg text-xs font-extrabold text-slate-200 transition" data-target="silahapp">SiLAHAPP</button>
+                                <button class="top-nav-btn px-2.5 py-1.5 rounded-lg text-xs font-extrabold text-slate-300 transition" data-target="coming-soon-1">PESUT</button>
+                                <button class="top-nav-btn px-2 py-1 rounded-lg text-[10px] font-extrabold text-slate-300 transition text-center leading-tight" data-target="coming-soon-2">
+                                    <span class="block">Coming</span>
+                                    <span class="block">Soon</span>
+                                </button>
+                            </div>
                             <button id="btnSettings" class="flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
                                 <i data-lucide="settings" class="w-4 h-4"></i>
                                 <span class="hidden sm:inline">Pengaturan Profil</span>
@@ -210,7 +176,7 @@
                 </main>
             </div>
 
-            <!-- RENDER COMING SOON CONTAINER (CS 1 & CS 2) -->
+            <!-- RENDER COMING SOON CONTAINER (PESUT & COMING SOON) -->
             <div id="comingSoonContainer"></div>
 
             <!-- COPYRIGHT FOOTER -->
@@ -227,7 +193,7 @@
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-5 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                    <i data-lucide="sliders" class="w-5 h-5 text-amber-600"></i> Pengaturan Profil & Custom Logo Menu Atas
+                    <i data-lucide="sliders" class="w-5 h-5 text-amber-600"></i> Pengaturan Profil
                 </h3>
                 <button id="btnCloseSettings" class="text-slate-400 hover:text-slate-600 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
@@ -255,25 +221,6 @@
                                 <img id="settingLogoRightPreview" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="max-w-full max-h-full object-contain">
                             </div>
                             <input type="file" id="inputSettingLogoRight" accept="image/*" class="text-[10px] text-slate-500 cursor-pointer">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Custom Logo Menu Atas Selector -->
-                <div class="border-t pt-3">
-                    <label class="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2">Custom Logo Menu Atas</label>
-                    <div class="grid grid-cols-3 gap-2 text-xs">
-                        <div class="bg-slate-50 p-2 rounded-xl border">
-                            <span class="block font-bold text-[10px] text-slate-600 mb-1">SiLAHAPP</span>
-                            <input type="file" id="inputSidebarLogo-silahapp" accept="image/*" class="text-[9px] w-full">
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded-xl border">
-                            <span class="block font-bold text-[10px] text-slate-600 mb-1">CS 1</span>
-                            <input type="file" id="inputSidebarLogo-1" accept="image/*" class="text-[9px] w-full">
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded-xl border">
-                            <span class="block font-bold text-[10px] text-slate-600 mb-1">CS 2</span>
-                            <input type="file" id="inputSidebarLogo-2" accept="image/*" class="text-[9px] w-full">
                         </div>
                     </div>
                 </div>
