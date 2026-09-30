@@ -208,7 +208,7 @@ function generateComingSoonViews() {
                                         <button type="button" id="csBtnAddLokasi-${i}" class="text-[11px] font-bold text-indigo-800 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Lokasi</button>
                                     </div>
                                     <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner space-y-3">
-                                        <textarea id="csInputDasar-${i}" rows="2" placeholder="Surat Tugas (ST)..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
+                                        <textarea id="csInputDasar-${i}" rows="2" placeholder="Dasar Pelaksanaan (Contoh: Surat Tugas Nomor: 094/123/ST-SATPOLPP/2026...)" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
                                         <div class="pt-1 border-t border-indigo-200">
                                             <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1.5">Daftar Tempat / Lokasi:</label>
                                             <div id="csLokasiList-${i}" class="space-y-2"></div>
