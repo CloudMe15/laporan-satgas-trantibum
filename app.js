@@ -1,12 +1,20 @@
 const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';
 const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
 const SILAHAPP_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313';
-const PESUT_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO';
-const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1zZjny4zbPQ-7ssY7IlZGfMG1PTa9wHuh?usp=sharing';
+const PESUT_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO'; 
 
+// --- Link Folder PDF Manual ---
+const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
 const COMING_SOON_FOLDERS = {
     1: 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
     2: 'https://drive.google.com/drive/folders/2xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing'
+};
+
+// --- ID Folder Auto-Upload Khusus Foto Dokumentasi ---
+const FOTO_DRIVE_FOLDERS = {
+    'silahapp': '1zZjny4zbPQ-7ssY7IlZGfMG1PTa9wHuh',
+    1: '1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr',
+    2: '18eX3ZImoWAGdzWGj1B8bxctBudJAmWKN'
 };
 
 let userProfile = {
@@ -27,11 +35,23 @@ let anggotaListContainer, lokasiListContainer, hasilListContainer;
 let csData = {};
 let settingsModal, driveNoticeModal, inputNip;
 
+// Helper: Komunikasi dengan API Vercel
+async function uploadToVercel(filename, base64Data, mimeType, folderId) {
+    const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename, fileBase64: base64Data, mimeType, folderId })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'Server error');
+    return result;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v32_fix_profile_sync') {
+    if (cacheVersion !== 'v35_auto_upload_photos') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v32_fix_profile_sync');
+        localStorage.setItem('satpol_app_version', 'v35_auto_upload_photos');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -178,7 +198,6 @@ function generateComingSoonViews() {
                                         <button type="button" id="csAnggotaModeManualBtn-${i}" class="flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition">Tambah Manual</button>
                                     </div>
 
-                                    <!-- Mode 1: Foto -->
                                     <div id="csAnggotaFotoWrapper-${i}" class="space-y-2">
                                         <div class="flex justify-between items-center">
                                             <span class="text-[11px] font-bold text-slate-600">Foto Nama Anggota</span>
@@ -191,7 +210,6 @@ function generateComingSoonViews() {
                                         <div id="csAnggotaPhotoPreview-${i}" class="grid grid-cols-4 gap-2 mt-2"></div>
                                     </div>
 
-                                    <!-- Mode 2: Manual -->
                                     <div id="csAnggotaManualWrapper-${i}" class="space-y-2 hidden">
                                         <div class="flex justify-between items-center">
                                             <span class="text-[11px] font-bold text-slate-600">Daftar Nama Anggota</span>
@@ -721,14 +739,52 @@ function initCsModuleEvents(i) {
         html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
     });
 
-    document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', () => {
-        const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
-        const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
-        document.getElementById('driveFilenameLabel').textContent = filename;
-        const element = document.getElementById(`csPdfContent-${i}`);
-        html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
-        window.open(COMING_SOON_FOLDERS[i], '_blank');
-        driveNoticeModal.classList.remove('hidden');
+    // ===== AUTO-UPLOAD KHUSUS FOTO DOKUMENTASI UNTUK MODUL CS =====
+    document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', async () => {
+        const btn = document.getElementById(`csBtnUploadDrive-${i}`);
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="animate-pulse">Memproses...</span>';
+        btn.disabled = true;
+
+        try {
+            const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
+            const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
+            document.getElementById('driveFilenameLabel').textContent = filename;
+            const element = document.getElementById(`csPdfContent-${i}`);
+
+            // 1. Download Laporan PDF (Seperti semula)
+            html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
+
+            // 2. Upload Otomatis Foto Dokumentasi
+            const fotoFolderId = FOTO_DRIVE_FOLDERS[i];
+            const allPhotos = [...csData[i].uploadedPhotos, ...csData[i].anggotaPhotos];
+            let fotoSuccess = 0;
+            
+            if (allPhotos.length > 0) {
+                for (let j = 0; j < allPhotos.length; j++) {
+                    btn.innerHTML = `<span class="animate-pulse">Kirim Foto ${j+1}/${allPhotos.length}...</span>`;
+                    const photoUri = allPhotos[j];
+                    const mimeType = photoUri.match(/data:(.*?);/)[1] || 'image/jpeg';
+                    const base64 = photoUri.split(',')[1];
+                    const photoFilename = `${modulePrefix}_Foto_${j+1}_${filename.replace('.pdf', '')}.${mimeType.split('/')[1]}`;
+                    
+                    await uploadToVercel(photoFilename, base64, mimeType, fotoFolderId);
+                    fotoSuccess++;
+                }
+                alert(`File PDF diunduh & ${fotoSuccess} Foto Dokumentasi berhasil dikirim otomatis ke Drive.`);
+            }
+
+            // 3. Buka Folder Laporan Utama
+            window.open(COMING_SOON_FOLDERS[i], '_blank');
+            driveNoticeModal.classList.remove('hidden');
+
+        } catch (err) {
+            console.error(err);
+            alert('Gagal mengunggah foto secara otomatis: ' + err.message);
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
     });
 
     updateCsPreview(i);
@@ -856,6 +912,24 @@ function bindEvents() {
         });
     }
 
+    ['silahapp', '1', '2'].forEach(key => {
+        const fileInp = document.getElementById(`inputSidebarLogo-${key}`);
+        if (fileInp) {
+            fileInp.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        userProfile.sidebarIcons[key] = ev.target.result;
+                        const iconImg = document.getElementById(`sidebarIcon-${key}`);
+                        if (iconImg) iconImg.src = ev.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+
     const tabFormBtn = document.getElementById('tabFormBtn');
     const tabPreviewBtn = document.getElementById('tabPreviewBtn');
     if (tabFormBtn && tabPreviewBtn) {
@@ -883,15 +957,51 @@ function bindEvents() {
         });
     }
 
+    // ===== AUTO-UPLOAD KHUSUS FOTO DOKUMENTASI UNTUK SILAHAPP =====
     const btnUploadDrive = document.getElementById('btnUploadDrive');
     if (btnUploadDrive) {
-        btnUploadDrive.addEventListener('click', () => {
-            const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
-            document.getElementById('driveFilenameLabel').textContent = filename;
-            const element = document.getElementById('pdfContent');
-            html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
-            window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
-            driveNoticeModal.classList.add('hidden');
+        btnUploadDrive.addEventListener('click', async () => {
+            const originalText = btnUploadDrive.innerHTML;
+            btnUploadDrive.innerHTML = '<span class="animate-pulse">Memproses...</span>';
+            btnUploadDrive.disabled = true;
+
+            try {
+                const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
+                document.getElementById('driveFilenameLabel').textContent = filename;
+                const element = document.getElementById('pdfContent');
+
+                // 1. Download Laporan PDF (Seperti semula)
+                html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
+
+                // 2. Upload Otomatis Foto Dokumentasi
+                const fotoFolderId = FOTO_DRIVE_FOLDERS['silahapp'];
+                let fotoSuccess = 0;
+                
+                if (uploadedPhotos.length > 0) {
+                    for (let i = 0; i < uploadedPhotos.length; i++) {
+                        btnUploadDrive.innerHTML = `<span class="animate-pulse">Kirim Foto ${i+1}/${uploadedPhotos.length}...</span>`;
+                        const photoUri = uploadedPhotos[i];
+                        const mimeType = photoUri.match(/data:(.*?);/)[1] || 'image/jpeg';
+                        const base64 = photoUri.split(',')[1];
+                        const photoFilename = `SiLAHAPP_Foto_${i+1}_${filename.replace('.pdf', '')}.${mimeType.split('/')[1]}`;
+                        
+                        await uploadToVercel(photoFilename, base64, mimeType, fotoFolderId);
+                        fotoSuccess++;
+                    }
+                    alert(`File PDF diunduh & ${fotoSuccess} Foto Dokumentasi berhasil dikirim otomatis ke Drive.`);
+                }
+
+                // 3. Buka Folder Laporan Utama
+                window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
+                driveNoticeModal.classList.remove('hidden');
+
+            } catch (err) {
+                console.error(err);
+                alert('Gagal mengunggah foto secara otomatis: ' + err.message);
+            } finally {
+                btnUploadDrive.innerHTML = originalText;
+                btnUploadDrive.disabled = false;
+            }
         });
     }
 
