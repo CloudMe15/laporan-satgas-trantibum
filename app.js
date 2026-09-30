@@ -3,18 +3,18 @@ const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLx
 const SILAHAPP_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313';
 const PESUT_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO'; 
 
-// --- Link Folder Laporan PDF Google Drive ---
-const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL?usp=drive_link';
+// --- Link Folder Laporan PDF Google Drive (Tombol Redirect) ---
+const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=drive_link';
 const COMING_SOON_FOLDERS = {
-    1: 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing',
-    2: 'https://drive.google.com/drive/folders/2xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=sharing'
+    1: 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=drive_link',
+    2: 'https://drive.google.com/drive/folders/18i8SkxQUfEuQjiNp0tVdO4-EWaKYFt0V?usp=drive_link'
 };
 
 // --- ID Folder Auto-Upload Khusus Laporan PDF ---
 const PDF_DRIVE_FOLDERS = {
-    'silahapp': '1aPfFmrtTlEkUEMNsWn-fASHKXQYP6nxL',
+    'silahapp': '12LUEDf2oqmUJYBzg53HACcO8J0qS26ta',
     1: '1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf',
-    2: '2xnLVXT41K96_dHipGjCDDQKF-SkDHbyf'
+    2: '18i8SkxQUfEuQjiNp0tVdO4-EWaKYFt0V'
 };
 
 // --- ID Folder Auto-Upload Khusus Foto Dokumentasi ---
