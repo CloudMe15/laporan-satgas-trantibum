@@ -99,7 +99,7 @@
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
                                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Dasar Pelaksanaan & Lokasi</label>
-                                        <button type="button" id="btnAddLokasi" class="text-[11px] font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 px-2 py-1 rounded-lg transition border border-amber-300">+ Tambah Lokasi</button>
+                                        <button type="button" id="btnAddLokasi" class="text-[11px] font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Lokasi</button>
                                     </div>
                                     <div class="bg-amber-50/80 p-3 rounded-2xl border border-amber-200 shadow-inner space-y-3">
                                         <textarea id="inputDasar" rows="2" placeholder="Dasar Pelaksanaan..." class="w-full px-3 py-2 bg-white/90 border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
@@ -155,8 +155,7 @@
                                 <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (SiLAHAPP)
                             </span>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
-                                <button id="btnDownloadPDF" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Download PDF</button>
-                                <button id="btnUploadDrive" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Google Drive</button>
+                                <button id="btnUploadDrive" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Upload Google Drive</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto pb-6">
@@ -200,10 +199,21 @@
             <!-- CONTAINER MODUL LANJUTAN -->
             <div id="comingSoonContainer"></div>
 
-            <!-- FOOTER -->
-            <footer class="relative z-10 w-full py-4 text-center text-xs text-slate-200 font-semibold no-print bg-slate-950/80 backdrop-blur-md border-t border-slate-800/80 mt-auto shadow-2xl">
-                <div class="max-w-7xl mx-auto px-4">
-                    CloudMe - Bag. Program Satuan Polisi Pamong Praja - 2026
+            <!-- FOOTER DENGAN TOMBOL CUSTOMER SERVICE WHATSAPP -->
+            <footer class="relative z-10 w-full py-5 text-center text-xs text-slate-200 font-semibold no-print bg-slate-950/80 backdrop-blur-md border-t border-slate-800/80 mt-auto shadow-2xl">
+                <div class="max-w-7xl mx-auto px-4 space-y-3">
+                    <p class="text-slate-300">CloudMe - Bag. Program Satuan Polisi Pamong Praja - 2026</p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
+                        <span class="text-[11px] text-slate-400 font-bold tracking-wider">Butuh Bantuan? Hubungi CS:</span>
+                        <div class="flex flex-wrap justify-center items-center gap-3">
+                            <a href="https://wa.me/6281374435636" target="_blank" class="flex items-center gap-1.5 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 border border-emerald-600/50 px-3 py-1.5 rounded-full transition shadow-sm">
+                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> CS 1 (+62 813-7443-5636)
+                            </a>
+                            <a href="https://wa.me/6285272683165" target="_blank" class="flex items-center gap-1.5 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 border border-emerald-600/50 px-3 py-1.5 rounded-full transition shadow-sm">
+                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> CS 2 (+62 852-7268-3165)
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </footer>
         </div>
@@ -276,13 +286,14 @@
     <div id="driveNoticeModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
         <div class="bg-white/95 backdrop-blur-xl rounded-3xl max-w-md w-full p-6 shadow-2xl border text-center space-y-4">
             <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto"><i data-lucide="hard-drive" class="w-6 h-6"></i></div>
-            <h3 class="text-base font-extrabold text-slate-900">Petunjuk Upload Google Drive</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">
-                File PDF laporan Anda telah diunduh dengan nama:<br>
-                <strong id="driveFilenameLabel" class="text-indigo-700 font-bold block mt-1 bg-indigo-50 p-2 rounded-xl border border-indigo-100 break-all">Laporan.pdf</strong>
+            <h3 class="text-base font-extrabold text-slate-900">Proses Selesai</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+                File Laporan PDF Anda telah berhasil diproses dengan nama:<br>
+                <strong id="driveFilenameLabel" class="text-indigo-700 font-bold block mt-1 bg-indigo-50 p-2 rounded-xl border border-indigo-100 break-all">-</strong>
             </p>
-            <p class="text-xs text-slate-500 leading-relaxed">Folder Google Drive khusus modul ini telah dibuka di tab baru. Silahkan unggah file PDF tersebut ke dalamnya.</p>
-            <div class="pt-2"><button id="btnCloseDriveNotice" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-lg">Mengerti & Lanjutkan</button></div>
+            <div class="pt-2">
+                <button id="btnCloseDriveNotice" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-lg">Buka Folder Google Drive</button>
+            </div>
         </div>
     </div>
 
