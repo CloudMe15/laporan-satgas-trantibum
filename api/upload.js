@@ -21,6 +21,8 @@ module.exports = async function handler(req, res) {
 
         const drive = google.drive({ version: 'v3', auth });
         const bufferStream = new stream.PassThrough();
+        
+        // Membaca raw base64 dari app.js menjadi buffer data
         bufferStream.end(Buffer.from(fileBase64, 'base64'));
 
         const response = await drive.files.create({
