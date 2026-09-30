@@ -3,14 +3,12 @@ const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLx
 const SILAHAPP_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313';
 const PESUT_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO'; 
 
-// --- Link Folder Laporan PDF Google Drive (Tombol Redirect Buka Drive) ---
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=drive_link';
 const COMING_SOON_FOLDERS = {
     1: 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=drive_link',
     2: 'https://drive.google.com/drive/folders/18i8SkxQUfEuQjiNp0tVdO4-EWaKYFt0V?usp=drive_link'
 };
 
-// --- ID Folder Auto-Upload Khusus Laporan PDF ---
 const PDF_DRIVE_FOLDERS = {
     'silahapp': '12LUEDf2oqmUJYBzg53HACcO8J0qS26ta',
     1: '1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf',
@@ -31,38 +29,27 @@ let userProfile = {
 };
 
 let uploadedPhotos = [];
+let silahappAnggotaPhotos = []; 
 let anggotaListContainer, lokasiListContainer, hasilListContainer;
 let csData = {};
 let settingsModal, driveNoticeModal, inputNip;
 
-// Helper: Komunikasi dengan API Vercel Internal
 async function uploadToVercel(filename, base64Data, mimeType, folderId) {
     const apiUrl = '/api/upload'; 
-    
     const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            filename: filename,
-            fileBase64: base64Data,
-            mimeType: mimeType,
-            folderId: folderId
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename, fileBase64: base64Data, mimeType, folderId })
     });
-    
     if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Server Error (${response.status}): ${errorText}`);
     }
-    
     const result = await response.json();
     if (!result.success) throw new Error(result.error || 'Gagal mengunggah ke Drive');
     return result;
 }
 
-// Helper: Kompresi gambar
 async function compressImage(file, maxSizeMB = 2) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -77,13 +64,8 @@ async function compressImage(file, maxSizeMB = 2) {
 
                 const MAX_DIMENSION = 1920;
                 if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
-                    if (width > height) {
-                        height = Math.round((height *= MAX_DIMENSION / width));
-                        width = MAX_DIMENSION;
-                    } else {
-                        width = Math.round((width *= MAX_DIMENSION / height));
-                        height = MAX_DIMENSION;
-                    }
+                    if (width > height) { height = Math.round((height *= MAX_DIMENSION / width)); width = MAX_DIMENSION; } 
+                    else { width = Math.round((width *= MAX_DIMENSION / height)); height = MAX_DIMENSION; }
                 }
 
                 canvas.width = width;
@@ -98,7 +80,6 @@ async function compressImage(file, maxSizeMB = 2) {
                     quality -= 0.1;
                     base64 = canvas.toDataURL('image/jpeg', quality);
                 }
-
                 resolve(base64);
             };
             img.onerror = (err) => reject(err);
@@ -145,17 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initTopNavNavigation();
 });
 
-// Perbaikan fungsi tab agar "PESUT" dan "Coming Soon" bisa terbuka sempurna
 function initTopNavNavigation() {
     const navBtns = document.querySelectorAll('.top-nav-btn');
-
     navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const target = btn.getAttribute('data-target');
             navBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Harus memanggil querySelector lagi di dalam event agar elemen yang di-generate tertangkap
             const appViews = document.querySelectorAll('.app-view');
             appViews.forEach(view => {
                 view.classList.add('hidden');
@@ -176,12 +154,10 @@ function initTopNavNavigation() {
 function generateComingSoonViews() {
     const container = document.getElementById('comingSoonContainer');
     let htmlContent = '';
-
     const moduleTitles = { 1: 'Pelaporan Surat Tugas', 2: 'Coming Soon' };
     const moduleSubtitles = { 1: 'Sistem Pelaporan Surat Tugas Perjalanan Dinas', 2: 'Modul Pengembangan Lanjutan 2' };
 
     for (let i = 1; i <= 2; i++) {
-        // Hapus 'flex' saat hidden agar tidak ada bentrok CSS, class 'flex' akan ditambahkan lewat JS
         htmlContent += `
             <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex-col">
                 <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
@@ -228,11 +204,11 @@ function generateComingSoonViews() {
                                 </div>
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Dasar Pelaksanaan & Lokasi</label>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Surat Tugas (ST) & Lokasi</label>
                                         <button type="button" id="csBtnAddLokasi-${i}" class="text-[11px] font-bold text-indigo-800 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Lokasi</button>
                                     </div>
                                     <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner space-y-3">
-                                        <textarea id="csInputDasar-${i}" rows="2" placeholder="Dasar Pelaksanaan..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
+                                        <textarea id="csInputDasar-${i}" rows="2" placeholder="Surat Tugas (ST)..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
                                         <div class="pt-1 border-t border-indigo-200">
                                             <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1.5">Daftar Tempat / Lokasi:</label>
                                             <div id="csLokasiList-${i}" class="space-y-2"></div>
@@ -334,7 +310,7 @@ function generateComingSoonViews() {
                                         <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
                                             <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span><span class="text-slate-400">:</span><span id="csViewTanggal-${i}" class="font-bold text-slate-950 text-xs"></span>
                                         </div>
-                                        <div id="csBlockDasar-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">1. Dasar Pelaksanaan</label><div id="csViewDasar-${i}" class="pdf-box min-h-[42px] whitespace-pre-line">-</div></div>
+                                        <div id="csBlockDasar-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">1. Surat Tugas (ST)</label><div id="csViewDasar-${i}" class="pdf-box min-h-[42px] whitespace-pre-line">-</div></div>
                                         <div id="csBlockLokasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">2. Tempat Pelaksanaan</label><div class="pdf-box min-h-[42px]"><div id="csViewTempat-${i}" class="space-y-1"></div></div></div>
                                         <div id="csBlockHasil-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">3. Hasil Kegiatan</label><div class="pdf-box min-h-[48px]"><div id="csViewHasil-${i}" class="space-y-1"></div></div></div>
                                         <div id="csBlockKegiatan-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">4. Uraian Kegiatan</label><div id="csViewKegiatan-${i}" class="pdf-box min-h-[48px] whitespace-pre-line">-</div></div>
@@ -485,13 +461,56 @@ function updatePreview() {
     document.getElementById('blockKegiatan').style.display = kVal ? 'block' : 'none';
     document.getElementById('viewKegiatan').textContent = kVal;
 
-    const viewAnggota = document.getElementById('viewAnggota');
-    viewAnggota.innerHTML = '';
-    let aCount = 0;
-    document.querySelectorAll('.input-anggota').forEach(inp => {
-        if (inp.value.trim()) viewAnggota.appendChild(createPdfListItem(++aCount, inp.value.trim()));
-    });
-    document.getElementById('blockAnggota').style.display = aCount > 0 ? 'block' : 'none';
+    // --- ANGGOTA LOGIC UNTUK SILAHAPP ---
+    const manualWrapper = document.getElementById('anggotaManualWrapper');
+    if (manualWrapper) {
+        const isManualMode = !manualWrapper.classList.contains('hidden');
+        const titleEl = document.getElementById('labelAnggotaTitle');
+        const viewAnggotaContainer = document.getElementById('viewAnggota');
+        viewAnggotaContainer.innerHTML = '';
+
+        if (isManualMode) {
+            titleEl.textContent = '5. Daftar Nama Anggota Satgas';
+            let aCount = 0;
+            let hasContent = false;
+            const listDiv = document.createElement('div');
+            listDiv.className = 'space-y-1';
+            document.querySelectorAll('.input-anggota').forEach(inp => {
+                if (inp.value.trim()) {
+                    hasContent = true;
+                    listDiv.appendChild(createPdfListItem(++aCount, inp.value.trim()));
+                }
+            });
+            viewAnggotaContainer.appendChild(listDiv);
+            document.getElementById('blockAnggota').style.display = hasContent ? 'block' : 'none';
+        } else {
+            titleEl.textContent = '5. Dokumentasi Foto Nama Anggota';
+            const pCountEl = document.getElementById('anggotaPhotoCount');
+            if(pCountEl) pCountEl.textContent = `${silahappAnggotaPhotos.length} / 10 Foto`;
+            document.getElementById('blockAnggota').style.display = silahappAnggotaPhotos.length === 0 ? 'none' : 'block';
+
+            const gridDiv = document.createElement('div');
+            gridDiv.className = 'grid grid-cols-2 gap-3';
+            silahappAnggotaPhotos.forEach((src, idx) => {
+                const pdfCard = document.createElement('div');
+                pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
+                pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Nama Anggota ${idx + 1}</span>`;
+                gridDiv.appendChild(pdfCard);
+            });
+            viewAnggotaContainer.appendChild(gridDiv);
+        }
+
+        const aContainer = document.getElementById('anggotaPhotoPreview');
+        if(aContainer) {
+            aContainer.innerHTML = '';
+            silahappAnggotaPhotos.forEach((src, idx) => {
+                const thumb = document.createElement('div');
+                thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
+                thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><button type="button" onclick="removeSilahappAnggotaPhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>`;
+                aContainer.appendChild(thumb);
+            });
+        }
+    }
 
     renderPhotoPreview();
 }
@@ -524,7 +543,8 @@ function renderPhotoPreview() {
     lucide.createIcons();
 }
 
-window.removePhoto = (i) => { uploadedPhotos.splice(i, 1); renderPhotoPreview(); };
+window.removePhoto = (i) => { uploadedPhotos.splice(i, 1); updatePreview(); };
+window.removeSilahappAnggotaPhoto = (idx) => { silahappAnggotaPhotos.splice(idx, 1); updatePreview(); };
 
 
 // ================= MODUL LANJUTAN LOGIC =================
@@ -948,6 +968,48 @@ function bindEvents() {
     
     const btnAddAnggota = document.getElementById('btnAddAnggota');
     if (btnAddAnggota) btnAddAnggota.addEventListener('click', () => addAnggotaInput());
+
+    // --- SiLAHAPP: Event Tombol Ganda Anggota Satgas ---
+    const fotoBtn = document.getElementById('anggotaModeFotoBtn');
+    const manualBtn = document.getElementById('anggotaModeManualBtn');
+    const fotoWrapper = document.getElementById('anggotaFotoWrapper');
+    const manualWrapper = document.getElementById('anggotaManualWrapper');
+
+    if (fotoBtn && manualBtn) {
+        fotoBtn.addEventListener('click', () => {
+            fotoBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
+            manualBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
+            fotoWrapper.classList.remove('hidden');
+            manualWrapper.classList.add('hidden');
+            updatePreview();
+        });
+
+        manualBtn.addEventListener('click', () => {
+            manualBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
+            fotoBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
+            manualWrapper.classList.remove('hidden');
+            fotoWrapper.classList.add('hidden');
+            updatePreview();
+        });
+    }
+
+    const inputAnggotaFoto = document.getElementById('inputAnggotaFoto');
+    if (inputAnggotaFoto) {
+        inputAnggotaFoto.addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            if (silahappAnggotaPhotos.length + files.length > 10) { alert('Maksimal 10 foto nama anggota!'); return; }
+            for (const file of files) {
+                if (file.type.startsWith('image/')) {
+                    if (silahappAnggotaPhotos.length < 10) {
+                        const compressedBase64 = await compressImage(file, 2);
+                        silahappAnggotaPhotos.push(compressedBase64);
+                        updatePreview();
+                    }
+                }
+            }
+            e.target.value = '';
+        });
+    }
 
     const inputDokumentasi = document.getElementById('inputDokumentasi');
     if (inputDokumentasi) {
