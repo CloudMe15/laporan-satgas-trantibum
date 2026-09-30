@@ -35,23 +35,26 @@ let anggotaListContainer, lokasiListContainer, hasilListContainer;
 let csData = {};
 let settingsModal, driveNoticeModal, inputNip;
 
-// Helper: Komunikasi dengan API Vercel
+// Helper: Komunikasi dengan API Google Apps Script (Jalur Baru)
 async function uploadToVercel(filename, base64Data, mimeType, folderId) {
-    const response = await fetch('/api/upload', {
+    const gasUrl = 'https://script.google.com/macros/s/AKfycbyrNIBN0hhmWbi5wLXQp6FVAsrqNixi7eBpwDLfORL9gIjozHXQrltJa5WJrE7zoJpgfQ/exec'; 
+    
+    const response = await fetch(gasUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        // Sengaja tidak memakai header application/json agar lolos dari blokir CORS browser
         body: JSON.stringify({ filename, fileBase64: base64Data, mimeType, folderId })
     });
+    
     const result = await response.json();
-    if (!response.ok) throw new Error(result.error || 'Server error');
+    if (!result.success) throw new Error(result.error || 'Gagal mengunggah ke Drive');
     return result;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v35_auto_upload_photos') {
+    if (cacheVersion !== 'v36_gas_auto_upload') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v35_auto_upload_photos');
+        localStorage.setItem('satpol_app_version', 'v36_gas_auto_upload');
     }
 
     settingsModal = document.getElementById('settingsModal');
