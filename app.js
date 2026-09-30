@@ -302,7 +302,7 @@ function generateComingSoonViews() {
                                 <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (${moduleTitles[i]})
                             </span>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
-                                <button id="csBtnUploadDrive-${i}" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Upload PDF ke Drive</button>
+                                <button id="csBtnUploadDrive-${i}" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Download dan Upload</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto pb-6">
@@ -771,6 +771,27 @@ function initCsModuleEvents(i) {
         e.target.value = '';
     });
 
+    document.getElementById(`csTabFormBtn-${i}`).addEventListener('click', () => {
+        document.getElementById(`csFormSection-${i}`).classList.remove('hidden');
+        document.getElementById(`csPreviewSection-${i}`).classList.add('hidden');
+        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md';
+        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
+    });
+
+    document.getElementById(`csTabPreviewBtn-${i}`).addEventListener('click', () => {
+        document.getElementById(`csPreviewSection-${i}`).classList.remove('hidden');
+        document.getElementById(`csFormSection-${i}`).classList.add('hidden');
+        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md';
+        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
+    });
+
+    document.getElementById(`csBtnDownloadPDF-${i}`).addEventListener('click', () => {
+        const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
+        const element = document.getElementById(`csPdfContent-${i}`);
+        const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
+        html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
+    });
+
     // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS MODUL CS (AUTO DOWNLOAD + UPLOAD PDF SAJA) =====
     document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', async () => {
         const btn = document.getElementById(`csBtnUploadDrive-${i}`);
@@ -800,7 +821,7 @@ function initCsModuleEvents(i) {
             document.getElementById('driveFilenameLabel').textContent = filename;
             const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
             if (noticeDesc) {
-                noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan unggah foto dokumentasi (serta file PDF) secara manual jika diperlukan.`;
+                noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan <b>Check File PDF anda</b>.`;
             }
             
             const btnClose = document.getElementById('btnCloseDriveNotice');
@@ -984,6 +1005,15 @@ function bindEvents() {
         });
     }
 
+    const btnDownloadPDF = document.getElementById('btnDownloadPDF');
+    if (btnDownloadPDF) {
+        btnDownloadPDF.addEventListener('click', () => {
+            const element = document.getElementById('pdfContent');
+            const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
+            html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
+        });
+    }
+
     // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS SILAHAPP (AUTO DOWNLOAD + UPLOAD PDF SAJA) =====
     const btnUploadDrive = document.getElementById('btnUploadDrive');
     if (btnUploadDrive) {
@@ -1013,7 +1043,7 @@ function bindEvents() {
                 document.getElementById('driveFilenameLabel').textContent = filename;
                 const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
                 if (noticeDesc) {
-                    noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan <b>unggah Foto Dokumentasi Anda secara manual</b>.`;
+                    noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan <b>Check File PDF anda</b>.`;
                 }
                 
                 const btnClose = document.getElementById('btnCloseDriveNotice');
