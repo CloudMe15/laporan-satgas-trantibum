@@ -145,9 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initTopNavNavigation();
 });
 
+// Perbaikan fungsi tab agar "PESUT" dan "Coming Soon" bisa terbuka sempurna
 function initTopNavNavigation() {
     const navBtns = document.querySelectorAll('.top-nav-btn');
-    const appViews = document.querySelectorAll('.app-view');
 
     navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -155,14 +155,18 @@ function initTopNavNavigation() {
             navBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
+            // Harus memanggil querySelector lagi di dalam event agar elemen yang di-generate tertangkap
+            const appViews = document.querySelectorAll('.app-view');
             appViews.forEach(view => {
                 view.classList.add('hidden');
+                view.classList.remove('flex');
                 view.classList.remove('active-view');
             });
 
             const targetView = document.getElementById(`view-${target}`);
             if (targetView) {
                 targetView.classList.remove('hidden');
+                targetView.classList.add('flex');
                 targetView.classList.add('active-view');
             }
         });
@@ -177,8 +181,9 @@ function generateComingSoonViews() {
     const moduleSubtitles = { 1: 'Sistem Pelaporan Surat Tugas Perjalanan Dinas', 2: 'Modul Pengembangan Lanjutan 2' };
 
     for (let i = 1; i <= 2; i++) {
+        // Hapus 'flex' saat hidden agar tidak ada bentrok CSS, class 'flex' akan ditambahkan lewat JS
         htmlContent += `
-            <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex flex-col">
+            <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex-col">
                 <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
                     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
                         <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
@@ -785,13 +790,6 @@ function initCsModuleEvents(i) {
         document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
     });
 
-    document.getElementById(`csBtnDownloadPDF-${i}`).addEventListener('click', () => {
-        const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
-        const element = document.getElementById(`csPdfContent-${i}`);
-        const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
-        html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
-    });
-
     // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS MODUL CS (AUTO DOWNLOAD + UPLOAD PDF SAJA) =====
     document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', async () => {
         const btn = document.getElementById(`csBtnUploadDrive-${i}`);
@@ -1002,15 +1000,6 @@ function bindEvents() {
             document.getElementById('formSection').classList.add('hidden');
             tabPreviewBtn.className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow-md';
             tabFormBtn.className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
-        });
-    }
-
-    const btnDownloadPDF = document.getElementById('btnDownloadPDF');
-    if (btnDownloadPDF) {
-        btnDownloadPDF.addEventListener('click', () => {
-            const element = document.getElementById('pdfContent');
-            const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
-            html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
         });
     }
 
