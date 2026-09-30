@@ -55,6 +55,53 @@ async function uploadToVercel(filename, base64Data, mimeType, folderId) {
     return result;
 }
 
+// Helper: Kompresi gambar menjadi di bawah batas maksimal (default 2MB)
+async function compressImage(file, maxSizeMB = 2) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                // Batasi dimensi maksimal agar proses lebih ringan
+                const MAX_DIMENSION = 1920;
+                if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+                    if (width > height) {
+                        height = Math.round((height *= MAX_DIMENSION / width));
+                        width = MAX_DIMENSION;
+                    } else {
+                        width = Math.round((width *= MAX_DIMENSION / height));
+                        height = MAX_DIMENSION;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                let quality = 0.9;
+                let base64 = canvas.toDataURL('image/jpeg', quality);
+
+                // Turunkan kualitas secara bertahap jika ukuran Base64 masih di atas batas
+                while (Math.round((base64.length * 3) / 4) / (1024 * 1024) > maxSizeMB && quality > 0.1) {
+                    quality -= 0.1;
+                    base64 = canvas.toDataURL('image/jpeg', quality);
+                }
+
+                resolve(base64);
+            };
+            img.onerror = (err) => reject(err);
+        };
+        reader.onerror = (err) => reject(err);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
     if (cacheVersion !== 'v37_full_stable') {
@@ -690,39 +737,33 @@ function initCsModuleEvents(i) {
         renderCsPhotoPreviews(i);
     });
 
-    document.getElementById(`csInputAnggotaFoto-${i}`).addEventListener('change', (e) => {
+    document.getElementById(`csInputAnggotaFoto-${i}`).addEventListener('change', async (e) => {
         const files = Array.from(e.target.files);
         if (csData[i].anggotaPhotos.length + files.length > 10) { alert('Maksimal 10 foto nama anggota!'); return; }
-        files.forEach(file => {
+        for (const file of files) {
             if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    if (csData[i].anggotaPhotos.length < 10) {
-                        csData[i].anggotaPhotos.push(ev.target.result);
-                        renderCsPhotoPreviews(i);
-                    }
-                };
-                reader.readAsDataURL(file);
+                if (csData[i].anggotaPhotos.length < 10) {
+                    const compressedBase64 = await compressImage(file, 2);
+                    csData[i].anggotaPhotos.push(compressedBase64);
+                    renderCsPhotoPreviews(i);
+                }
             }
-        });
+        }
         e.target.value = '';
     });
 
-    document.getElementById(`csInputDokumentasi-${i}`).addEventListener('change', (e) => {
+    document.getElementById(`csInputDokumentasi-${i}`).addEventListener('change', async (e) => {
         const files = Array.from(e.target.files);
         if (csData[i].uploadedPhotos.length + files.length > 10) { alert('Maksimal 10 foto dokumentasi!'); return; }
-        files.forEach(file => {
+        for (const file of files) {
             if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    if (csData[i].uploadedPhotos.length < 10) {
-                        csData[i].uploadedPhotos.push(ev.target.result);
-                        renderCsPhotoPreviews(i);
-                    }
-                };
-                reader.readAsDataURL(file);
+                if (csData[i].uploadedPhotos.length < 10) {
+                    const compressedBase64 = await compressImage(file, 2);
+                    csData[i].uploadedPhotos.push(compressedBase64);
+                    renderCsPhotoPreviews(i);
+                }
             }
-        });
+        }
         e.target.value = '';
     });
 
@@ -904,18 +945,19 @@ function bindEvents() {
 
     const inputDokumentasi = document.getElementById('inputDokumentasi');
     if (inputDokumentasi) {
-        inputDokumentasi.addEventListener('change', (e) => {
+        inputDokumentasi.addEventListener('change', async (e) => {
             const files = Array.from(e.target.files);
             if (uploadedPhotos.length + files.length > 10) { alert('Maksimal 10 foto dokumentasi!'); return; }
-            files.forEach(file => {
+            for (const file of files) {
                 if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        if (uploadedPhotos.length < 10) { uploadedPhotos.push(ev.target.result); renderPhotoPreview(); }
-                    };
-                    reader.readAsDataURL(file);
+                    if (uploadedPhotos.length < 10) { 
+                        // Kompres file sebelum push
+                        const compressedBase64 = await compressImage(file, 2);
+                        uploadedPhotos.push(compressedBase64); 
+                        renderPhotoPreview(); 
+                    }
                 }
-            });
+            }
             e.target.value = '';
         });
     }
