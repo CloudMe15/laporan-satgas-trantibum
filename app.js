@@ -35,14 +35,19 @@ let anggotaListContainer, lokasiListContainer, hasilListContainer;
 let csData = {};
 let settingsModal, driveNoticeModal, inputNip;
 
-// Helper: Komunikasi dengan API Google Apps Script (Jalur Baru)
+// Helper: Komunikasi dengan API Google Apps Script (Anti-CORS & Format Formulir)
 async function uploadToVercel(filename, base64Data, mimeType, folderId) {
-    const gasUrl = 'https://script.google.com/macros/s/AKfycbyrNIBN0hhmWbi5wLXQp6FVAsrqNixi7eBpwDLfORL9gIjozHXQrltJa5WJrE7zoJpgfQ/exec'; 
+    const gasUrl = 'https://script.google.com/macros/s/AKfycbwsstkCJzRnRJ7Pt4SDbAXHbc2Cs8RugusZoraejVKNuj5llFbb_mOe4yAIzlNDESchhg/exec'; 
     
+    const formData = new URLSearchParams();
+    formData.append('filename', filename);
+    formData.append('fileBase64', base64Data);
+    formData.append('mimeType', mimeType);
+    formData.append('folderId', folderId);
+
     const response = await fetch(gasUrl, {
         method: 'POST',
-        // Sengaja tidak memakai header application/json agar lolos dari blokir CORS browser
-        body: JSON.stringify({ filename, fileBase64: base64Data, mimeType, folderId })
+        body: formData
     });
     
     const result = await response.json();
@@ -52,9 +57,9 @@ async function uploadToVercel(filename, base64Data, mimeType, folderId) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v36_gas_auto_upload') {
+    if (cacheVersion !== 'v37_full_stable') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v36_gas_auto_upload');
+        localStorage.setItem('satpol_app_version', 'v37_full_stable');
     }
 
     settingsModal = document.getElementById('settingsModal');
