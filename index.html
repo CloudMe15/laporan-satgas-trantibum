@@ -199,20 +199,22 @@
             <!-- CONTAINER MODUL LANJUTAN -->
             <div id="comingSoonContainer"></div>
 
-            <!-- FOOTER DENGAN TOMBOL POP-UP CUSTOMER SERVICE WHATSAPP -->
+            <!-- FOOTER BAWAAN (TANPA CS DI DALAM SINI) -->
             <footer class="relative z-10 w-full py-5 text-center text-xs text-slate-200 font-semibold no-print bg-slate-950/80 backdrop-blur-md border-t border-slate-800/80 mt-auto shadow-2xl">
-                <div class="max-w-7xl mx-auto px-4 space-y-3">
+                <div class="max-w-7xl mx-auto px-4">
                     <p class="text-slate-300">CloudMe - Bag. Program Satuan Polisi Pamong Praja - 2026</p>
-                    <div class="flex items-center justify-center pt-1">
-                        <button id="btnOpenCsModal" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-4 py-2 rounded-xl transition shadow-lg shadow-emerald-600/30 active:scale-95">
-                            <i data-lucide="message-circle" class="w-4 h-4"></i>
-                            <span>Butuh Bantuan? Hubungi Customer Service (WhatsApp)</span>
-                        </button>
-                    </div>
                 </div>
             </footer>
         </div>
     </div>
+
+    <!-- TOMBOL MENGAMBANG CS WHATSAPP DI POJOK KANAN BAWAH -->
+    <button id="btnOpenCsModal" class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full shadow-[0_4px_20px_rgb(5,150,105,0.6)] transition-all transform hover:-translate-y-1 hover:scale-105 group no-print cursor-pointer border-2 border-emerald-400/50">
+        <i data-lucide="headset" class="w-7 h-7"></i>
+        <span class="absolute right-full mr-4 px-3 py-1.5 bg-slate-800 text-white text-[11px] font-bold rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap shadow-lg transition-opacity duration-300">
+            Bantuan & CS
+        </span>
+    </button>
 
     <!-- SETTINGS MODAL -->
     <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
