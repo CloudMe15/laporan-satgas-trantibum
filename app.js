@@ -3,7 +3,7 @@ const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLx
 const SILAHAPP_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313';
 const PESUT_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO'; 
 
-// --- Link Folder Laporan PDF Google Drive (Tombol Redirect) ---
+// --- Link Folder Laporan PDF Google Drive (Tombol Redirect Buka Drive) ---
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=drive_link';
 const COMING_SOON_FOLDERS = {
     1: 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=drive_link',
@@ -15,13 +15,6 @@ const PDF_DRIVE_FOLDERS = {
     'silahapp': '12LUEDf2oqmUJYBzg53HACcO8J0qS26ta',
     1: '1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf',
     2: '18i8SkxQUfEuQjiNp0tVdO4-EWaKYFt0V'
-};
-
-// --- ID Folder Auto-Upload Khusus Foto Dokumentasi ---
-const FOTO_DRIVE_FOLDERS = {
-    'silahapp': '1zZjny4zbPQ-7ssY7IlZGfMG1PTa9wHuh',
-    1: '1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr',
-    2: '18eX3ZImoWAGdzWGj1B8bxctBudJAmWKN'
 };
 
 let userProfile = {
@@ -309,8 +302,7 @@ function generateComingSoonViews() {
                                 <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (${moduleTitles[i]})
                             </span>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
-                                <button id="csBtnDownloadPDF-${i}" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Download PDF</button>
-                                <button id="csBtnUploadDrive-${i}" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Google Drive</button>
+                                <button id="csBtnUploadDrive-${i}" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Upload PDF ke Drive</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto pb-6">
@@ -779,32 +771,11 @@ function initCsModuleEvents(i) {
         e.target.value = '';
     });
 
-    document.getElementById(`csTabFormBtn-${i}`).addEventListener('click', () => {
-        document.getElementById(`csFormSection-${i}`).classList.remove('hidden');
-        document.getElementById(`csPreviewSection-${i}`).classList.add('hidden');
-        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md';
-        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
-    });
-
-    document.getElementById(`csTabPreviewBtn-${i}`).addEventListener('click', () => {
-        document.getElementById(`csPreviewSection-${i}`).classList.remove('hidden');
-        document.getElementById(`csFormSection-${i}`).classList.add('hidden');
-        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md';
-        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
-    });
-
-    document.getElementById(`csBtnDownloadPDF-${i}`).addEventListener('click', () => {
-        const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
-        const element = document.getElementById(`csPdfContent-${i}`);
-        const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
-        html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
-    });
-
-    // ===== AUTO-UPLOAD KHUSUS MODUL CS =====
+    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS MODUL CS (AUTO DOWNLOAD + UPLOAD PDF SAJA) =====
     document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', async () => {
         const btn = document.getElementById(`csBtnUploadDrive-${i}`);
         const originalText = btn.innerHTML;
-        btn.innerHTML = '<span class="animate-pulse">Memproses PDF & Foto...</span>';
+        btn.innerHTML = '<span class="animate-pulse">Membuat PDF & Mengunggah...</span>';
         btn.disabled = true;
 
         try {
@@ -812,45 +783,24 @@ function initCsModuleEvents(i) {
             const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
             const element = document.getElementById(`csPdfContent-${i}`);
 
-            // 1. Buat Data PDF
-            btn.innerHTML = `<span class="animate-pulse">Membuat PDF...</span>`;
+            // 1. Buat PDF & Unduh Otomatis ke HP
             const opt = { margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} };
             const pdfDataUri = await html2pdf().set(opt).from(element).output('datauristring');
             
-            // 2. Download otomatis secara lokal
             const link = document.createElement('a');
             link.href = pdfDataUri;
             link.download = filename;
             link.click();
 
-            // 3. Upload Laporan PDF ke Folder Drive Laporan
-            btn.innerHTML = `<span class="animate-pulse">Kirim PDF Laporan...</span>`;
+            // 2. Upload Laporan PDF otomatis ke Google Drive
             const pdfBase64 = pdfDataUri.split(',')[1];
             await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS[i]);
 
-            // 4. Upload Foto Dokumentasi ke Folder Drive Foto
-            const fotoFolderId = FOTO_DRIVE_FOLDERS[i];
-            const allPhotos = [...csData[i].uploadedPhotos, ...csData[i].anggotaPhotos];
-            let fotoSuccess = 0;
-            
-            if (allPhotos.length > 0) {
-                for (let j = 0; j < allPhotos.length; j++) {
-                    btn.innerHTML = `<span class="animate-pulse">Kirim Foto ${j+1}/${allPhotos.length}...</span>`;
-                    const photoUri = allPhotos[j];
-                    const mimeType = photoUri.match(/data:(.*?);/)[1] || 'image/jpeg';
-                    const base64 = photoUri.split(',')[1];
-                    const photoFilename = `${modulePrefix}_Foto_${j+1}_${filename.replace('.pdf', '')}.${mimeType.split('/')[1]}`;
-                    
-                    await uploadToVercel(photoFilename, base64, mimeType, fotoFolderId);
-                    fotoSuccess++;
-                }
-            }
-
-            // 5. Notifikasi Modal Sukses (Tanpa Buka Otomatis Agar Lolos Popup Blocker HP)
+            // 3. Notifikasi Modal Sukses
             document.getElementById('driveFilenameLabel').textContent = filename;
             const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
             if (noticeDesc) {
-                noticeDesc.innerHTML = `File PDF berhasil <b>diunduh</b> ke perangkat Anda dan <b>diunggah</b> ke Google Drive.<br><span class="text-emerald-600 font-bold text-sm leading-loose">✓ ${fotoSuccess} Foto Dokumentasi sukses dikirim.</span><br><br>Silahkan klik tombol di bawah untuk mengecek Folder Laporan Anda.`;
+                noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan unggah foto dokumentasi (serta file PDF) secara manual jika diperlukan.`;
             }
             
             const btnClose = document.getElementById('btnCloseDriveNotice');
@@ -866,7 +816,7 @@ function initCsModuleEvents(i) {
 
         } catch (err) {
             console.error(err);
-            alert('Gagal mengunggah laporan ke server: ' + err.message);
+            alert('Gagal memproses laporan: ' + err.message);
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
@@ -1034,65 +984,36 @@ function bindEvents() {
         });
     }
 
-    const btnDownloadPDF = document.getElementById('btnDownloadPDF');
-    if (btnDownloadPDF) {
-        btnDownloadPDF.addEventListener('click', () => {
-            const element = document.getElementById('pdfContent');
-            const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
-            html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
-        });
-    }
-
-    // ===== AUTO-UPLOAD KHUSUS SILAHAPP =====
+    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS SILAHAPP (AUTO DOWNLOAD + UPLOAD PDF SAJA) =====
     const btnUploadDrive = document.getElementById('btnUploadDrive');
     if (btnUploadDrive) {
         btnUploadDrive.addEventListener('click', async () => {
             const originalText = btnUploadDrive.innerHTML;
-            btnUploadDrive.innerHTML = '<span class="animate-pulse">Memproses PDF & Foto...</span>';
+            btnUploadDrive.innerHTML = '<span class="animate-pulse">Membuat PDF & Mengunggah...</span>';
             btnUploadDrive.disabled = true;
 
             try {
                 const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
                 const element = document.getElementById('pdfContent');
 
-                // 1. Buat Data PDF
-                btnUploadDrive.innerHTML = `<span class="animate-pulse">Membuat PDF...</span>`;
+                // 1. Buat dan Unduh PDF secara lokal
                 const opt = { margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} };
                 const pdfDataUri = await html2pdf().set(opt).from(element).output('datauristring');
 
-                // 2. Download otomatis secara lokal
                 const link = document.createElement('a');
                 link.href = pdfDataUri;
                 link.download = filename;
                 link.click();
 
-                // 3. Upload Laporan PDF ke Folder Drive Laporan
-                btnUploadDrive.innerHTML = `<span class="animate-pulse">Kirim PDF Laporan...</span>`;
+                // 2. Upload Laporan PDF otomatis ke Google Drive
                 const pdfBase64 = pdfDataUri.split(',')[1];
                 await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS['silahapp']);
 
-                // 4. Upload Foto Dokumentasi ke Folder Drive Foto
-                const fotoFolderId = FOTO_DRIVE_FOLDERS['silahapp'];
-                let fotoSuccess = 0;
-                
-                if (uploadedPhotos.length > 0) {
-                    for (let i = 0; i < uploadedPhotos.length; i++) {
-                        btnUploadDrive.innerHTML = `<span class="animate-pulse">Kirim Foto ${i+1}/${uploadedPhotos.length}...</span>`;
-                        const photoUri = uploadedPhotos[i];
-                        const mimeType = photoUri.match(/data:(.*?);/)[1] || 'image/jpeg';
-                        const base64 = photoUri.split(',')[1];
-                        const photoFilename = `SiLAHAPP_Foto_${i+1}_${filename.replace('.pdf', '')}.${mimeType.split('/')[1]}`;
-                        
-                        await uploadToVercel(photoFilename, base64, mimeType, fotoFolderId);
-                        fotoSuccess++;
-                    }
-                }
-
-                // 5. Notifikasi Modal Sukses (Tanpa Buka Otomatis Agar Lolos Popup Blocker HP)
+                // 3. Notifikasi Modal Sukses
                 document.getElementById('driveFilenameLabel').textContent = filename;
                 const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
                 if (noticeDesc) {
-                    noticeDesc.innerHTML = `File PDF berhasil <b>diunduh</b> ke perangkat Anda dan <b>diunggah</b> ke Google Drive.<br><span class="text-emerald-600 font-bold text-sm leading-loose">✓ ${fotoSuccess} Foto Dokumentasi sukses dikirim.</span><br><br>Silahkan klik tombol di bawah untuk mengecek Folder Laporan Anda.`;
+                    noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan <b>unggah Foto Dokumentasi Anda secara manual</b>.`;
                 }
                 
                 const btnClose = document.getElementById('btnCloseDriveNotice');
@@ -1108,7 +1029,7 @@ function bindEvents() {
 
             } catch (err) {
                 console.error(err);
-                alert('Gagal mengunggah laporan ke server: ' + err.message);
+                alert('Gagal memproses laporan: ' + err.message);
             } finally {
                 btnUploadDrive.innerHTML = originalText;
                 btnUploadDrive.disabled = false;
