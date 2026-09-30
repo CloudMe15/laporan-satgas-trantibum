@@ -35,7 +35,7 @@ let anggotaListContainer, lokasiListContainer, hasilListContainer;
 let csData = {};
 let settingsModal, driveNoticeModal, inputNip;
 
-// Helper: Komunikasi dengan API Vercel Internal
+// Helper: Komunikasi dengan API Vercel Internal (Bukan Google Apps Script lagi)
 async function uploadToVercel(filename, base64Data, mimeType, folderId) {
     const apiUrl = '/api/upload'; 
     
@@ -53,7 +53,7 @@ async function uploadToVercel(filename, base64Data, mimeType, folderId) {
         })
     });
     
-    // Menangkap error jika Vercel mengembalikan status gagal (contoh: 500)
+    // Menangkap error jika Vercel mengembalikan status gagal
     if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Server Error (${response.status}): ${errorText}`);
@@ -810,7 +810,7 @@ function initCsModuleEvents(i) {
             document.getElementById('driveFilenameLabel').textContent = filename;
             const element = document.getElementById(`csPdfContent-${i}`);
 
-            // 1. Download Laporan PDF (Seperti semula)
+            // 1. Download Laporan PDF
             html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
 
             // 2. Upload Otomatis Foto Dokumentasi
@@ -1029,7 +1029,7 @@ function bindEvents() {
                 document.getElementById('driveFilenameLabel').textContent = filename;
                 const element = document.getElementById('pdfContent');
 
-                // 1. Download Laporan PDF (Seperti semula)
+                // 1. Download Laporan PDF
                 html2pdf().set({ margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} }).from(element).save();
 
                 // 2. Upload Otomatis Foto Dokumentasi
