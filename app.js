@@ -35,20 +35,29 @@ let anggotaListContainer, lokasiListContainer, hasilListContainer;
 let csData = {};
 let settingsModal, driveNoticeModal, inputNip;
 
-// Helper: Komunikasi dengan API Google Apps Script (Anti-CORS & Format Formulir)
+// Helper: Komunikasi dengan API Vercel Internal
 async function uploadToVercel(filename, base64Data, mimeType, folderId) {
-    const gasUrl = 'https://script.google.com/macros/s/AKfycbwsstkCJzRnRJ7Pt4SDbAXHbc2Cs8RugusZoraejVKNuj5llFbb_mOe4yAIzlNDESchhg/exec'; 
+    const apiUrl = '/api/upload'; 
     
-    const formData = new URLSearchParams();
-    formData.append('filename', filename);
-    formData.append('fileBase64', base64Data);
-    formData.append('mimeType', mimeType);
-    formData.append('folderId', folderId);
-
-    const response = await fetch(gasUrl, {
+    // Mengirim data sebagai JSON ke endpoint internal Vercel untuk menghindari CORS
+    const response = await fetch(apiUrl, {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            filename: filename,
+            fileBase64: base64Data,
+            mimeType: mimeType,
+            folderId: folderId
+        })
     });
+    
+    // Menangkap error jika Vercel mengembalikan status gagal (contoh: 500)
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server Error (${response.status}): ${errorText}`);
+    }
     
     const result = await response.json();
     if (!result.success) throw new Error(result.error || 'Gagal mengunggah ke Drive');
