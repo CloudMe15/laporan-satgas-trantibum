@@ -5,14 +5,14 @@ const PESUT_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1tCvpcnzr0YI
 
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=drive_link';
 const COMING_SOON_FOLDERS = {
-    1: 'https://drive.google.com/drive/folders/1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr?usp=drive_link', // Modul 1 (PESUT)
-    2: 'https://drive.google.com/drive/folders/18eX3ZImoWAGdzWGj1B8bxctBudJAmWKN?usp=drive_link'  // Modul 2 (Coming Soon)
+    1: 'https://drive.google.com/drive/folders/1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr?usp=drive_link',
+    2: 'https://drive.google.com/drive/folders/1o6KyMinIed9hK05RiB1xtDY9o_-bnb-V?usp=drive_link'
 };
 
 const PDF_DRIVE_FOLDERS = {
     'silahapp': '12LUEDf2oqmUJYBzg53HACcO8J0qS26ta',
-    1: '1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr', // ID Folder PESUT
-    2: '18eX3ZImoWAGdzWGj1B8bxctBudJAmWKN'  // ID Folder Coming Soon
+    1: '1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr',
+    2: '1o6KyMinIed9hK05RiB1xtDY9o_-bnb-V'
 };
 
 let userProfile = {
@@ -34,7 +34,6 @@ let anggotaListContainer, lokasiListContainer, hasilListContainer;
 let csData = {};
 let settingsModal, driveNoticeModal, inputNip;
 
-// Fungsi helper aman untuk menghindari error null (textContent)
 function safeSetTextContent(elementId, text) {
     const el = document.getElementById(elementId);
     if (el) {
@@ -843,7 +842,7 @@ function initCsModuleEvents(i) {
             const pdfBase64 = pdfDataUri.split(',')[1];
             await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS[i]);
 
-            // 3. Notifikasi Modal Sukses dengan penanganan elemen aman
+            // 3. Notifikasi Modal Sukses
             safeSetTextContent('driveFilenameLabel', filename);
             const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
             if (noticeDesc) {
