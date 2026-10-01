@@ -162,7 +162,7 @@ function generateComingSoonViews() {
     const container = document.getElementById('comingSoonContainer');
     let htmlContent = '';
     const moduleTitles = { 1: 'Pelaporan Surat Tugas', 2: 'Coming Soon' };
-    const moduleSubtitles = { 1: 'Sistem Pelaporan Surat Tugas Perjalanan Dinas', 2: 'Modul Pengembangan Lanjutan 2' };
+    const moduleSubtitles = { 1: 'Sistem Pelaporan Surat Tugas', 2: 'Modul Pengembangan Lanjutan 2' };
 
     for (let i = 1; i <= 2; i++) {
         htmlContent += `
