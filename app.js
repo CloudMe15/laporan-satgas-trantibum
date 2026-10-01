@@ -34,6 +34,14 @@ let anggotaListContainer, lokasiListContainer, hasilListContainer;
 let csData = {};
 let settingsModal, driveNoticeModal, inputNip;
 
+// Fungsi helper aman untuk menghindari error null (textContent)
+function safeSetTextContent(elementId, text) {
+    const el = document.getElementById(elementId);
+    if (el) {
+        el.textContent = text;
+    }
+}
+
 async function uploadToVercel(filename, base64Data, mimeType, folderId) {
     const apiUrl = '/api/upload'; 
     const response = await fetch(apiUrl, {
@@ -810,7 +818,7 @@ function initCsModuleEvents(i) {
         document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
     });
 
-    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS MODUL CS (AUTO DOWNLOAD + UPLOAD PDF SAJA) =====
+    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS MODUL PESUT & COMING SOON (AUTO DOWNLOAD + UPLOAD PDF) =====
     document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', async () => {
         const btn = document.getElementById(`csBtnUploadDrive-${i}`);
         const originalText = btn.innerHTML;
@@ -818,11 +826,11 @@ function initCsModuleEvents(i) {
         btn.disabled = true;
 
         try {
-            const modulePrefix = i === 1 ? 'SuratTugas' : 'ComingSoon';
+            const modulePrefix = i === 1 ? 'Pesut' : 'ComingSoon';
             const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
             const element = document.getElementById(`csPdfContent-${i}`);
 
-            // 1. Buat PDF & Unduh Otomatis ke HP
+            // 1. Buat PDF & Unduh Otomatis ke Perangkat
             const opt = { margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} };
             const pdfDataUri = await html2pdf().set(opt).from(element).output('datauristring');
             
@@ -835,8 +843,8 @@ function initCsModuleEvents(i) {
             const pdfBase64 = pdfDataUri.split(',')[1];
             await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS[i]);
 
-            // 3. Notifikasi Modal Sukses
-            document.getElementById('driveFilenameLabel').textContent = filename;
+            // 3. Notifikasi Modal Sukses dengan penanganan elemen aman (Mencegah Error Null)
+            safeSetTextContent('driveFilenameLabel', filename);
             const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
             if (noticeDesc) {
                 noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan <b>Check File PDF anda</b>.`;
@@ -847,11 +855,11 @@ function initCsModuleEvents(i) {
                 btnClose.textContent = "Buka Folder Google Drive";
                 btnClose.onclick = () => {
                     window.open(COMING_SOON_FOLDERS[i], '_blank');
-                    driveNoticeModal.classList.add('hidden');
+                    if (driveNoticeModal) driveNoticeModal.classList.add('hidden');
                 };
             }
             
-            driveNoticeModal.classList.remove('hidden');
+            if (driveNoticeModal) driveNoticeModal.classList.remove('hidden');
 
         } catch (err) {
             console.error(err);
@@ -934,20 +942,25 @@ function updateNipCounter() {
 function saveSettings() {
     if (!inputNip) return;
     const nipVal = inputNip.value.trim();
+    const nipErrorEl = document.getElementById('nipError');
     if (nipVal && nipVal.length !== 18) {
-        document.getElementById('nipError').classList.remove('hidden');
+        if (nipErrorEl) nipErrorEl.classList.remove('hidden');
         return;
     }
-    document.getElementById('nipError').classList.add('hidden');
-    userProfile.nama = document.getElementById('inputSettingNama').value.trim();
+    if (nipErrorEl) nipErrorEl.classList.add('hidden');
+    
+    const settingNamaEl = document.getElementById('inputSettingNama');
+    const settingJabatanEl = document.getElementById('inputSettingJabatan');
+
+    if (settingNamaEl) userProfile.nama = settingNamaEl.value.trim();
     userProfile.nip = nipVal;
-    userProfile.jabatan = document.getElementById('inputSettingJabatan').value.trim();
+    if (settingJabatanEl) userProfile.jabatan = settingJabatanEl.value.trim();
 
     localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
     applyUserProfileUI();
     updatePreview();
     for (let i = 1; i <= 2; i++) updateCsPreview(i);
-    settingsModal.classList.add('hidden');
+    if (settingsModal) settingsModal.classList.add('hidden');
 }
 
 function bindEvents() {
@@ -1065,7 +1078,7 @@ function bindEvents() {
         });
     }
 
-    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS SILAHAPP (AUTO DOWNLOAD + UPLOAD PDF SAJA) =====
+    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS SILAHAPP (AUTO DOWNLOAD + UPLOAD PDF) =====
     const btnUploadDrive = document.getElementById('btnUploadDrive');
     if (btnUploadDrive) {
         btnUploadDrive.addEventListener('click', async () => {
@@ -1091,7 +1104,7 @@ function bindEvents() {
                 await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS['silahapp']);
 
                 // 3. Notifikasi Modal Sukses
-                document.getElementById('driveFilenameLabel').textContent = filename;
+                safeSetTextContent('driveFilenameLabel', filename);
                 const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
                 if (noticeDesc) {
                     noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan <b>Check File PDF anda</b>.`;
@@ -1102,11 +1115,11 @@ function bindEvents() {
                     btnClose.textContent = "Buka Folder Google Drive";
                     btnClose.onclick = () => {
                         window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
-                        driveNoticeModal.classList.add('hidden');
+                        if (driveNoticeModal) driveNoticeModal.classList.add('hidden');
                     };
                 }
                 
-                driveNoticeModal.classList.remove('hidden');
+                if (driveNoticeModal) driveNoticeModal.classList.remove('hidden');
 
             } catch (err) {
                 console.error(err);
@@ -1122,19 +1135,20 @@ function bindEvents() {
         inputNip.addEventListener('input', (e) => {
             e.target.value = e.target.value.replace(/\D/g, '');
             updateNipCounter();
-            if (e.target.value.length === 18) document.getElementById('nipError').classList.add('hidden');
+            const nipErrorEl = document.getElementById('nipError');
+            if (e.target.value.length === 18 && nipErrorEl) nipErrorEl.classList.add('hidden');
         });
     }
 
     document.querySelectorAll('#btnSettings').forEach(btn => {
-        btn.addEventListener('click', () => { applyUserProfileUI(); settingsModal.classList.remove('hidden'); });
+        btn.addEventListener('click', () => { applyUserProfileUI(); if (settingsModal) settingsModal.classList.remove('hidden'); });
     });
 
     const closeSettings = document.getElementById('btnCloseSettings');
-    if (closeSettings) closeSettings.addEventListener('click', () => settingsModal.classList.add('hidden'));
+    if (closeSettings) closeSettings.addEventListener('click', () => { if (settingsModal) settingsModal.classList.add('hidden'); });
     
     const cancelSettings = document.getElementById('btnCancelSettings');
-    if (cancelSettings) cancelSettings.addEventListener('click', () => settingsModal.classList.add('hidden'));
+    if (cancelSettings) cancelSettings.addEventListener('click', () => { if (settingsModal) settingsModal.classList.add('hidden'); });
     
     const saveSettingsBtn = document.getElementById('btnSaveSettings');
     if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
