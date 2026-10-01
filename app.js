@@ -5,14 +5,14 @@ const PESUT_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1tCvpcnzr0YI
 
 const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=drive_link';
 const COMING_SOON_FOLDERS = {
-    1: 'https://drive.google.com/drive/folders/1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf?usp=drive_link',
-    2: 'https://drive.google.com/drive/folders/18i8SkxQUfEuQjiNp0tVdO4-EWaKYFt0V?usp=drive_link'
+    1: 'https://drive.google.com/drive/folders/1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr?usp=drive_link', // Modul 1 (PESUT)
+    2: 'https://drive.google.com/drive/folders/18eX3ZImoWAGdzWGj1B8bxctBudJAmWKN?usp=drive_link'  // Modul 2 (Coming Soon)
 };
 
 const PDF_DRIVE_FOLDERS = {
     'silahapp': '12LUEDf2oqmUJYBzg53HACcO8J0qS26ta',
-    1: '1xnLVXT41K96_dHipGjCDDQKF-SkDHbyf',
-    2: '18i8SkxQUfEuQjiNp0tVdO4-EWaKYFt0V'
+    1: '1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr', // ID Folder PESUT
+    2: '18eX3ZImoWAGdzWGj1B8bxctBudJAmWKN'  // ID Folder Coming Soon
 };
 
 let userProfile = {
@@ -818,7 +818,7 @@ function initCsModuleEvents(i) {
         document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
     });
 
-    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS MODUL PESUT & COMING SOON (AUTO DOWNLOAD + UPLOAD PDF) =====
+    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS MODUL PESUT & COMING SOON =====
     document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', async () => {
         const btn = document.getElementById(`csBtnUploadDrive-${i}`);
         const originalText = btn.innerHTML;
@@ -843,7 +843,7 @@ function initCsModuleEvents(i) {
             const pdfBase64 = pdfDataUri.split(',')[1];
             await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS[i]);
 
-            // 3. Notifikasi Modal Sukses dengan penanganan elemen aman (Mencegah Error Null)
+            // 3. Notifikasi Modal Sukses dengan penanganan elemen aman
             safeSetTextContent('driveFilenameLabel', filename);
             const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
             if (noticeDesc) {
@@ -1078,7 +1078,7 @@ function bindEvents() {
         });
     }
 
-    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS SILAHAPP (AUTO DOWNLOAD + UPLOAD PDF) =====
+    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS SILAHAPP =====
     const btnUploadDrive = document.getElementById('btnUploadDrive');
     if (btnUploadDrive) {
         btnUploadDrive.addEventListener('click', async () => {
