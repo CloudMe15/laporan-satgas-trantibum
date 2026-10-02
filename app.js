@@ -97,9 +97,9 @@ async function compressImage(file, maxSizeMB = 2) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v37_full_stable') {
+    if (cacheVersion !== 'v38_full_stable') {
         localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v37_full_stable');
+        localStorage.setItem('satpol_app_version', 'v38_full_stable');
     }
 
     settingsModal = document.getElementById('settingsModal');
@@ -211,7 +211,7 @@ function generateComingSoonViews() {
                                 </div>
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Surat Tugas (ST) & Lokasi</label>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Dasar Pelaksanaan & Lokasi</label>
                                         <button type="button" id="csBtnAddLokasi-${i}" class="text-[11px] font-bold text-indigo-800 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Lokasi</button>
                                     </div>
                                     <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner space-y-3">
@@ -239,7 +239,7 @@ function generateComingSoonViews() {
                                 </div>
                                 <div>
                                     <div class="flex items-center justify-between mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">5. Nama Anggota Satgas (Pilih Opsi)</label>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">5. Nama Anggota (Pilih Opsi)</label>
                                     </div>
                                     <div class="flex bg-slate-200 p-1 rounded-xl mb-3">
                                         <button type="button" id="csAnggotaModeFotoBtn-${i}" class="flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition">Foto Nama Anggota</button>
@@ -317,11 +317,11 @@ function generateComingSoonViews() {
                                         <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
                                             <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span><span class="text-slate-400">:</span><span id="csViewTanggal-${i}" class="font-bold text-slate-950 text-xs"></span>
                                         </div>
-                                        <div id="csBlockDasar-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">1. Surat Tugas (ST)</label><div id="csViewDasar-${i}" class="pdf-box min-h-[42px] whitespace-pre-line">-</div></div>
+                                        <div id="csBlockDasar-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">1. Dasar Pelaksanaan</label><div id="csViewDasar-${i}" class="pdf-box min-h-[42px] whitespace-pre-line">-</div></div>
                                         <div id="csBlockLokasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">2. Tempat Pelaksanaan</label><div class="pdf-box min-h-[42px]"><div id="csViewTempat-${i}" class="space-y-1"></div></div></div>
                                         <div id="csBlockHasil-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">3. Hasil Kegiatan</label><div class="pdf-box min-h-[48px]"><div id="csViewHasil-${i}" class="space-y-1"></div></div></div>
                                         <div id="csBlockKegiatan-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">4. Uraian Kegiatan</label><div id="csViewKegiatan-${i}" class="pdf-box min-h-[48px] whitespace-pre-line">-</div></div>
-                                        <div id="csBlockAnggota-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1" id="csLabelAnggotaTitle-${i}">5. Daftar Nama Anggota Satgas</label><div class="pdf-box min-h-[50px]"><div id="csViewAnggota-${i}"></div></div></div>
+                                        <div id="csBlockAnggota-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1" id="csLabelAnggotaTitle-${i}">5. Daftar Nama Anggota</label><div class="pdf-box min-h-[50px]"><div id="csViewAnggota-${i}"></div></div></div>
                                         <div id="csBlockDokumentasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">6. Dokumentasi Foto Kegiatan</label><div class="pdf-box min-h-[90px]"><div id="csViewDokumentasi-${i}" class="grid grid-cols-2 gap-3"></div></div></div>
                                     </div>
                                 </div>
@@ -477,7 +477,7 @@ function updatePreview() {
         viewAnggotaContainer.innerHTML = '';
 
         if (isManualMode) {
-            titleEl.textContent = '5. Daftar Nama Anggota Satgas';
+            titleEl.textContent = '5. Daftar Nama Anggota';
             let aCount = 0;
             let hasContent = false;
             const listDiv = document.createElement('div');
@@ -678,7 +678,7 @@ function renderCsPhotoPreviews(i) {
     viewAnggotaContainer.innerHTML = '';
 
     if (isManualMode) {
-        titleEl.textContent = '5. Daftar Nama Anggota Satgas';
+        titleEl.textContent = '5. Daftar Nama Anggota';
         let mCount = 0;
         let hasContent = false;
         const manualItems = document.querySelectorAll(`#csManualAnggotaList-${i} .cs-input-manual-anggota`);
@@ -817,7 +817,6 @@ function initCsModuleEvents(i) {
         document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
     });
 
-    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS MODUL PESUT & COMING SOON =====
     document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', async () => {
         const btn = document.getElementById(`csBtnUploadDrive-${i}`);
         const originalText = btn.innerHTML;
@@ -829,7 +828,6 @@ function initCsModuleEvents(i) {
             const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
             const element = document.getElementById(`csPdfContent-${i}`);
 
-            // 1. Buat PDF & Unduh Otomatis ke Perangkat
             const opt = { margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} };
             const pdfDataUri = await html2pdf().set(opt).from(element).output('datauristring');
             
@@ -838,11 +836,9 @@ function initCsModuleEvents(i) {
             link.download = filename;
             link.click();
 
-            // 2. Upload Laporan PDF otomatis ke Google Drive
             const pdfBase64 = pdfDataUri.split(',')[1];
             await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS[i]);
 
-            // 3. Notifikasi Modal Sukses
             safeSetTextContent('driveFilenameLabel', filename);
             const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
             if (noticeDesc) {
@@ -981,7 +977,6 @@ function bindEvents() {
     const btnAddAnggota = document.getElementById('btnAddAnggota');
     if (btnAddAnggota) btnAddAnggota.addEventListener('click', () => addAnggotaInput());
 
-    // --- SiLAHAPP: Event Tombol Ganda Anggota Satgas ---
     const fotoBtn = document.getElementById('anggotaModeFotoBtn');
     const manualBtn = document.getElementById('anggotaModeManualBtn');
     const fotoWrapper = document.getElementById('anggotaFotoWrapper');
@@ -1077,7 +1072,6 @@ function bindEvents() {
         });
     }
 
-    // ===== TOMBOL UPLOAD GOOGLE DRIVE KHUSUS SILAHAPP =====
     const btnUploadDrive = document.getElementById('btnUploadDrive');
     if (btnUploadDrive) {
         btnUploadDrive.addEventListener('click', async () => {
@@ -1089,7 +1083,6 @@ function bindEvents() {
                 const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
                 const element = document.getElementById('pdfContent');
 
-                // 1. Buat dan Unduh PDF secara lokal
                 const opt = { margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} };
                 const pdfDataUri = await html2pdf().set(opt).from(element).output('datauristring');
 
@@ -1098,11 +1091,9 @@ function bindEvents() {
                 link.download = filename;
                 link.click();
 
-                // 2. Upload Laporan PDF otomatis ke Google Drive
                 const pdfBase64 = pdfDataUri.split(',')[1];
                 await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS['silahapp']);
 
-                // 3. Notifikasi Modal Sukses
                 safeSetTextContent('driveFilenameLabel', filename);
                 const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
                 if (noticeDesc) {
