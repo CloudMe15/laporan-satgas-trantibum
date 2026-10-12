@@ -1,5 +1,5 @@
 const CONFIG = {
-    APP_VERSION: 'v45_security_hardened',
+    APP_VERSION: 'v46_aligned_report_points',
     SECURITY_TOKEN: 'SATPOL_INHU_TRANTIBUM_2026',
     DEFAULT_LOGOS: {
         INHU: 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb',
@@ -1252,7 +1252,7 @@ class ReportController {
         const hasilFilled = Array.from(document.querySelectorAll(hasilSelector))
             .filter((inp) => inp.value.trim().length > 0);
         if (hasilFilled.length === 0) {
-            return { valid: false, message: 'Harap isi minimal 1 (satu) uraian Hasil Pelaksanaan Kegiatan!' };
+            return { valid: false, message: 'Harap isi minimal 1 (satu) poin Uraian Kegiatan!' };
         }
 
         if (this.state.anggotaMode === 'manual') {
