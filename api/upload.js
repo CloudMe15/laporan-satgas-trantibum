@@ -2,9 +2,8 @@ module.exports = async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
     try {
-        const { filename, fileBase64, mimeType, folderId } = req.body;
-
-        // URL Web App Google Apps Script Anda yang baru
+        const payload = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+        const { filename, fileBase64, mimeType, folderId } = payload;
         const gasUrl = 'https://script.google.com/macros/s/AKfycbzpSCFC7HnISdchHP9lDJrQihSj01cyLW53yL1NsC918xkyRuP3eL1JjRhFy1c2WJKyqw/exec';
 
         const formData = new URLSearchParams();

@@ -1,7 +1,8 @@
 {
-  "name": "satpolpp-upload-api",
+  "name": "laporan-satgas-trantibum",
   "version": "1.0.0",
-  "dependencies": {
-    "googleapis": "^126.0.1"
+  "description": "Sistem Pelaporan Satgas Trantibum & PESUT Satpol PP Kab. Indragiri Hulu",
+  "scripts": {
+    "start": "npx serve ."
   }
 }

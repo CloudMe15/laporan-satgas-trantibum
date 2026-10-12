@@ -11,7 +11,7 @@ body {
     background-attachment: fixed;
 }
 
-/* Navigasi Atas Efek Kaca Transparan */
+/* Navigation */
 .top-navbar {
     background: rgba(15, 23, 42, 0.35) !important;
     backdrop-filter: blur(14px);
@@ -65,7 +65,7 @@ body {
     border-radius: 4px;
 }
 
-/* Panel Formulir: Dibuat Lebih Transparan dengan Efek Kaca Menonjol */
+/* Glass Panels */
 .glass-panel {
     background: rgba(255, 255, 255, 0.45) !important;
     backdrop-filter: blur(16px);
@@ -74,7 +74,7 @@ body {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
 
-/* Header Efek Kaca Transparan */
+/* Header */
 .glass-header {
     background: rgba(15, 23, 42, 0.4) !important;
     backdrop-filter: blur(16px);
@@ -113,7 +113,7 @@ body {
     object-fit: contain !important;
 }
 
-#settingLogoLeftPreview, #settingLogoRightPreview {
+#settingLogoLeftPreview, #settingLogoRightPreview, #settingLogoPesutPreview {
     background-color: #ffffff !important;
     padding: 4px !important;
     max-height: 100% !important;
@@ -127,7 +127,7 @@ body {
     margin: 20mm 16mm;
 }
 
-/* Pratinjau Dokumen A4: Lebih Transparan namun Efek Kaca & Blur Tetap Jelas */
+/* Print & Document Layout */
 .a4-page {
     width: 210mm;
     min-height: 297mm;

@@ -1,186 +1,345 @@
-const DEFAULT_INHU_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';
-const DEFAULT_SATPOL_PP_DRIVE_URL = 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';
-const SILAHAPP_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313';
-const PESUT_DEFAULT_ICON_URL = 'https://lh3.googleusercontent.com/d/1tCvpcnzr0YI4BXl-VxTw-msDMf32CooO'; 
-
-const GOOGLE_DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=drive_link';
-const COMING_SOON_FOLDERS = {
-    1: 'https://drive.google.com/drive/folders/1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr?usp=drive_link',
-    2: 'https://drive.google.com/drive/folders/1o6KyMinIed9hK05RiB1xtDY9o_-bnb-V?usp=drive_link'
-};
-
-const PDF_DRIVE_FOLDERS = {
-    'silahapp': '12LUEDf2oqmUJYBzg53HACcO8J0qS26ta',
-    1: '1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr',
-    2: '1o6KyMinIed9hK05RiB1xtDY9o_-bnb-V'
-};
-
-let userProfile = {
-    logoLeft: DEFAULT_INHU_DRIVE_URL,
-    logoRight: DEFAULT_SATPOL_PP_DRIVE_URL,
-    sidebarIcons: {
-        'silahapp': SILAHAPP_DEFAULT_ICON_URL,
-        '1': PESUT_DEFAULT_ICON_URL,
-        '2': DEFAULT_SATPOL_PP_DRIVE_URL
+const CONFIG = {
+    APP_VERSION: 'v42_pesut_emblem_fixed',
+    DEFAULT_LOGOS: {
+        INHU: 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb',
+        SATPOL: 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr',
+        SILAHAPP_ICON: 'https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313',
+        PESUT_ICON: 'logo-pesut.png',
+        PESUT_DRIVE_URL: 'https://lh3.googleusercontent.com/d/1n-4lVxoLXLyZwzbFX8QYatC7nx9eMoyN'
     },
-    nama: 'Fajar Ari Prakoso',
-    nip: '199507102025211095',
-    jabatan: 'Staff Program dan Keuangan'
+    FOLDERS: {
+        silahapp: {
+            driveFolderUrl: 'https://drive.google.com/drive/folders/12LUEDf2oqmUJYBzg53HACcO8J0qS26ta?usp=drive_link',
+            folderId: '12LUEDf2oqmUJYBzg53HACcO8J0qS26ta',
+            title: 'SiLAHAPP',
+            subtitle: 'Sistem Laporan Harian Piket dan Patroli',
+            prefix: 'SiLAHAPP'
+        },
+        1: {
+            driveFolderUrl: 'https://drive.google.com/drive/folders/1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr?usp=drive_link',
+            folderId: '1tYSAUCmmnmoibhNHplsIVV3tuYGjJ3dr',
+            title: 'Pelaporan Surat Tugas (PESUT)',
+            subtitle: 'Sistem Pelaporan Surat Tugas Satpol PP',
+            prefix: 'Pesut'
+        },
+        2: {
+            driveFolderUrl: 'https://drive.google.com/drive/folders/1o6KyMinIed9hK05RiB1xtDY9o_-bnb-V?usp=drive_link',
+            folderId: '1o6KyMinIed9hK05RiB1xtDY9o_-bnb-V',
+            title: 'Coming Soon',
+            subtitle: 'Modul Pengembangan Lanjutan 2',
+            prefix: 'ComingSoon'
+        }
+    },
+    DEFAULT_PROFILE: {
+        nama: 'Fajar Ari Prakoso',
+        nip: '199507102025211095',
+        jabatan: 'Staff Program dan Keuangan'
+    }
 };
 
-let uploadedPhotos = [];
-let silahappAnggotaPhotos = []; 
-let anggotaListContainer, lokasiListContainer, hasilListContainer;
-let csData = {};
-let settingsModal, driveNoticeModal, inputNip;
+const StorageService = {
+    STORAGE_KEY: 'satpolpp_inhu_trantibum_profile',
+    VERSION_KEY: 'satpol_app_version',
 
-function safeSetTextContent(elementId, text) {
-    const el = document.getElementById(elementId);
-    if (el) {
-        el.textContent = text;
-    }
-}
+    init() {
+        const cachedVer = localStorage.getItem(this.VERSION_KEY);
+        if (cachedVer !== CONFIG.APP_VERSION) {
+            localStorage.removeItem(this.STORAGE_KEY);
+            localStorage.setItem(this.VERSION_KEY, CONFIG.APP_VERSION);
+        }
+    },
 
-async function uploadToVercel(filename, base64Data, mimeType, folderId) {
-    const apiUrl = '/api/upload'; 
-    const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename, fileBase64: base64Data, mimeType, folderId })
-    });
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server Error (${response.status}): ${errorText}`);
-    }
-    const result = await response.json();
-    if (!result.success) throw new Error(result.error || 'Gagal mengunggah ke Drive');
-    return result;
-}
-
-async function compressImage(file, maxSizeMB = 2) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
-
-                const MAX_DIMENSION = 1920;
-                if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
-                    if (width > height) { height = Math.round((height *= MAX_DIMENSION / width)); width = MAX_DIMENSION; } 
-                    else { width = Math.round((width *= MAX_DIMENSION / height)); height = MAX_DIMENSION; }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-
-                let quality = 0.9;
-                let base64 = canvas.toDataURL('image/jpeg', quality);
-
-                while (Math.round((base64.length * 3) / 4) / (1024 * 1024) > maxSizeMB && quality > 0.1) {
-                    quality -= 0.1;
-                    base64 = canvas.toDataURL('image/jpeg', quality);
-                }
-                resolve(base64);
-            };
-            img.onerror = (err) => reject(err);
-        };
-        reader.onerror = (err) => reject(err);
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const cacheVersion = localStorage.getItem('satpol_app_version');
-    if (cacheVersion !== 'v38_full_stable') {
-        localStorage.removeItem('satpolpp_inhu_trantibum_profile');
-        localStorage.setItem('satpol_app_version', 'v38_full_stable');
-    }
-
-    settingsModal = document.getElementById('settingsModal');
-    driveNoticeModal = document.getElementById('driveNoticeModal');
-    inputNip = document.getElementById('inputSettingNip');
-
-    generateComingSoonViews();
-
-    lokasiListContainer = document.getElementById('lokasiList');
-    hasilListContainer = document.getElementById('hasilList');
-    anggotaListContainer = document.getElementById('anggotaList');
-
-    lucide.createIcons();
-    loadSettings();
-    initDefaultDate();
-    
-    addLokasiInput();
-    addHasilInput();
-    addAnggotaInput();
-
-    for (let i = 1; i <= 2; i++) {
-        csData[i] = { uploadedPhotos: [], anggotaPhotos: [], manualAnggota: [] };
-        addCsLokasiInput(i);
-        addCsHasilInput(i);
-        addCsManualAnggotaInput(i);
-        initCsModuleEvents(i);
-    }
-    
-    bindEvents();
-    updatePreview();
-    initTopNavNavigation();
-});
-
-function initTopNavNavigation() {
-    const navBtns = document.querySelectorAll('.top-nav-btn');
-    navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const target = btn.getAttribute('data-target');
-            navBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const appViews = document.querySelectorAll('.app-view');
-            appViews.forEach(view => {
-                view.classList.add('hidden');
-                view.classList.remove('flex');
-                view.classList.remove('active-view');
-            });
-
-            const targetView = document.getElementById(`view-${target}`);
-            if (targetView) {
-                targetView.classList.remove('hidden');
-                targetView.classList.add('flex');
-                targetView.classList.add('active-view');
+    getProfile() {
+        let profile = {
+            ...CONFIG.DEFAULT_PROFILE,
+            logoLeft: CONFIG.DEFAULT_LOGOS.INHU,
+            logoRight: CONFIG.DEFAULT_LOGOS.SATPOL,
+            sidebarIcons: {
+                silahapp: CONFIG.DEFAULT_LOGOS.SILAHAPP_ICON,
+                '1': CONFIG.DEFAULT_LOGOS.PESUT_ICON,
+                '2': CONFIG.DEFAULT_LOGOS.SATPOL
             }
+        };
+
+        const saved = localStorage.getItem(this.STORAGE_KEY);
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.sidebarIcons && parsed.sidebarIcons['1'] && parsed.sidebarIcons['1'].includes('109_eNYKyEZdA')) {
+                    delete parsed.sidebarIcons['1'];
+                }
+                profile = {
+                    ...profile,
+                    ...parsed,
+                    sidebarIcons: {
+                        ...profile.sidebarIcons,
+                        ...(parsed.sidebarIcons || {})
+                    }
+                };
+            } catch (e) {
+                console.error('Failed to parse stored profile:', e);
+            }
+        }
+        return profile;
+    },
+
+    saveProfile(profile) {
+        try {
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(profile));
+        } catch (e) {
+            console.error('Failed to save profile:', e);
+        }
+    }
+};
+
+const MediaHelper = {
+    async compressImage(file, maxSizeMB = 2) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    const MAX_DIMENSION = 1920;
+                    if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+                        if (width > height) {
+                            height = Math.round((height * MAX_DIMENSION) / width);
+                            width = MAX_DIMENSION;
+                        } else {
+                            width = Math.round((width * MAX_DIMENSION) / height);
+                            height = MAX_DIMENSION;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    let quality = 0.9;
+                    let base64 = canvas.toDataURL('image/jpeg', quality);
+
+                    while (
+                        Math.round((base64.length * 3) / 4) / (1024 * 1024) > maxSizeMB &&
+                        quality > 0.15
+                    ) {
+                        quality = Math.max(0.1, Number((quality - 0.1).toFixed(2)));
+                        base64 = canvas.toDataURL('image/jpeg', quality);
+                    }
+                    resolve(base64);
+                };
+                img.onerror = (err) => reject(err);
+            };
+            reader.onerror = (err) => reject(err);
         });
-    });
+    },
+
+    readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = (err) => reject(err);
+            reader.readAsDataURL(file);
+        });
+    }
+};
+
+const PdfService = {
+    async uploadPdf(filename, base64Data, mimeType, folderId) {
+        const gasUrl = 'https://script.google.com/macros/s/AKfycbzpSCFC7HnISdchHP9lDJrQihSj01cyLW53yL1NsC918xkyRuP3eL1JjRhFy1c2WJKyqw/exec';
+
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename, fileBase64: base64Data, mimeType, folderId })
+            });
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) return result;
+            }
+        } catch (_) {
+            // Fallback to direct request when serverless proxy is unavailable
+        }
+
+        const formData = new URLSearchParams();
+        formData.append('filename', filename);
+        formData.append('fileBase64', base64Data);
+        formData.append('mimeType', mimeType);
+        formData.append('folderId', folderId);
+
+        const gasResponse = await fetch(gasUrl, {
+            method: 'POST',
+            body: formData
+        });
+
+        const textResult = await gasResponse.text();
+        let result;
+        try {
+            result = JSON.parse(textResult);
+        } catch (e) {
+            throw new Error(`Invalid response: ${textResult}`);
+        }
+        if (!result.success) throw new Error(result.error || 'Server rejected upload');
+        return result;
+    },
+
+    formatIndonesianDate(dateStr) {
+        if (!dateStr) return '-';
+        return new Date(dateStr).toLocaleDateString('id-ID', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    },
+
+    generateFilename(prefix, dateInputId, userName) {
+        const dateEl = document.getElementById(dateInputId);
+        const rawDate = dateEl && dateEl.value ? dateEl.value : new Date().toISOString().split('T')[0];
+        const cleanName = (userName || 'Petugas')
+            .trim()
+            .replace(/\s+/g, '_')
+            .replace(/[^a-zA-Z0-9_\-]/g, '');
+        return `${rawDate}_${prefix}_${cleanName}.pdf`;
+    },
+
+    async processAndUpload({ buttonEl, containerId, filename, folderId, driveFolderUrl }) {
+        const originalHtml = buttonEl.innerHTML;
+        buttonEl.innerHTML = '<span class="animate-pulse">Membuat PDF & Mengunggah...</span>';
+        buttonEl.disabled = true;
+
+        let pdfDataUri = null;
+        try {
+            const element = document.getElementById(containerId);
+            if (!element) throw new Error(`Elemen konten PDF tidak ditemukan (${containerId})`);
+
+            const opt = {
+                margin: [0, 0, 0, 0],
+                filename: filename,
+                image: { type: 'jpeg', quality: 0.95 },
+                html2canvas: { scale: 1.6, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            pdfDataUri = await html2pdf().set(opt).from(element).output('datauristring');
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = pdfDataUri;
+            downloadLink.download = filename;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            let uploadSuccess = false;
+            let uploadErrorMessage = '';
+            try {
+                const pdfBase64 = pdfDataUri.split(',')[1];
+                await this.uploadPdf(filename, pdfBase64, 'application/pdf', folderId);
+                uploadSuccess = true;
+            } catch (uploadErr) {
+                console.warn('Google Drive upload notice:', uploadErr);
+                uploadErrorMessage = uploadErr.message;
+            }
+
+            this.showDriveNoticeModal(filename, driveFolderUrl, uploadSuccess, uploadErrorMessage);
+
+        } catch (err) {
+            console.error('PDF generation error:', err);
+            alert(`Gagal memproses laporan: ${err.message}`);
+        } finally {
+            buttonEl.innerHTML = originalHtml;
+            buttonEl.disabled = false;
+        }
+    },
+
+    showDriveNoticeModal(filename, driveFolderUrl, uploadSuccess, uploadErrorMessage) {
+        const driveNoticeModal = document.getElementById('driveNoticeModal');
+        const filenameLabel = document.getElementById('driveFilenameLabel');
+        const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
+        const btnClose = document.getElementById('btnCloseDriveNotice');
+
+        if (filenameLabel) filenameLabel.textContent = filename;
+
+        if (noticeDesc) {
+            if (uploadSuccess) {
+                noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> ke perangkat Anda dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Klik tombol di bawah untuk membuka Folder Google Drive dan memeriksa file Anda.`;
+            } else {
+                noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> ke komputer Anda.<br><span class="text-amber-600 text-[11px] block mt-1">Catatan: Pengunggahan otomatis ke Google Drive mengalami kendala (${uploadErrorMessage || 'offline/API limit'}). Anda dapat mengunggah file yang sudah diunduh secara manual.</span>`;
+            }
+        }
+
+        if (btnClose) {
+            btnClose.textContent = uploadSuccess ? "Buka Folder Google Drive" : "Tutup / Buka Folder Drive";
+            btnClose.onclick = () => {
+                if (driveFolderUrl) window.open(driveFolderUrl, '_blank');
+                if (driveNoticeModal) driveNoticeModal.classList.add('hidden');
+            };
+        }
+
+        if (driveNoticeModal) driveNoticeModal.classList.remove('hidden');
+    }
+};
+
+let currentProfile = {};
+
+const moduleStates = {
+    silahapp: {
+        anggotaMode: 'foto',
+        anggotaPhotos: [],
+        uploadedPhotos: []
+    },
+    1: {
+        anggotaMode: 'foto',
+        anggotaPhotos: [],
+        uploadedPhotos: []
+    },
+    2: {
+        anggotaMode: 'foto',
+        anggotaPhotos: [],
+        uploadedPhotos: []
+    }
+};
+
+function createPdfListItem(index, text) {
+    const row = document.createElement('div');
+    row.className = 'pdf-list-item';
+    row.innerHTML = `<span class="pdf-list-num">${index}.</span><span class="pdf-list-text">${text}</span>`;
+    return row;
 }
 
 function generateComingSoonViews() {
     const container = document.getElementById('comingSoonContainer');
-    let htmlContent = '';
-    const moduleTitles = { 1: 'Pelaporan Surat Tugas', 2: 'Coming Soon' };
-    const moduleSubtitles = { 1: 'Sistem Pelaporan Surat Tugas', 2: 'Modul Pengembangan Lanjutan 2' };
+    if (!container) return;
 
+    let htmlContent = '';
     for (let i = 1; i <= 2; i++) {
+        const info = CONFIG.FOLDERS[i];
+        const rightLogo = (i === 1) ? CONFIG.DEFAULT_LOGOS.PESUT_ICON : CONFIG.DEFAULT_LOGOS.SATPOL;
         htmlContent += `
             <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex-col">
                 <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
                     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
                         <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
                             <div class="flex items-center gap-2">
-                                <img src="${DEFAULT_INHU_DRIVE_URL}" class="w-8 h-8 object-contain bg-white rounded p-0.5">
-                                <img src="${DEFAULT_SATPOL_PP_DRIVE_URL}" class="w-8 h-8 object-contain bg-white rounded p-0.5">
+                                <img id="csHeaderLogoLeft-${i}" src="${CONFIG.DEFAULT_LOGOS.INHU}" class="w-8 h-8 object-contain bg-white rounded p-0.5" alt="Logo Kiri">
+                                <img id="csHeaderLogoRight-${i}" src="${rightLogo}" class="w-8 h-8 object-contain bg-white rounded p-0.5" alt="Logo Kanan">
                             </div>
                             <div>
-                                <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">${moduleTitles[i]}</h1>
-                                <p class="text-[10px] sm:text-[11px] text-indigo-400 font-semibold tracking-wider">${moduleSubtitles[i]}</p>
+                                <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">${info.title}</h1>
+                                <p class="text-[10px] sm:text-[11px] text-indigo-400 font-semibold tracking-wider">${info.subtitle}</p>
                             </div>
                         </div>
                         <div class="flex items-center justify-end w-full sm:w-auto">
-                            <button id="btnSettings" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
+                            <button id="btnSettings-cs-${i}" class="btn-open-settings w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
                                 <i data-lucide="settings" class="w-4 h-4"></i>
                                 <span>Pengaturan Profil</span>
                             </button>
@@ -194,14 +353,13 @@ function generateComingSoonViews() {
                         <button id="csTabPreviewBtn-${i}" class="flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300 transition">Pratinjau</button>
                     </div>
 
-                    <!-- FORM CS -->
                     <section id="csFormSection-${i}" class="lg:col-span-5 space-y-6 no-print">
                         <div class="glass-panel p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
                             <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
                                 <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                                    <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600"></i> Formulir ${moduleTitles[i]}
+                                    <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600"></i> Formulir ${info.title}
                                 </h2>
-                                <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">${moduleTitles[i]}</span>
+                                <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">${info.prefix}</span>
                             </div>
 
                             <form class="space-y-4" onsubmit="event.preventDefault();">
@@ -234,7 +392,7 @@ function generateComingSoonViews() {
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">4. Hasil Kegiatan</label>
                                     <div class="bg-slate-100 p-3 rounded-2xl border border-slate-300 shadow-inner">
-                                        <textarea id="csInputKegiatan-${i}" rows="3" placeholder="Deskripsikan rincian..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
+                                        <textarea id="csInputKegiatan-${i}" rows="3" placeholder="Deskripsikan rincian hasil kegiatan..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
                                     </div>
                                 </div>
                                 <div>
@@ -283,28 +441,27 @@ function generateComingSoonViews() {
                         </div>
                     </section>
 
-                    <!-- PREVIEW CS -->
                     <section id="csPreviewSection-${i}" class="lg:col-span-7 hidden lg:block space-y-4">
                         <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
                             <span class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (${moduleTitles[i]})
+                                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (${info.title})
                             </span>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
-                                <button id="csBtnUploadDrive-${i}" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Download dan Upload</button>
+                                <button id="csBtnUploadDrive-${i}" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg transition active:scale-95">Download dan Upload</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto pb-6">
                             <div id="csPdfContent-${i}" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
                                 <div>
                                     <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
-                                        <div class="flex-shrink-0 flex items-center justify-center"><img src="${DEFAULT_INHU_DRIVE_URL}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;"></div>
+                                        <div class="flex-shrink-0 flex items-center justify-center"><img id="csPreviewLogoLeft-${i}" src="${CONFIG.DEFAULT_LOGOS.INHU}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;" alt="Logo Inhu"></div>
                                         <div class="flex-1 text-center px-1">
                                             <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
                                             <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
                                             <div class="w-full h-0.5 bg-slate-900 my-1"></div>
-                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN ${moduleTitles[i].toUpperCase()}</h1>
+                                            <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN ${info.title.toUpperCase()}</h1>
                                         </div>
-                                        <div class="flex-shrink-0 flex items-center justify-center"><img src="${DEFAULT_SATPOL_PP_DRIVE_URL}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;"></div>
+                                        <div class="flex-shrink-0 flex items-center justify-center"><img id="csPreviewLogoRight-${i}" src="${rightLogo}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;" alt="Logo Kanan"></div>
                                     </div>
                                     <div class="preview-block pdf-box shadow-sm mb-4">
                                         <div class="grid grid-cols-2 gap-2 text-[11px]">
@@ -315,12 +472,12 @@ function generateComingSoonViews() {
                                     </div>
                                     <div class="space-y-3">
                                         <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
-                                            <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span><span class="text-slate-400">:</span><span id="csViewTanggal-${i}" class="font-bold text-slate-950 text-xs"></span>
+                                            <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span><span class="text-slate-400">:</span><span id="csViewTanggal-${i}" class="font-bold text-slate-950 text-xs">-</span>
                                         </div>
                                         <div id="csBlockDasar-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">1. Dasar Pelaksanaan</label><div id="csViewDasar-${i}" class="pdf-box min-h-[42px] whitespace-pre-line">-</div></div>
                                         <div id="csBlockLokasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">2. Tempat Pelaksanaan</label><div class="pdf-box min-h-[42px]"><div id="csViewTempat-${i}" class="space-y-1"></div></div></div>
-                                        <div id="csBlockHasil-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">3. Hasil Kegiatan</label><div class="pdf-box min-h-[48px]"><div id="csViewHasil-${i}" class="space-y-1"></div></div></div>
-                                        <div id="csBlockKegiatan-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">4. Uraian Kegiatan</label><div id="csViewKegiatan-${i}" class="pdf-box min-h-[48px] whitespace-pre-line">-</div></div>
+                                        <div id="csBlockHasil-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">3. Uraian Kegiatan</label><div class="pdf-box min-h-[48px]"><div id="csViewHasil-${i}" class="space-y-1"></div></div></div>
+                                        <div id="csBlockKegiatan-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">4. Hasil Kegiatan</label><div id="csViewKegiatan-${i}" class="pdf-box min-h-[48px] whitespace-pre-line">-</div></div>
                                         <div id="csBlockAnggota-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1" id="csLabelAnggotaTitle-${i}">5. Daftar Nama Anggota</label><div class="pdf-box min-h-[50px]"><div id="csViewAnggota-${i}"></div></div></div>
                                         <div id="csBlockDokumentasi-${i}" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">6. Dokumentasi Foto Kegiatan</label><div class="pdf-box min-h-[90px]"><div id="csViewDokumentasi-${i}" class="grid grid-cols-2 gap-3"></div></div></div>
                                     </div>
@@ -335,811 +492,755 @@ function generateComingSoonViews() {
     container.innerHTML = htmlContent;
 }
 
-function initDefaultDate() {
-    const today = new Date().toISOString().split('T')[0];
-    const mainDate = document.getElementById('inputTanggal');
-    if (mainDate) mainDate.value = today;
-    
-    for (let i = 1; i <= 2; i++) {
-        const dateInput = document.getElementById(`csInputTanggal-${i}`);
+const ProfileManager = {
+    applyUI(profile) {
+        currentProfile = profile;
+
+        const cleanNip = profile.nip ? profile.nip.replace(/\D/g, '') : '';
+        const formattedNip = cleanNip ? `NIP. ${cleanNip}` : '-';
+        const nama = profile.nama || '-';
+        const jabatan = profile.jabatan || '-';
+
+        const elNama = document.getElementById('viewNama');
+        if (elNama) elNama.textContent = nama;
+        const elNip = document.getElementById('viewNip');
+        if (elNip) elNip.textContent = formattedNip;
+        const elJabatan = document.getElementById('viewJabatan');
+        if (elJabatan) elJabatan.textContent = jabatan;
+
+        for (let i = 1; i <= 2; i++) {
+            const csNama = document.getElementById(`csViewNama-${i}`);
+            if (csNama) csNama.textContent = nama;
+            const csNip = document.getElementById(`csViewNip-${i}`);
+            if (csNip) csNip.textContent = formattedNip;
+            const csJabatan = document.getElementById(`csViewJabatan-${i}`);
+            if (csJabatan) csJabatan.textContent = jabatan;
+        }
+
+        const inputNama = document.getElementById('inputSettingNama');
+        if (inputNama) inputNama.value = profile.nama || '';
+        const inputNip = document.getElementById('inputSettingNip');
+        if (inputNip) {
+            inputNip.value = cleanNip;
+            const nipCounter = document.getElementById('nipCounter');
+            if (nipCounter) nipCounter.textContent = `${cleanNip.length} / 18 Digit`;
+        }
+        const inputJabatan = document.getElementById('inputSettingJabatan');
+        if (inputJabatan) inputJabatan.value = profile.jabatan || '';
+
+        const logoLeft = profile.logoLeft || CONFIG.DEFAULT_LOGOS.INHU;
+        const logoRight = profile.logoRight || CONFIG.DEFAULT_LOGOS.SATPOL;
+        const logoPesut = (profile.sidebarIcons && profile.sidebarIcons['1']) || CONFIG.DEFAULT_LOGOS.PESUT_ICON;
+
+        const handlePesutImg = (imgEl) => {
+            if (!imgEl) return;
+            imgEl.src = logoPesut;
+            imgEl.onerror = () => {
+                imgEl.onerror = null;
+                imgEl.src = CONFIG.DEFAULT_LOGOS.PESUT_DRIVE_URL;
+            };
+        };
+
+        const headerLeft = document.getElementById('headerLogoLeft');
+        if (headerLeft) headerLeft.src = logoLeft;
+        const headerRight = document.getElementById('headerLogoRight');
+        if (headerRight) headerRight.src = logoRight;
+
+        const prevLeft = document.getElementById('previewLogoLeft');
+        if (prevLeft) prevLeft.src = logoLeft;
+        const prevRight = document.getElementById('previewLogoRight');
+        if (prevRight) prevRight.src = logoRight;
+
+        for (let i = 1; i <= 2; i++) {
+            const csHLeft = document.getElementById(`csHeaderLogoLeft-${i}`);
+            if (csHLeft) csHLeft.src = logoLeft;
+            const csHRight = document.getElementById(`csHeaderLogoRight-${i}`);
+            if (csHRight) {
+                if (i === 1) {
+                    handlePesutImg(csHRight);
+                } else {
+                    csHRight.src = logoRight;
+                }
+            }
+
+            const csPLeft = document.getElementById(`csPreviewLogoLeft-${i}`);
+            if (csPLeft) csPLeft.src = logoLeft;
+            const csPRight = document.getElementById(`csPreviewLogoRight-${i}`);
+            if (csPRight) {
+                if (i === 1) {
+                    handlePesutImg(csPRight);
+                } else {
+                    csPRight.src = logoRight;
+                }
+            }
+        }
+
+        const setLeftPrev = document.getElementById('settingLogoLeftPreview');
+        if (setLeftPrev) setLeftPrev.src = logoLeft;
+        const setRightPrev = document.getElementById('settingLogoRightPreview');
+        if (setRightPrev) setRightPrev.src = logoRight;
+        const setPesutPrev = document.getElementById('settingLogoPesutPreview');
+        if (setPesutPrev) handlePesutImg(setPesutPrev);
+
+        const sidebarPesut = document.getElementById('sidebarIcon-1');
+        if (sidebarPesut) handlePesutImg(sidebarPesut);
+
+        const sidebarSilahapp = document.getElementById('sidebarIcon-silahapp');
+        if (sidebarSilahapp && profile.sidebarIcons && profile.sidebarIcons.silahapp) {
+            sidebarSilahapp.src = profile.sidebarIcons.silahapp;
+        }
+
+        const sidebarCs2 = document.getElementById('sidebarIcon-2');
+        if (sidebarCs2 && profile.sidebarIcons && profile.sidebarIcons['2']) {
+            sidebarCs2.src = profile.sidebarIcons['2'];
+        }
+    },
+
+    bindEvents() {
+        const inpLeft = document.getElementById('inputSettingLogoLeft');
+        if (inpLeft) {
+            inpLeft.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const dataUrl = await MediaHelper.readFileAsDataURL(file);
+                    currentProfile.logoLeft = dataUrl;
+                    const prev = document.getElementById('settingLogoLeftPreview');
+                    if (prev) prev.src = dataUrl;
+                }
+            });
+        }
+
+        const inpRight = document.getElementById('inputSettingLogoRight');
+        if (inpRight) {
+            inpRight.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const dataUrl = await MediaHelper.readFileAsDataURL(file);
+                    currentProfile.logoRight = dataUrl;
+                    const prev = document.getElementById('settingLogoRightPreview');
+                    if (prev) prev.src = dataUrl;
+                }
+            });
+        }
+
+        const inpPesut = document.getElementById('inputSettingLogoPesut');
+        if (inpPesut) {
+            inpPesut.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const dataUrl = await MediaHelper.readFileAsDataURL(file);
+                    if (!currentProfile.sidebarIcons) currentProfile.sidebarIcons = {};
+                    currentProfile.sidebarIcons['1'] = dataUrl;
+                    const prev = document.getElementById('settingLogoPesutPreview');
+                    if (prev) prev.src = dataUrl;
+                }
+            });
+        }
+
+        const btnResetLeft = document.getElementById('btnResetLogoLeft');
+        if (btnResetLeft) {
+            btnResetLeft.addEventListener('click', () => {
+                currentProfile.logoLeft = CONFIG.DEFAULT_LOGOS.INHU;
+                const prev = document.getElementById('settingLogoLeftPreview');
+                if (prev) prev.src = CONFIG.DEFAULT_LOGOS.INHU;
+                if (inpLeft) inpLeft.value = '';
+            });
+        }
+
+        const btnResetRight = document.getElementById('btnResetLogoRight');
+        if (btnResetRight) {
+            btnResetRight.addEventListener('click', () => {
+                currentProfile.logoRight = CONFIG.DEFAULT_LOGOS.SATPOL;
+                const prev = document.getElementById('settingLogoRightPreview');
+                if (prev) prev.src = CONFIG.DEFAULT_LOGOS.SATPOL;
+                if (inpRight) inpRight.value = '';
+            });
+        }
+
+        const btnResetPesut = document.getElementById('btnResetLogoPesut');
+        if (btnResetPesut) {
+            btnResetPesut.addEventListener('click', () => {
+                if (!currentProfile.sidebarIcons) currentProfile.sidebarIcons = {};
+                currentProfile.sidebarIcons['1'] = CONFIG.DEFAULT_LOGOS.PESUT_ICON;
+                const prev = document.getElementById('settingLogoPesutPreview');
+                if (prev) prev.src = CONFIG.DEFAULT_LOGOS.PESUT_ICON;
+                if (inpPesut) inpPesut.value = '';
+            });
+        }
+
+        const inputNip = document.getElementById('inputSettingNip');
+        if (inputNip) {
+            inputNip.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/\D/g, '');
+                const nipCounter = document.getElementById('nipCounter');
+                if (nipCounter) nipCounter.textContent = `${e.target.value.length} / 18 Digit`;
+                const nipError = document.getElementById('nipError');
+                if (e.target.value.length === 18 && nipError) nipError.classList.add('hidden');
+            });
+        }
+
+        const settingsModal = document.getElementById('settingsModal');
+        document.querySelectorAll('.btn-open-settings, #btnSettings').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                ProfileManager.applyUI(currentProfile);
+                if (settingsModal) settingsModal.classList.remove('hidden');
+            });
+        });
+
+        const closeBtn = document.getElementById('btnCloseSettings');
+        if (closeBtn) closeBtn.addEventListener('click', () => settingsModal && settingsModal.classList.add('hidden'));
+
+        const cancelBtn = document.getElementById('btnCancelSettings');
+        if (cancelBtn) cancelBtn.addEventListener('click', () => settingsModal && settingsModal.classList.add('hidden'));
+
+        const saveBtn = document.getElementById('btnSaveSettings');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => {
+                const nipVal = inputNip ? inputNip.value.trim() : '';
+                const nipError = document.getElementById('nipError');
+                if (nipVal && nipVal.length !== 18) {
+                    if (nipError) nipError.classList.remove('hidden');
+                    return;
+                }
+                if (nipError) nipError.classList.add('hidden');
+
+                const namaInp = document.getElementById('inputSettingNama');
+                const jabatanInp = document.getElementById('inputSettingJabatan');
+
+                currentProfile.nama = namaInp ? namaInp.value.trim() : currentProfile.nama;
+                currentProfile.nip = nipVal;
+                currentProfile.jabatan = jabatanInp ? jabatanInp.value.trim() : currentProfile.jabatan;
+
+                StorageService.saveProfile(currentProfile);
+                ProfileManager.applyUI(currentProfile);
+
+                if (settingsModal) settingsModal.classList.add('hidden');
+            });
+        }
+    }
+};
+
+class ReportController {
+    constructor(key) {
+        this.key = key;
+        this.isMain = key === 'silahapp';
+        this.state = moduleStates[key];
+    }
+
+    getId(prefix) {
+        return this.isMain ? prefix : `cs${prefix.charAt(0).toUpperCase() + prefix.slice(1)}-${this.key}`;
+    }
+
+    init() {
+        this.initDefaultDate();
+        this.addLokasiInput();
+        this.addHasilInput();
+        if (this.isMain) {
+            this.addMainAnggotaInput();
+        } else {
+            this.addCsManualAnggotaInput();
+        }
+        this.bindEvents();
+        this.updatePreview();
+    }
+
+    initDefaultDate() {
+        const today = new Date().toISOString().split('T')[0];
+        const dateInput = document.getElementById(this.getId('inputTanggal'));
         if (dateInput) dateInput.value = today;
     }
-}
 
-function formatIndonesianDate(dateStr) {
-    if (!dateStr) return '-';
-    return new Date(dateStr).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-}
+    addLokasiInput(value = '') {
+        const listEl = document.getElementById(this.getId('lokasiList'));
+        if (!listEl) return;
 
-function generatePdfFilename(modulePrefix, inputDateId) {
-    const dateEl = document.getElementById(inputDateId);
-    const rawDate = (dateEl && dateEl.value) ? dateEl.value : new Date().toISOString().split('T')[0];
-    const cleanNama = (userProfile.nama || 'Petugas').trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '');
-    return `${rawDate}_${modulePrefix}_${cleanNama}.pdf`;
-}
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-2 lokasi-row';
+        const numClass = this.isMain ? 'lokasi-index' : 'cs-lokasi-index';
+        const inpClass = this.isMain ? 'input-lokasi' : 'cs-input-lokasi';
+        const btnClass = this.isMain ? 'btn-remove-lokasi' : 'cs-btn-remove-lokasi';
 
-function createPdfListItem(index, text) {
-    const row = document.createElement('div');
-    row.className = 'pdf-list-item';
-    row.innerHTML = `<span class="pdf-list-num">${index}.</span><span class="pdf-list-text">${text}</span>`;
-    return row;
-}
+        item.innerHTML = `
+            <span class="text-xs font-bold text-slate-400 w-4 text-center ${numClass}">1.</span>
+            <input type="text" value="${value}" placeholder="Tempat / Lokasi..." class="${inpClass} flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none shadow-sm">
+            <button type="button" class="${btnClass} text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        `;
+        listEl.appendChild(item);
+        lucide.createIcons();
+        this.updateLokasiIndexes();
 
-// ================= SILAHAPP LOGIC =================
-function addLokasiInput(value = '') {
-    if (!lokasiListContainer) return;
-    const div = document.createElement('div');
-    div.className = 'flex items-center gap-2 class-lokasi-item';
-    div.innerHTML = `
-        <span class="text-xs font-bold text-slate-400 w-4 text-center lokasi-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tempat / Lokasi..." class="input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
-        <button type="button" class="btn-remove-lokasi text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-    `;
-    lokasiListContainer.appendChild(div);
-    lucide.createIcons();
-    updateLokasiIndexes();
-    div.querySelector('.input-lokasi').addEventListener('input', updatePreview);
-    div.querySelector('.btn-remove-lokasi').addEventListener('click', () => {
-        if (lokasiListContainer.children.length > 1) { div.remove(); updateLokasiIndexes(); updatePreview(); }
-    });
-}
-function updateLokasiIndexes() {
-    if (!lokasiListContainer) return;
-    lokasiListContainer.querySelectorAll('.class-lokasi-item').forEach((item, index) => {
-        item.querySelector('.lokasi-index').textContent = `${index + 1}.`;
-    });
-}
+        item.querySelector(`.${inpClass}`).addEventListener('input', () => this.updatePreview());
+        item.querySelector(`.${btnClass}`).addEventListener('click', () => {
+            if (listEl.children.length > 1) {
+                item.remove();
+                this.updateLokasiIndexes();
+                this.updatePreview();
+            }
+        });
+    }
 
-function addHasilInput(value = '') {
-    if (!hasilListContainer) return;
-    const div = document.createElement('div');
-    div.className = 'flex items-center gap-2 class-hasil-item';
-    div.innerHTML = `
-        <span class="text-xs font-bold text-slate-400 w-4 text-center item-index">1.</span>
-        <input type="text" value="${value}" placeholder="Poin hasil patroli..." class="input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
-        <button type="button" class="btn-remove-hasil text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-    `;
-    hasilListContainer.appendChild(div);
-    lucide.createIcons();
-    updateHasilIndexes();
-    div.querySelector('.input-hasil').addEventListener('input', updatePreview);
-    div.querySelector('.btn-remove-hasil').addEventListener('click', () => {
-        if (hasilListContainer.children.length > 1) { div.remove(); updateHasilIndexes(); updatePreview(); }
-    });
-}
-function updateHasilIndexes() {
-    if (!hasilListContainer) return;
-    hasilListContainer.querySelectorAll('.class-hasil-item').forEach((item, index) => {
-        item.querySelector('.item-index').textContent = `${index + 1}.`;
-    });
-}
+    updateLokasiIndexes() {
+        const listEl = document.getElementById(this.getId('lokasiList'));
+        if (!listEl) return;
+        const numClass = this.isMain ? '.lokasi-index' : '.cs-lokasi-index';
+        listEl.querySelectorAll('.lokasi-row').forEach((row, idx) => {
+            const num = row.querySelector(numClass);
+            if (num) num.textContent = `${idx + 1}.`;
+        });
+    }
 
-function addAnggotaInput(value = '') {
-    if (!anggotaListContainer) return;
-    const div = document.createElement('div');
-    div.className = 'flex items-center gap-2 class-anggota-item';
-    div.innerHTML = `
-        <span class="text-xs font-bold text-slate-400 w-4 text-center anggota-index">1.</span>
-        <input type="text" value="${value}" placeholder="Nama lengkap anggota..." class="input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
-        <button type="button" class="btn-remove-anggota text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-    `;
-    anggotaListContainer.appendChild(div);
-    lucide.createIcons();
-    updateAnggotaIndexes();
-    div.querySelector('.input-anggota').addEventListener('input', updatePreview);
-    div.querySelector('.btn-remove-anggota').addEventListener('click', () => {
-        if (anggotaListContainer.children.length > 1) { div.remove(); updateAnggotaIndexes(); updatePreview(); }
-    });
-}
-function updateAnggotaIndexes() {
-    if (!anggotaListContainer) return;
-    anggotaListContainer.querySelectorAll('.class-anggota-item').forEach((item, index) => {
-        item.querySelector('.anggota-index').textContent = `${index + 1}.`;
-    });
-}
+    addHasilInput(value = '') {
+        const listEl = document.getElementById(this.getId('hasilList'));
+        if (!listEl) return;
 
-function updatePreview() {
-    const inputTanggal = document.getElementById('inputTanggal');
-    if (!inputTanggal) return;
-    
-    document.getElementById('viewTanggal').textContent = formatIndonesianDate(inputTanggal.value);
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-2 hasil-row';
+        const numClass = this.isMain ? 'item-index' : 'cs-item-index';
+        const inpClass = this.isMain ? 'input-hasil' : 'cs-input-hasil';
+        const btnClass = this.isMain ? 'btn-remove-hasil' : 'cs-btn-remove-hasil';
 
-    const dasarVal = document.getElementById('inputDasar').value.trim();
-    document.getElementById('blockDasar').style.display = dasarVal ? 'block' : 'none';
-    document.getElementById('viewDasar').textContent = dasarVal;
+        item.innerHTML = `
+            <span class="text-xs font-bold text-slate-400 w-4 text-center ${numClass}">1.</span>
+            <input type="text" value="${value}" placeholder="Poin kegiatan..." class="${inpClass} flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none shadow-sm">
+            <button type="button" class="${btnClass} text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        `;
+        listEl.appendChild(item);
+        lucide.createIcons();
+        this.updateHasilIndexes();
 
-    const viewTempat = document.getElementById('viewTempat');
-    viewTempat.innerHTML = '';
-    let lCount = 0;
-    document.querySelectorAll('.input-lokasi').forEach(inp => {
-        if (inp.value.trim()) viewTempat.appendChild(createPdfListItem(++lCount, inp.value.trim()));
-    });
-    document.getElementById('blockLokasi').style.display = lCount > 0 ? 'block' : 'none';
+        item.querySelector(`.${inpClass}`).addEventListener('input', () => this.updatePreview());
+        item.querySelector(`.${btnClass}`).addEventListener('click', () => {
+            if (listEl.children.length > 1) {
+                item.remove();
+                this.updateHasilIndexes();
+                this.updatePreview();
+            }
+        });
+    }
 
-    const viewHasil = document.getElementById('viewHasil');
-    viewHasil.innerHTML = '';
-    let hCount = 0;
-    document.querySelectorAll('.input-hasil').forEach(inp => {
-        if (inp.value.trim()) viewHasil.appendChild(createPdfListItem(++hCount, inp.value.trim()));
-    });
-    document.getElementById('blockHasil').style.display = hCount > 0 ? 'block' : 'none';
+    updateHasilIndexes() {
+        const listEl = document.getElementById(this.getId('hasilList'));
+        if (!listEl) return;
+        const numClass = this.isMain ? '.item-index' : '.cs-item-index';
+        listEl.querySelectorAll('.hasil-row').forEach((row, idx) => {
+            const num = row.querySelector(numClass);
+            if (num) num.textContent = `${idx + 1}.`;
+        });
+    }
 
-    const kVal = document.getElementById('inputKegiatan').value.trim();
-    document.getElementById('blockKegiatan').style.display = kVal ? 'block' : 'none';
-    document.getElementById('viewKegiatan').textContent = kVal;
+    addMainAnggotaInput(value = '') {
+        const listEl = document.getElementById('anggotaList');
+        if (!listEl) return;
 
-    // --- ANGGOTA LOGIC UNTUK SILAHAPP ---
-    const manualWrapper = document.getElementById('anggotaManualWrapper');
-    if (manualWrapper) {
-        const isManualMode = !manualWrapper.classList.contains('hidden');
-        const titleEl = document.getElementById('labelAnggotaTitle');
-        const viewAnggotaContainer = document.getElementById('viewAnggota');
-        viewAnggotaContainer.innerHTML = '';
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-2 class-anggota-item';
+        item.innerHTML = `
+            <span class="text-xs font-bold text-slate-400 w-4 text-center anggota-index">1.</span>
+            <input type="text" value="${value}" placeholder="Nama lengkap anggota..." class="input-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none shadow-sm">
+            <button type="button" class="btn-remove-anggota text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        `;
+        listEl.appendChild(item);
+        lucide.createIcons();
+        this.updateMainAnggotaIndexes();
 
-        if (isManualMode) {
-            titleEl.textContent = '5. Daftar Nama Anggota';
+        item.querySelector('.input-anggota').addEventListener('input', () => this.updatePreview());
+        item.querySelector('.btn-remove-anggota').addEventListener('click', () => {
+            if (listEl.children.length > 1) {
+                item.remove();
+                this.updateMainAnggotaIndexes();
+                this.updatePreview();
+            }
+        });
+    }
+
+    updateMainAnggotaIndexes() {
+        const listEl = document.getElementById('anggotaList');
+        if (!listEl) return;
+        listEl.querySelectorAll('.class-anggota-item').forEach((row, idx) => {
+            const num = row.querySelector('.anggota-index');
+            if (num) num.textContent = `${idx + 1}.`;
+        });
+    }
+
+    addCsManualAnggotaInput(value = '') {
+        const listEl = document.getElementById(`csManualAnggotaList-${this.key}`);
+        if (!listEl) return;
+
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-2 cs-manual-anggota-item';
+        item.innerHTML = `
+            <span class="text-xs font-bold text-slate-400 w-4 text-center cs-manual-anggota-index">1.</span>
+            <input type="text" value="${value}" placeholder="Nama lengkap anggota..." class="cs-input-manual-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none shadow-sm">
+            <button type="button" class="cs-btn-remove-manual-anggota text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        `;
+        listEl.appendChild(item);
+        lucide.createIcons();
+        this.updateCsManualAnggotaIndexes();
+
+        item.querySelector('.cs-input-manual-anggota').addEventListener('input', () => this.updatePreview());
+        item.querySelector('.cs-btn-remove-manual-anggota').addEventListener('click', () => {
+            if (listEl.children.length > 1) {
+                item.remove();
+                this.updateCsManualAnggotaIndexes();
+                this.updatePreview();
+            }
+        });
+    }
+
+    updateCsManualAnggotaIndexes() {
+        const listEl = document.getElementById(`csManualAnggotaList-${this.key}`);
+        if (!listEl) return;
+        listEl.querySelectorAll('.cs-manual-anggota-item').forEach((row, idx) => {
+            const num = row.querySelector('.cs-manual-anggota-index');
+            if (num) num.textContent = `${idx + 1}.`;
+        });
+    }
+
+    updatePreview() {
+        const dateInp = document.getElementById(this.getId('inputTanggal'));
+        const viewTanggal = document.getElementById(this.getId('viewTanggal'));
+        if (viewTanggal && dateInp) {
+            viewTanggal.textContent = PdfService.formatIndonesianDate(dateInp.value);
+        }
+
+        const dasarInp = document.getElementById(this.getId('inputDasar'));
+        const viewDasar = document.getElementById(this.getId('viewDasar'));
+        const blockDasar = document.getElementById(this.getId('blockDasar'));
+        const dasarVal = dasarInp ? dasarInp.value.trim() : '';
+        if (blockDasar) blockDasar.style.display = dasarVal ? 'block' : 'none';
+        if (viewDasar) viewDasar.textContent = dasarVal;
+
+        const viewTempat = document.getElementById(this.getId('viewTempat'));
+        const blockLokasi = document.getElementById(this.getId('blockLokasi'));
+        if (viewTempat) {
+            viewTempat.innerHTML = '';
+            let lCount = 0;
+            const selector = this.isMain ? '.input-lokasi' : `#view-coming-soon-${this.key} .cs-input-lokasi`;
+            document.querySelectorAll(selector).forEach((inp) => {
+                if (inp.value.trim()) viewTempat.appendChild(createPdfListItem(++lCount, inp.value.trim()));
+            });
+            if (blockLokasi) blockLokasi.style.display = lCount > 0 ? 'block' : 'none';
+        }
+
+        const viewHasil = document.getElementById(this.getId('viewHasil'));
+        const blockHasil = document.getElementById(this.getId('blockHasil'));
+        if (viewHasil) {
+            viewHasil.innerHTML = '';
+            let hCount = 0;
+            const selector = this.isMain ? '.input-hasil' : `#view-coming-soon-${this.key} .cs-input-hasil`;
+            document.querySelectorAll(selector).forEach((inp) => {
+                if (inp.value.trim()) viewHasil.appendChild(createPdfListItem(++hCount, inp.value.trim()));
+            });
+            if (blockHasil) blockHasil.style.display = hCount > 0 ? 'block' : 'none';
+        }
+
+        const kegInp = document.getElementById(this.getId('inputKegiatan'));
+        const viewKegiatan = document.getElementById(this.getId('viewKegiatan'));
+        const blockKegiatan = document.getElementById(this.getId('blockKegiatan'));
+        const kegVal = kegInp ? kegInp.value.trim() : '';
+        if (blockKegiatan) blockKegiatan.style.display = kegVal ? 'block' : 'none';
+        if (viewKegiatan) viewKegiatan.textContent = kegVal;
+
+        this.renderAnggotaPreview();
+        this.renderDokumentasiPreview();
+    }
+
+    renderAnggotaPreview() {
+        const isManual = this.state.anggotaMode === 'manual';
+        const titleEl = document.getElementById(this.isMain ? 'labelAnggotaTitle' : `csLabelAnggotaTitle-${this.key}`);
+        const viewContainer = document.getElementById(this.getId('viewAnggota'));
+        const blockAnggota = document.getElementById(this.getId('blockAnggota'));
+        const photoCountEl = document.getElementById(this.isMain ? 'anggotaPhotoCount' : `csAnggotaPhotoCount-${this.key}`);
+        const previewGrid = document.getElementById(this.isMain ? 'anggotaPhotoPreview' : `csAnggotaPhotoPreview-${this.key}`);
+
+        if (!viewContainer) return;
+        viewContainer.innerHTML = '';
+
+        if (isManual) {
+            if (titleEl) titleEl.textContent = '5. Daftar Nama Anggota';
             let aCount = 0;
             let hasContent = false;
             const listDiv = document.createElement('div');
             listDiv.className = 'space-y-1';
-            document.querySelectorAll('.input-anggota').forEach(inp => {
+
+            const selector = this.isMain
+                ? '.input-anggota'
+                : `#csManualAnggotaList-${this.key} .cs-input-manual-anggota`;
+            document.querySelectorAll(selector).forEach((inp) => {
                 if (inp.value.trim()) {
                     hasContent = true;
                     listDiv.appendChild(createPdfListItem(++aCount, inp.value.trim()));
                 }
             });
-            viewAnggotaContainer.appendChild(listDiv);
-            document.getElementById('blockAnggota').style.display = hasContent ? 'block' : 'none';
+            viewContainer.appendChild(listDiv);
+            if (blockAnggota) blockAnggota.style.display = hasContent ? 'block' : 'none';
         } else {
-            titleEl.textContent = '5. Dokumentasi Foto Nama Anggota';
-            const pCountEl = document.getElementById('anggotaPhotoCount');
-            if(pCountEl) pCountEl.textContent = `${silahappAnggotaPhotos.length} / 10 Foto`;
-            document.getElementById('blockAnggota').style.display = silahappAnggotaPhotos.length === 0 ? 'none' : 'block';
+            if (titleEl) titleEl.textContent = '5. Dokumentasi Foto Nama Anggota';
+            if (photoCountEl) photoCountEl.textContent = `${this.state.anggotaPhotos.length} / 10 Foto`;
+            if (blockAnggota) blockAnggota.style.display = this.state.anggotaPhotos.length === 0 ? 'none' : 'block';
 
             const gridDiv = document.createElement('div');
             gridDiv.className = 'grid grid-cols-2 gap-3';
-            silahappAnggotaPhotos.forEach((src, idx) => {
+            this.state.anggotaPhotos.forEach((src, idx) => {
                 const pdfCard = document.createElement('div');
                 pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
                 pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Nama Anggota ${idx + 1}</span>`;
                 gridDiv.appendChild(pdfCard);
             });
-            viewAnggotaContainer.appendChild(gridDiv);
+            viewContainer.appendChild(gridDiv);
         }
 
-        const aContainer = document.getElementById('anggotaPhotoPreview');
-        if(aContainer) {
-            aContainer.innerHTML = '';
-            silahappAnggotaPhotos.forEach((src, idx) => {
+        if (previewGrid) {
+            previewGrid.innerHTML = '';
+            this.state.anggotaPhotos.forEach((src, idx) => {
                 const thumb = document.createElement('div');
                 thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
-                thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><button type="button" onclick="removeSilahappAnggotaPhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>`;
-                aContainer.appendChild(thumb);
+                thumb.innerHTML = `
+                    <img src="${src}" class="w-full h-full object-cover">
+                    <button type="button" class="btn-del-photo absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition shadow"><i data-lucide="x" class="w-3 h-3"></i></button>
+                `;
+                thumb.querySelector('.btn-del-photo').addEventListener('click', () => {
+                    this.state.anggotaPhotos.splice(idx, 1);
+                    this.updatePreview();
+                });
+                previewGrid.appendChild(thumb);
             });
+            lucide.createIcons();
         }
     }
 
-    renderPhotoPreview();
-}
+    renderDokumentasiPreview() {
+        const photoCountEl = document.getElementById(this.isMain ? 'photoCount' : `csPhotoCount-${this.key}`);
+        const blockDoc = document.getElementById(this.getId('blockDokumentasi'));
+        const formGrid = document.getElementById(this.isMain ? 'photoPreview' : `csPhotoPreview-${this.key}`);
+        const pdfGrid = document.getElementById(this.getId('viewDokumentasi'));
 
-function renderPhotoPreview() {
-    const container = document.getElementById('photoPreview');
-    const viewContainer = document.getElementById('viewDokumentasi');
-    const countEl = document.getElementById('photoCount');
-    const blockDoc = document.getElementById('blockDokumentasi');
-    
-    if (!container || !viewContainer) return;
+        if (!formGrid || !pdfGrid) return;
 
-    countEl.textContent = `${uploadedPhotos.length} / 10 Foto`;
-    blockDoc.style.display = uploadedPhotos.length === 0 ? 'none' : 'block';
-    
-    container.innerHTML = '';
-    viewContainer.innerHTML = '';
+        if (photoCountEl) photoCountEl.textContent = `${this.state.uploadedPhotos.length} / 10 Foto`;
+        if (blockDoc) blockDoc.style.display = this.state.uploadedPhotos.length === 0 ? 'none' : 'block';
 
-    uploadedPhotos.forEach((src, idx) => {
-        const thumb = document.createElement('div');
-        thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
-        thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>`;
-        container.appendChild(thumb);
+        formGrid.innerHTML = '';
+        pdfGrid.innerHTML = '';
 
-        const pdfCard = document.createElement('div');
-        pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-        pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>`;
-        viewContainer.appendChild(pdfCard);
-    });
-    lucide.createIcons();
-}
+        this.state.uploadedPhotos.forEach((src, idx) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
+            thumb.innerHTML = `
+                <img src="${src}" class="w-full h-full object-cover">
+                <button type="button" class="btn-del-doc absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition shadow"><i data-lucide="x" class="w-3 h-3"></i></button>
+            `;
+            thumb.querySelector('.btn-del-doc').addEventListener('click', () => {
+                this.state.uploadedPhotos.splice(idx, 1);
+                this.updatePreview();
+            });
+            formGrid.appendChild(thumb);
 
-window.removePhoto = (i) => { uploadedPhotos.splice(i, 1); updatePreview(); };
-window.removeSilahappAnggotaPhoto = (idx) => { silahappAnggotaPhotos.splice(idx, 1); updatePreview(); };
-
-
-// ================= MODUL LANJUTAN LOGIC =================
-function addCsLokasiInput(i, value = '') {
-    const container = document.getElementById(`csLokasiList-${i}`);
-    if (!container) return;
-    const div = document.createElement('div');
-    div.className = 'flex items-center gap-2 cs-lokasi-item';
-    div.innerHTML = `
-        <span class="text-xs font-bold text-slate-400 w-4 text-center cs-lokasi-index">1.</span>
-        <input type="text" value="${value}" placeholder="Tempat / Lokasi..." class="cs-input-lokasi flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
-        <button type="button" class="cs-btn-remove-lokasi text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-    `;
-    container.appendChild(div);
-    lucide.createIcons();
-    updateCsLokasiIndexes(i);
-    div.querySelector('.cs-input-lokasi').addEventListener('input', () => updateCsPreview(i));
-    div.querySelector('.cs-btn-remove-lokasi').addEventListener('click', () => {
-        if (container.children.length > 1) { div.remove(); updateCsLokasiIndexes(i); updateCsPreview(i); }
-    });
-}
-function updateCsLokasiIndexes(i) {
-    const container = document.getElementById(`csLokasiList-${i}`);
-    if (!container) return;
-    container.querySelectorAll('.cs-lokasi-item').forEach((item, index) => {
-        item.querySelector('.cs-lokasi-index').textContent = `${index + 1}.`;
-    });
-}
-
-function addCsHasilInput(i, value = '') {
-    const container = document.getElementById(`csHasilList-${i}`);
-    if (!container) return;
-    const div = document.createElement('div');
-    div.className = 'flex items-center gap-2 cs-hasil-item';
-    div.innerHTML = `
-        <span class="text-xs font-bold text-slate-400 w-4 text-center cs-item-index">1.</span>
-        <input type="text" value="${value}" placeholder="Poin hasil..." class="cs-input-hasil flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
-        <button type="button" class="cs-btn-remove-hasil text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-    `;
-    container.appendChild(div);
-    lucide.createIcons();
-    updateCsHasilIndexes(i);
-    div.querySelector('.cs-input-hasil').addEventListener('input', () => updateCsPreview(i));
-    div.querySelector('.cs-btn-remove-hasil').addEventListener('click', () => {
-        if (container.children.length > 1) { div.remove(); updateCsHasilIndexes(i); updateCsPreview(i); }
-    });
-}
-function updateCsHasilIndexes(i) {
-    const container = document.getElementById(`csHasilList-${i}`);
-    if (!container) return;
-    container.querySelectorAll('.cs-hasil-item').forEach((item, index) => {
-        item.querySelector('.cs-item-index').textContent = `${index + 1}.`;
-    });
-}
-
-function addCsManualAnggotaInput(i, value = '') {
-    const container = document.getElementById(`csManualAnggotaList-${i}`);
-    if (!container) return;
-    const div = document.createElement('div');
-    div.className = 'flex items-center gap-2 cs-manual-anggota-item';
-    div.innerHTML = `
-        <span class="text-xs font-bold text-slate-400 w-4 text-center cs-manual-anggota-index">1.</span>
-        <input type="text" value="${value}" placeholder="Nama lengkap anggota..." class="cs-input-manual-anggota flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
-        <button type="button" class="cs-btn-remove-manual-anggota text-slate-400 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-    `;
-    container.appendChild(div);
-    lucide.createIcons();
-    updateCsManualAnggotaIndexes(i);
-    div.querySelector('.cs-input-manual-anggota').addEventListener('input', () => updateCsPreview(i));
-    div.querySelector('.cs-btn-remove-manual-anggota').addEventListener('click', () => {
-        if (container.children.length > 1) { div.remove(); updateCsManualAnggotaIndexes(i); updateCsPreview(i); }
-    });
-}
-function updateCsManualAnggotaIndexes(i) {
-    const container = document.getElementById(`csManualAnggotaList-${i}`);
-    if (!container) return;
-    container.querySelectorAll('.cs-manual-anggota-item').forEach((item, index) => {
-        item.querySelector('.cs-manual-anggota-index').textContent = `${index + 1}.`;
-    });
-}
-
-function updateCsPreview(i) {
-    const dateInput = document.getElementById(`csInputTanggal-${i}`);
-    if (!dateInput) return;
-
-    document.getElementById(`csViewTanggal-${i}`).textContent = formatIndonesianDate(dateInput.value);
-
-    const dVal = document.getElementById(`csInputDasar-${i}`).value.trim();
-    document.getElementById(`csBlockDasar-${i}`).style.display = dVal ? 'block' : 'none';
-    document.getElementById(`csViewDasar-${i}`).textContent = dVal;
-
-    const viewTempat = document.getElementById(`csViewTempat-${i}`);
-    viewTempat.innerHTML = '';
-    let lCount = 0;
-    document.querySelectorAll(`#view-coming-soon-${i} .cs-input-lokasi`).forEach(inp => {
-        if (inp.value.trim()) viewTempat.appendChild(createPdfListItem(++lCount, inp.value.trim()));
-    });
-    document.getElementById(`csBlockLokasi-${i}`).style.display = lCount > 0 ? 'block' : 'none';
-
-    const viewHasil = document.getElementById(`csViewHasil-${i}`);
-    viewHasil.innerHTML = '';
-    let hCount = 0;
-    document.querySelectorAll(`#view-coming-soon-${i} .cs-input-hasil`).forEach(inp => {
-        if (inp.value.trim()) viewHasil.appendChild(createPdfListItem(++hCount, inp.value.trim()));
-    });
-    document.getElementById(`csBlockHasil-${i}`).style.display = hCount > 0 ? 'block' : 'none';
-
-    const kVal = document.getElementById(`csInputKegiatan-${i}`).value.trim();
-    document.getElementById(`csBlockKegiatan-${i}`).style.display = kVal ? 'block' : 'none';
-    document.getElementById(`csViewKegiatan-${i}`).textContent = kVal;
-
-    renderCsPhotoPreviews(i);
-}
-
-function renderCsPhotoPreviews(i) {
-    const data = csData[i];
-    const manualWrapper = document.getElementById(`csAnggotaManualWrapper-${i}`);
-    if (!manualWrapper) return;
-    
-    const isManualMode = !manualWrapper.classList.contains('hidden');
-
-    const titleEl = document.getElementById(`csLabelAnggotaTitle-${i}`);
-    const viewAnggotaContainer = document.getElementById(`csViewAnggota-${i}`);
-    viewAnggotaContainer.innerHTML = '';
-
-    if (isManualMode) {
-        titleEl.textContent = '5. Daftar Nama Anggota';
-        let mCount = 0;
-        let hasContent = false;
-        const manualItems = document.querySelectorAll(`#csManualAnggotaList-${i} .cs-input-manual-anggota`);
-        
-        const listDiv = document.createElement('div');
-        manualItems.forEach(inp => {
-            if (inp.value.trim()) {
-                hasContent = true;
-                listDiv.appendChild(createPdfListItem(++mCount, inp.value.trim()));
-            }
-        });
-        viewAnggotaContainer.appendChild(listDiv);
-        document.getElementById(`csBlockAnggota-${i}`).style.display = hasContent ? 'block' : 'none';
-    } else {
-        titleEl.textContent = '5. Dokumentasi Foto Nama Anggota';
-        document.getElementById(`csAnggotaPhotoCount-${i}`).textContent = `${data.anggotaPhotos.length} / 10 Foto`;
-        document.getElementById(`csBlockAnggota-${i}`).style.display = data.anggotaPhotos.length === 0 ? 'none' : 'block';
-
-        const gridDiv = document.createElement('div');
-        gridDiv.className = 'grid grid-cols-2 gap-3';
-        data.anggotaPhotos.forEach((src, idx) => {
             const pdfCard = document.createElement('div');
             pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-            pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Nama Anggota ${idx + 1}</span>`;
-            gridDiv.appendChild(pdfCard);
+            pdfCard.innerHTML = `
+                <div class="photo-wrapper"><img src="${src}"></div>
+                <span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>
+            `;
+            pdfGrid.appendChild(pdfCard);
         });
-        viewAnggotaContainer.appendChild(gridDiv);
+        lucide.createIcons();
     }
 
-    const aContainer = document.getElementById(`csAnggotaPhotoPreview-${i}`);
-    aContainer.innerHTML = '';
-    data.anggotaPhotos.forEach((src, idx) => {
-        const thumb = document.createElement('div');
-        thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
-        thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><button type="button" onclick="removeCsAnggotaPhoto(${i}, ${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>`;
-        aContainer.appendChild(thumb);
-    });
+    bindEvents() {
+        const dateInp = document.getElementById(this.getId('inputTanggal'));
+        if (dateInp) dateInp.addEventListener('input', () => this.updatePreview());
 
-    const dContainer = document.getElementById(`csPhotoPreview-${i}`);
-    const dViewContainer = document.getElementById(`csViewDokumentasi-${i}`);
-    document.getElementById(`csPhotoCount-${i}`).textContent = `${data.uploadedPhotos.length} / 10 Foto`;
-    document.getElementById(`csBlockDokumentasi-${i}`).style.display = data.uploadedPhotos.length === 0 ? 'none' : 'block';
+        const dasarInp = document.getElementById(this.getId('inputDasar'));
+        if (dasarInp) dasarInp.addEventListener('input', () => this.updatePreview());
 
-    dContainer.innerHTML = '';
-    dViewContainer.innerHTML = '';
-    data.uploadedPhotos.forEach((src, idx) => {
-        const thumb = document.createElement('div');
-        thumb.className = 'relative aspect-square border rounded-xl overflow-hidden bg-white shadow-sm';
-        thumb.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><button type="button" onclick="removeCsPhoto(${i}, ${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>`;
-        dContainer.appendChild(thumb);
+        const addLokasiBtn = document.getElementById(this.getId('btnAddLokasi'));
+        if (addLokasiBtn) addLokasiBtn.addEventListener('click', () => this.addLokasiInput());
 
-        const pdfCard = document.createElement('div');
-        pdfCard.className = 'border rounded-xl p-2 bg-white text-center shadow-sm photo-wrapper';
-        pdfCard.innerHTML = `<div class="photo-wrapper"><img src="${src}"></div><span class="text-[10px] text-slate-600 font-bold block mt-1.5">Dokumentasi ${idx + 1}</span>`;
-        dViewContainer.appendChild(pdfCard);
-    });
-    lucide.createIcons();
-}
+        const kegInp = document.getElementById(this.getId('inputKegiatan'));
+        if (kegInp) kegInp.addEventListener('input', () => this.updatePreview());
 
-window.removeCsAnggotaPhoto = (i, idx) => { csData[i].anggotaPhotos.splice(idx, 1); renderCsPhotoPreviews(i); };
-window.removeCsPhoto = (i, idx) => { csData[i].uploadedPhotos.splice(idx, 1); renderCsPhotoPreviews(i); };
+        const addHasilBtn = document.getElementById(this.getId('btnAddHasil'));
+        if (addHasilBtn) addHasilBtn.addEventListener('click', () => this.addHasilInput());
 
-function initCsModuleEvents(i) {
-    const tanggalInp = document.getElementById(`csInputTanggal-${i}`);
-    if (!tanggalInp) return;
+        const fotoBtn = document.getElementById(this.isMain ? 'anggotaModeFotoBtn' : `csAnggotaModeFotoBtn-${this.key}`);
+        const manualBtn = document.getElementById(this.isMain ? 'anggotaModeManualBtn' : `csAnggotaModeManualBtn-${this.key}`);
+        const fotoWrapper = document.getElementById(this.isMain ? 'anggotaFotoWrapper' : `csAnggotaFotoWrapper-${this.key}`);
+        const manualWrapper = document.getElementById(this.isMain ? 'anggotaManualWrapper' : `csAnggotaManualWrapper-${this.key}`);
 
-    tanggalInp.addEventListener('input', () => updateCsPreview(i));
-    document.getElementById(`csInputDasar-${i}`).addEventListener('input', () => updateCsPreview(i));
-    document.getElementById(`csBtnAddLokasi-${i}`).addEventListener('click', () => addCsLokasiInput(i));
-    document.getElementById(`csInputKegiatan-${i}`).addEventListener('input', () => updateCsPreview(i));
-    document.getElementById(`csBtnAddHasil-${i}`).addEventListener('click', () => addCsHasilInput(i));
-    document.getElementById(`csBtnAddManualAnggota-${i}`).addEventListener('click', () => addCsManualAnggotaInput(i));
+        if (fotoBtn && manualBtn) {
+            fotoBtn.addEventListener('click', () => {
+                this.state.anggotaMode = 'foto';
+                fotoBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
+                manualBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
+                if (fotoWrapper) fotoWrapper.classList.remove('hidden');
+                if (manualWrapper) manualWrapper.classList.add('hidden');
+                this.updatePreview();
+            });
 
-    const fotoBtn = document.getElementById(`csAnggotaModeFotoBtn-${i}`);
-    const manualBtn = document.getElementById(`csAnggotaModeManualBtn-${i}`);
-    const fotoWrapper = document.getElementById(`csAnggotaFotoWrapper-${i}`);
-    const manualWrapper = document.getElementById(`csAnggotaManualWrapper-${i}`);
-
-    fotoBtn.addEventListener('click', () => {
-        fotoBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
-        manualBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
-        fotoWrapper.classList.remove('hidden');
-        manualWrapper.classList.add('hidden');
-        renderCsPhotoPreviews(i);
-    });
-
-    manualBtn.addEventListener('click', () => {
-        manualBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
-        fotoBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
-        manualWrapper.classList.remove('hidden');
-        fotoWrapper.classList.add('hidden');
-        renderCsPhotoPreviews(i);
-    });
-
-    document.getElementById(`csInputAnggotaFoto-${i}`).addEventListener('change', async (e) => {
-        const files = Array.from(e.target.files);
-        if (csData[i].anggotaPhotos.length + files.length > 10) { alert('Maksimal 10 foto nama anggota!'); return; }
-        for (const file of files) {
-            if (file.type.startsWith('image/')) {
-                if (csData[i].anggotaPhotos.length < 10) {
-                    const compressedBase64 = await compressImage(file, 2);
-                    csData[i].anggotaPhotos.push(compressedBase64);
-                    renderCsPhotoPreviews(i);
-                }
-            }
-        }
-        e.target.value = '';
-    });
-
-    document.getElementById(`csInputDokumentasi-${i}`).addEventListener('change', async (e) => {
-        const files = Array.from(e.target.files);
-        if (csData[i].uploadedPhotos.length + files.length > 10) { alert('Maksimal 10 foto dokumentasi!'); return; }
-        for (const file of files) {
-            if (file.type.startsWith('image/')) {
-                if (csData[i].uploadedPhotos.length < 10) {
-                    const compressedBase64 = await compressImage(file, 2);
-                    csData[i].uploadedPhotos.push(compressedBase64);
-                    renderCsPhotoPreviews(i);
-                }
-            }
-        }
-        e.target.value = '';
-    });
-
-    document.getElementById(`csTabFormBtn-${i}`).addEventListener('click', () => {
-        document.getElementById(`csFormSection-${i}`).classList.remove('hidden');
-        document.getElementById(`csPreviewSection-${i}`).classList.add('hidden');
-        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md';
-        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
-    });
-
-    document.getElementById(`csTabPreviewBtn-${i}`).addEventListener('click', () => {
-        document.getElementById(`csPreviewSection-${i}`).classList.remove('hidden');
-        document.getElementById(`csFormSection-${i}`).classList.add('hidden');
-        document.getElementById(`csTabPreviewBtn-${i}`).className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md';
-        document.getElementById(`csTabFormBtn-${i}`).className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
-    });
-
-    document.getElementById(`csBtnUploadDrive-${i}`).addEventListener('click', async () => {
-        const btn = document.getElementById(`csBtnUploadDrive-${i}`);
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<span class="animate-pulse">Membuat PDF & Mengunggah...</span>';
-        btn.disabled = true;
-
-        try {
-            const modulePrefix = i === 1 ? 'Pesut' : 'ComingSoon';
-            const filename = generatePdfFilename(modulePrefix, `csInputTanggal-${i}`);
-            const element = document.getElementById(`csPdfContent-${i}`);
-
-            const opt = { margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} };
-            const pdfDataUri = await html2pdf().set(opt).from(element).output('datauristring');
-            
-            const link = document.createElement('a');
-            link.href = pdfDataUri;
-            link.download = filename;
-            link.click();
-
-            const pdfBase64 = pdfDataUri.split(',')[1];
-            await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS[i]);
-
-            safeSetTextContent('driveFilenameLabel', filename);
-            const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
-            if (noticeDesc) {
-                noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan <b>Check File PDF anda</b>.`;
-            }
-            
-            const btnClose = document.getElementById('btnCloseDriveNotice');
-            if (btnClose) {
-                btnClose.textContent = "Buka Folder Google Drive";
-                btnClose.onclick = () => {
-                    window.open(COMING_SOON_FOLDERS[i], '_blank');
-                    if (driveNoticeModal) driveNoticeModal.classList.add('hidden');
-                };
-            }
-            
-            if (driveNoticeModal) driveNoticeModal.classList.remove('hidden');
-
-        } catch (err) {
-            console.error(err);
-            alert('Gagal memproses laporan: ' + err.message);
-        } finally {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }
-    });
-
-    updateCsPreview(i);
-}
-
-
-// ================= PROFILES & GLOBAL EVENTS =================
-function loadSettings() {
-    const saved = localStorage.getItem('satpolpp_inhu_trantibum_profile');
-    if (saved) {
-        try { userProfile = { ...userProfile, ...JSON.parse(saved) }; } catch(e){}
-    }
-    userProfile.logoLeft = DEFAULT_INHU_DRIVE_URL;
-    userProfile.logoRight = DEFAULT_SATPOL_PP_DRIVE_URL;
-    applyUserProfileUI();
-}
-
-function applyUserProfileUI() {
-    const viewNama = document.getElementById('viewNama');
-    if (viewNama) viewNama.textContent = userProfile.nama || '-';
-
-    for (let i = 1; i <= 2; i++) {
-        const el = document.getElementById(`csViewNama-${i}`);
-        if (el) el.textContent = userProfile.nama || '-';
-    }
-
-    const cleanNip = userProfile.nip ? userProfile.nip.replace(/\D/g, '') : '';
-    const formattedNip = cleanNip ? `NIP. ${cleanNip}` : '-';
-    
-    const viewNip = document.getElementById('viewNip');
-    if (viewNip) viewNip.textContent = formattedNip;
-
-    for (let i = 1; i <= 2; i++) {
-        const el = document.getElementById(`csViewNip-${i}`);
-        if (el) el.textContent = formattedNip;
-    }
-
-    const viewJabatan = document.getElementById('viewJabatan');
-    if (viewJabatan) viewJabatan.textContent = userProfile.jabatan || '-';
-
-    for (let i = 1; i <= 2; i++) {
-        const el = document.getElementById(`csViewJabatan-${i}`);
-        if (el) el.textContent = userProfile.jabatan || '-';
-    }
-
-    const inputSettingNama = document.getElementById('inputSettingNama');
-    if (inputSettingNama) inputSettingNama.value = userProfile.nama || '';
-    if (inputNip) inputNip.value = cleanNip;
-    
-    const inputSettingJabatan = document.getElementById('inputSettingJabatan');
-    if (inputSettingJabatan) inputSettingJabatan.value = userProfile.jabatan || '';
-    
-    updateNipCounter();
-
-    if (userProfile.sidebarIcons) {
-        ['silahapp', '1', '2'].forEach(key => {
-            const iconImg = document.getElementById(`sidebarIcon-${key}`);
-            if (iconImg && userProfile.sidebarIcons[key]) {
-                iconImg.src = userProfile.sidebarIcons[key];
-            }
-        });
-    }
-}
-
-function updateNipCounter() {
-    const nipCounter = document.getElementById('nipCounter');
-    if (nipCounter && inputNip) {
-        nipCounter.textContent = `${inputNip.value.length} / 18 Digit`;
-    }
-}
-
-function saveSettings() {
-    if (!inputNip) return;
-    const nipVal = inputNip.value.trim();
-    const nipErrorEl = document.getElementById('nipError');
-    if (nipVal && nipVal.length !== 18) {
-        if (nipErrorEl) nipErrorEl.classList.remove('hidden');
-        return;
-    }
-    if (nipErrorEl) nipErrorEl.classList.add('hidden');
-    
-    const settingNamaEl = document.getElementById('inputSettingNama');
-    const settingJabatanEl = document.getElementById('inputSettingJabatan');
-
-    if (settingNamaEl) userProfile.nama = settingNamaEl.value.trim();
-    userProfile.nip = nipVal;
-    if (settingJabatanEl) userProfile.jabatan = settingJabatanEl.value.trim();
-
-    localStorage.setItem('satpolpp_inhu_trantibum_profile', JSON.stringify(userProfile));
-    applyUserProfileUI();
-    updatePreview();
-    for (let i = 1; i <= 2; i++) updateCsPreview(i);
-    if (settingsModal) settingsModal.classList.add('hidden');
-}
-
-function bindEvents() {
-    const inputTanggal = document.getElementById('inputTanggal');
-    if (inputTanggal) inputTanggal.addEventListener('input', updatePreview);
-    
-    const inputDasar = document.getElementById('inputDasar');
-    if (inputDasar) inputDasar.addEventListener('input', updatePreview);
-    
-    const btnAddLokasi = document.getElementById('btnAddLokasi');
-    if (btnAddLokasi) btnAddLokasi.addEventListener('click', () => addLokasiInput());
-    
-    const inputKegiatan = document.getElementById('inputKegiatan');
-    if (inputKegiatan) inputKegiatan.addEventListener('input', updatePreview);
-    
-    const btnAddHasil = document.getElementById('btnAddHasil');
-    if (btnAddHasil) btnAddHasil.addEventListener('click', () => addHasilInput());
-    
-    const btnAddAnggota = document.getElementById('btnAddAnggota');
-    if (btnAddAnggota) btnAddAnggota.addEventListener('click', () => addAnggotaInput());
-
-    const fotoBtn = document.getElementById('anggotaModeFotoBtn');
-    const manualBtn = document.getElementById('anggotaModeManualBtn');
-    const fotoWrapper = document.getElementById('anggotaFotoWrapper');
-    const manualWrapper = document.getElementById('anggotaManualWrapper');
-
-    if (fotoBtn && manualBtn) {
-        fotoBtn.addEventListener('click', () => {
-            fotoBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
-            manualBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
-            fotoWrapper.classList.remove('hidden');
-            manualWrapper.classList.add('hidden');
-            updatePreview();
-        });
-
-        manualBtn.addEventListener('click', () => {
-            manualBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
-            fotoBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
-            manualWrapper.classList.remove('hidden');
-            fotoWrapper.classList.add('hidden');
-            updatePreview();
-        });
-    }
-
-    const inputAnggotaFoto = document.getElementById('inputAnggotaFoto');
-    if (inputAnggotaFoto) {
-        inputAnggotaFoto.addEventListener('change', async (e) => {
-            const files = Array.from(e.target.files);
-            if (silahappAnggotaPhotos.length + files.length > 10) { alert('Maksimal 10 foto nama anggota!'); return; }
-            for (const file of files) {
-                if (file.type.startsWith('image/')) {
-                    if (silahappAnggotaPhotos.length < 10) {
-                        const compressedBase64 = await compressImage(file, 2);
-                        silahappAnggotaPhotos.push(compressedBase64);
-                        updatePreview();
-                    }
-                }
-            }
-            e.target.value = '';
-        });
-    }
-
-    const inputDokumentasi = document.getElementById('inputDokumentasi');
-    if (inputDokumentasi) {
-        inputDokumentasi.addEventListener('change', async (e) => {
-            const files = Array.from(e.target.files);
-            if (uploadedPhotos.length + files.length > 10) { alert('Maksimal 10 foto dokumentasi!'); return; }
-            for (const file of files) {
-                if (file.type.startsWith('image/')) {
-                    if (uploadedPhotos.length < 10) { 
-                        const compressedBase64 = await compressImage(file, 2);
-                        uploadedPhotos.push(compressedBase64); 
-                        renderPhotoPreview(); 
-                    }
-                }
-            }
-            e.target.value = '';
-        });
-    }
-
-    ['silahapp', '1', '2'].forEach(key => {
-        const fileInp = document.getElementById(`inputSidebarLogo-${key}`);
-        if (fileInp) {
-            fileInp.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        userProfile.sidebarIcons[key] = ev.target.result;
-                        const iconImg = document.getElementById(`sidebarIcon-${key}`);
-                        if (iconImg) iconImg.src = ev.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
+            manualBtn.addEventListener('click', () => {
+                this.state.anggotaMode = 'manual';
+                manualBtn.className = 'flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition';
+                fotoBtn.className = 'flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition';
+                if (manualWrapper) manualWrapper.classList.remove('hidden');
+                if (fotoWrapper) fotoWrapper.classList.add('hidden');
+                this.updatePreview();
             });
         }
-    });
 
-    const tabFormBtn = document.getElementById('tabFormBtn');
-    const tabPreviewBtn = document.getElementById('tabPreviewBtn');
-    if (tabFormBtn && tabPreviewBtn) {
-        tabFormBtn.addEventListener('click', () => {
-            document.getElementById('formSection').classList.remove('hidden');
-            document.getElementById('previewSection').classList.add('hidden');
-            tabFormBtn.className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow-md';
-            tabPreviewBtn.className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
-        });
+        const addAnggotaBtn = document.getElementById(
+            this.isMain ? 'btnAddAnggota' : `csBtnAddManualAnggota-${this.key}`
+        );
+        if (addAnggotaBtn) {
+            addAnggotaBtn.addEventListener('click', () => {
+                if (this.isMain) this.addMainAnggotaInput();
+                else this.addCsManualAnggotaInput();
+            });
+        }
 
-        tabPreviewBtn.addEventListener('click', () => {
-            document.getElementById('previewSection').classList.remove('hidden');
-            document.getElementById('formSection').classList.add('hidden');
-            tabPreviewBtn.className = 'flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow-md';
-            tabFormBtn.className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300';
-        });
-    }
-
-    const btnUploadDrive = document.getElementById('btnUploadDrive');
-    if (btnUploadDrive) {
-        btnUploadDrive.addEventListener('click', async () => {
-            const originalText = btnUploadDrive.innerHTML;
-            btnUploadDrive.innerHTML = '<span class="animate-pulse">Membuat PDF & Mengunggah...</span>';
-            btnUploadDrive.disabled = true;
-
-            try {
-                const filename = generatePdfFilename('SiLAHAPP', 'inputTanggal');
-                const element = document.getElementById('pdfContent');
-
-                const opt = { margin: [0,0,0,0], filename: filename, image: {type:'jpeg', quality:0.92}, html2canvas: {scale:1.5, useCORS:true}, jsPDF: {unit:'mm', format:'a4'} };
-                const pdfDataUri = await html2pdf().set(opt).from(element).output('datauristring');
-
-                const link = document.createElement('a');
-                link.href = pdfDataUri;
-                link.download = filename;
-                link.click();
-
-                const pdfBase64 = pdfDataUri.split(',')[1];
-                await uploadToVercel(filename, pdfBase64, 'application/pdf', PDF_DRIVE_FOLDERS['silahapp']);
-
-                safeSetTextContent('driveFilenameLabel', filename);
-                const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
-                if (noticeDesc) {
-                    noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> secara lokal dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Silahkan klik tombol di bawah untuk membuka Folder Google Drive dan <b>Check File PDF anda</b>.`;
+        const inpAnggotaFoto = document.getElementById(
+            this.isMain ? 'inputAnggotaFoto' : `csInputAnggotaFoto-${this.key}`
+        );
+        if (inpAnggotaFoto) {
+            inpAnggotaFoto.addEventListener('change', async (e) => {
+                const files = Array.from(e.target.files);
+                if (this.state.anggotaPhotos.length + files.length > 10) {
+                    alert('Maksimal 10 foto nama anggota!');
+                    return;
                 }
-                
-                const btnClose = document.getElementById('btnCloseDriveNotice');
-                if (btnClose) {
-                    btnClose.textContent = "Buka Folder Google Drive";
-                    btnClose.onclick = () => {
-                        window.open(GOOGLE_DRIVE_FOLDER_URL, '_blank');
-                        if (driveNoticeModal) driveNoticeModal.classList.add('hidden');
-                    };
+                for (const file of files) {
+                    if (file.type.startsWith('image/')) {
+                        if (this.state.anggotaPhotos.length < 10) {
+                            const compressed = await MediaHelper.compressImage(file, 2);
+                            this.state.anggotaPhotos.push(compressed);
+                            this.updatePreview();
+                        }
+                    }
                 }
-                
-                if (driveNoticeModal) driveNoticeModal.classList.remove('hidden');
+                e.target.value = '';
+            });
+        }
 
-            } catch (err) {
-                console.error(err);
-                alert('Gagal memproses laporan: ' + err.message);
-            } finally {
-                btnUploadDrive.innerHTML = originalText;
-                btnUploadDrive.disabled = false;
-            }
-        });
+        const inpDokumentasi = document.getElementById(
+            this.isMain ? 'inputDokumentasi' : `csInputDokumentasi-${this.key}`
+        );
+        if (inpDokumentasi) {
+            inpDokumentasi.addEventListener('change', async (e) => {
+                const files = Array.from(e.target.files);
+                if (this.state.uploadedPhotos.length + files.length > 10) {
+                    alert('Maksimal 10 foto dokumentasi!');
+                    return;
+                }
+                for (const file of files) {
+                    if (file.type.startsWith('image/')) {
+                        if (this.state.uploadedPhotos.length < 10) {
+                            const compressed = await MediaHelper.compressImage(file, 2);
+                            this.state.uploadedPhotos.push(compressed);
+                            this.updatePreview();
+                        }
+                    }
+                }
+                e.target.value = '';
+            });
+        }
+
+        const tabFormBtn = document.getElementById(this.isMain ? 'tabFormBtn' : `csTabFormBtn-${this.key}`);
+        const tabPreviewBtn = document.getElementById(this.isMain ? 'tabPreviewBtn' : `csTabPreviewBtn-${this.key}`);
+        const formSection = document.getElementById(this.isMain ? 'formSection' : `csFormSection-${this.key}`);
+        const previewSection = document.getElementById(this.isMain ? 'previewSection' : `csPreviewSection-${this.key}`);
+
+        if (tabFormBtn && tabPreviewBtn && formSection && previewSection) {
+            const activeColor = this.isMain ? 'bg-amber-500 text-slate-950' : 'bg-indigo-500 text-white';
+
+            tabFormBtn.addEventListener('click', () => {
+                formSection.classList.remove('hidden');
+                previewSection.classList.add('hidden');
+                tabFormBtn.className = `flex-1 py-2 text-center font-bold text-xs rounded-lg ${activeColor} shadow-md transition`;
+                tabPreviewBtn.className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300 transition';
+            });
+
+            tabPreviewBtn.addEventListener('click', () => {
+                previewSection.classList.remove('hidden');
+                formSection.classList.add('hidden');
+                tabPreviewBtn.className = `flex-1 py-2 text-center font-bold text-xs rounded-lg ${activeColor} shadow-md transition`;
+                tabFormBtn.className = 'flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300 transition';
+            });
+        }
+
+        const btnUpload = document.getElementById(this.isMain ? 'btnUploadDrive' : `csBtnUploadDrive-${this.key}`);
+        if (btnUpload) {
+            btnUpload.addEventListener('click', async () => {
+                const info = CONFIG.FOLDERS[this.key];
+                const dateId = this.getId('inputTanggal');
+                const filename = PdfService.generateFilename(info.prefix, dateId, currentProfile.nama);
+                const containerId = this.isMain ? 'pdfContent' : `csPdfContent-${this.key}`;
+
+                await PdfService.processAndUpload({
+                    buttonEl: btnUpload,
+                    containerId: containerId,
+                    filename: filename,
+                    folderId: info.folderId,
+                    driveFolderUrl: info.driveFolderUrl
+                });
+            });
+        }
     }
-
-    if (inputNip) {
-        inputNip.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/\D/g, '');
-            updateNipCounter();
-            const nipErrorEl = document.getElementById('nipError');
-            if (e.target.value.length === 18 && nipErrorEl) nipErrorEl.classList.add('hidden');
-        });
-    }
-
-    document.querySelectorAll('#btnSettings').forEach(btn => {
-        btn.addEventListener('click', () => { applyUserProfileUI(); if (settingsModal) settingsModal.classList.remove('hidden'); });
-    });
-
-    const closeSettings = document.getElementById('btnCloseSettings');
-    if (closeSettings) closeSettings.addEventListener('click', () => { if (settingsModal) settingsModal.classList.add('hidden'); });
-    
-    const cancelSettings = document.getElementById('btnCancelSettings');
-    if (cancelSettings) cancelSettings.addEventListener('click', () => { if (settingsModal) settingsModal.classList.add('hidden'); });
-    
-    const saveSettingsBtn = document.getElementById('btnSaveSettings');
-    if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
 }
+
+const NavigationManager = {
+    init() {
+        const navBtns = document.querySelectorAll('.top-nav-btn');
+        navBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const target = btn.getAttribute('data-target');
+                navBtns.forEach((b) => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const appViews = document.querySelectorAll('.app-view');
+                appViews.forEach((view) => {
+                    view.classList.add('hidden');
+                    view.classList.remove('flex', 'active-view');
+                });
+
+                const targetView = document.getElementById(`view-${target}`);
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                    targetView.classList.add('flex', 'active-view');
+                }
+            });
+        });
+
+        const csModal = document.getElementById('csModal');
+        const btnOpenCs = document.getElementById('btnOpenCsModal');
+        const btnCloseCs = document.getElementById('btnCloseCsModal');
+        if (btnOpenCs && csModal && btnCloseCs) {
+            btnOpenCs.addEventListener('click', () => csModal.classList.remove('hidden'));
+            btnCloseCs.addEventListener('click', () => csModal.classList.add('hidden'));
+            csModal.addEventListener('click', (e) => {
+                if (e.target === csModal) csModal.classList.add('hidden');
+            });
+        }
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    StorageService.init();
+    generateComingSoonViews();
+
+    const initialProfile = StorageService.getProfile();
+    ProfileManager.applyUI(initialProfile);
+    ProfileManager.bindEvents();
+
+    const controllers = {
+        silahapp: new ReportController('silahapp'),
+        1: new ReportController(1),
+        2: new ReportController(2)
+    };
+
+    controllers.silahapp.init();
+    controllers[1].init();
+    controllers[2].init();
+
+    NavigationManager.init();
+    lucide.createIcons();
+});
