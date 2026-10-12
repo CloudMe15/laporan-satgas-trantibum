@@ -575,13 +575,6 @@ const ProfileManager = {
             }
         }
 
-        const setLeftPrev = document.getElementById('settingLogoLeftPreview');
-        if (setLeftPrev) setLeftPrev.src = logoLeft;
-        const setRightPrev = document.getElementById('settingLogoRightPreview');
-        if (setRightPrev) setRightPrev.src = logoRight;
-        const setPesutPrev = document.getElementById('settingLogoPesutPreview');
-        if (setPesutPrev) handlePesutImg(setPesutPrev);
-
         const sidebarPesut = document.getElementById('sidebarIcon-1');
         if (sidebarPesut) handlePesutImg(sidebarPesut);
 
@@ -597,77 +590,6 @@ const ProfileManager = {
     },
 
     bindEvents() {
-        const inpLeft = document.getElementById('inputSettingLogoLeft');
-        if (inpLeft) {
-            inpLeft.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const dataUrl = await MediaHelper.readFileAsDataURL(file);
-                    currentProfile.logoLeft = dataUrl;
-                    const prev = document.getElementById('settingLogoLeftPreview');
-                    if (prev) prev.src = dataUrl;
-                }
-            });
-        }
-
-        const inpRight = document.getElementById('inputSettingLogoRight');
-        if (inpRight) {
-            inpRight.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const dataUrl = await MediaHelper.readFileAsDataURL(file);
-                    currentProfile.logoRight = dataUrl;
-                    const prev = document.getElementById('settingLogoRightPreview');
-                    if (prev) prev.src = dataUrl;
-                }
-            });
-        }
-
-        const inpPesut = document.getElementById('inputSettingLogoPesut');
-        if (inpPesut) {
-            inpPesut.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const dataUrl = await MediaHelper.readFileAsDataURL(file);
-                    if (!currentProfile.sidebarIcons) currentProfile.sidebarIcons = {};
-                    currentProfile.sidebarIcons['1'] = dataUrl;
-                    const prev = document.getElementById('settingLogoPesutPreview');
-                    if (prev) prev.src = dataUrl;
-                }
-            });
-        }
-
-        const btnResetLeft = document.getElementById('btnResetLogoLeft');
-        if (btnResetLeft) {
-            btnResetLeft.addEventListener('click', () => {
-                currentProfile.logoLeft = CONFIG.DEFAULT_LOGOS.INHU;
-                const prev = document.getElementById('settingLogoLeftPreview');
-                if (prev) prev.src = CONFIG.DEFAULT_LOGOS.INHU;
-                if (inpLeft) inpLeft.value = '';
-            });
-        }
-
-        const btnResetRight = document.getElementById('btnResetLogoRight');
-        if (btnResetRight) {
-            btnResetRight.addEventListener('click', () => {
-                currentProfile.logoRight = CONFIG.DEFAULT_LOGOS.SATPOL;
-                const prev = document.getElementById('settingLogoRightPreview');
-                if (prev) prev.src = CONFIG.DEFAULT_LOGOS.SATPOL;
-                if (inpRight) inpRight.value = '';
-            });
-        }
-
-        const btnResetPesut = document.getElementById('btnResetLogoPesut');
-        if (btnResetPesut) {
-            btnResetPesut.addEventListener('click', () => {
-                if (!currentProfile.sidebarIcons) currentProfile.sidebarIcons = {};
-                currentProfile.sidebarIcons['1'] = CONFIG.DEFAULT_LOGOS.PESUT_ICON;
-                const prev = document.getElementById('settingLogoPesutPreview');
-                if (prev) prev.src = CONFIG.DEFAULT_LOGOS.PESUT_ICON;
-                if (inpPesut) inpPesut.value = '';
-            });
-        }
-
         const inputNip = document.getElementById('inputSettingNip');
         if (inputNip) {
             inputNip.addEventListener('input', (e) => {

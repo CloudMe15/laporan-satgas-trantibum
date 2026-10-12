@@ -11,7 +11,7 @@ Sistem informasi pelaporan harian piket/patroli Trantibum (**SiLAHAPP**) dan pel
 - **Pratinjau Dokumen A4 Real-Time**: Standar tata naskah dinas A4 dengan kop resmi Pemerintah Kabupaten Indragiri Hulu dan Satpol PP.
 - **Export Dokumen PDF**: Kompilasi dokumen PDF resolusi tinggi berbasis client-side rendering via `html2pdf.js`.
 - **Integrasi Cloud Storage**: Sinkronisasi dokumen digital ke Google Drive resmi Satpol PP Indragiri Hulu melalui dual-mode upload (API Proxy & Direct Endpoint).
-- **Manajemen Profil & Kustomisasi Logo**: Konfigurasi identitas aparatur (Nama, NIP 18-digit, Jabatan) dan logo instansi berbasis penyimpanan lokal browser (`localStorage`).
+- **Manajemen Profil Aparatur**: Konfigurasi identitas aparatur pelapor (Nama, NIP 18-digit, Jabatan) berbasis penyimpanan lokal browser (`localStorage`) dengan logo kedinasan resmi terintegrasi permanen.
 - **Pusat Layanan Bantuan**: Integrasi kanal komunikasi Customer Service dinas via WhatsApp.
 
 ---

@@ -113,15 +113,6 @@ body {
     object-fit: contain !important;
 }
 
-#settingLogoLeftPreview, #settingLogoRightPreview, #settingLogoPesutPreview {
-    background-color: #ffffff !important;
-    padding: 4px !important;
-    max-height: 100% !important;
-    max-width: 100% !important;
-    border-radius: 6px !important;
-    object-fit: contain !important;
-}
-
 @page {
     size: A4 portrait;
     margin: 20mm 16mm;
