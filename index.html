@@ -288,6 +288,30 @@
         </div>
     </div>
 
+    <div id="confirmUploadModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
+        <div class="bg-white/95 backdrop-blur-xl rounded-3xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-100 text-center space-y-4">
+            <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
+                <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-base font-extrabold text-slate-900">Konfirmasi Kirim Laporan</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                Pastikan seluruh data laporan kegiatan piket/patroli telah diisi dengan benar sebelum dikirim ke Google Drive resmi.
+            </p>
+            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 text-left text-xs space-y-2">
+                <div class="flex justify-between items-center"><span class="text-slate-500 font-semibold">Modul:</span><span id="confirmModalModul" class="font-extrabold text-slate-800">-</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-500 font-semibold">Tanggal:</span><span id="confirmModalTanggal" class="font-bold text-slate-800">-</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-500 font-semibold">Petugas:</span><span id="confirmModalPetugas" class="font-bold text-slate-800 truncate max-w-[180px]">-</span></div>
+            </div>
+            <div class="pt-2 flex gap-2.5">
+                <button type="button" id="btnCancelConfirmUpload" class="flex-1 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl transition">Batal</button>
+                <button type="button" id="btnProceedConfirmUpload" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">Kirim Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Honeypot Security Field (Anti-Bot Trap) -->
+    <input type="text" id="hpSecurityTrap" name="website_security_field" style="display:none !important; position:absolute; left:-9999px; opacity:0; pointer-events:none;" tabindex="-1" autocomplete="off">
+
     <script src="app.js"></script>
 </body>
 </html>
