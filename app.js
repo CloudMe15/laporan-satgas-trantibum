@@ -1,5 +1,5 @@
 const CONFIG = {
-    APP_VERSION: 'v42_pesut_emblem_fixed',
+    APP_VERSION: 'v43_official_kop_restored',
     DEFAULT_LOGOS: {
         INHU: 'https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb',
         SATPOL: 'https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr',
@@ -323,7 +323,6 @@ function generateComingSoonViews() {
     let htmlContent = '';
     for (let i = 1; i <= 2; i++) {
         const info = CONFIG.FOLDERS[i];
-        const rightLogo = (i === 1) ? CONFIG.DEFAULT_LOGOS.PESUT_ICON : CONFIG.DEFAULT_LOGOS.SATPOL;
         htmlContent += `
             <div id="view-coming-soon-${i}" class="app-view hidden flex-1 flex-col">
                 <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
@@ -331,7 +330,7 @@ function generateComingSoonViews() {
                         <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
                             <div class="flex items-center gap-2">
                                 <img id="csHeaderLogoLeft-${i}" src="${CONFIG.DEFAULT_LOGOS.INHU}" class="w-8 h-8 object-contain bg-white rounded p-0.5" alt="Logo Kiri">
-                                <img id="csHeaderLogoRight-${i}" src="${rightLogo}" class="w-8 h-8 object-contain bg-white rounded p-0.5" alt="Logo Kanan">
+                                <img id="csHeaderLogoRight-${i}" src="${CONFIG.DEFAULT_LOGOS.SATPOL}" class="w-8 h-8 object-contain bg-white rounded p-0.5" alt="Logo Kanan">
                             </div>
                             <div>
                                 <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">${info.title}</h1>
@@ -461,7 +460,7 @@ function generateComingSoonViews() {
                                             <div class="w-full h-0.5 bg-slate-900 my-1"></div>
                                             <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN ${info.title.toUpperCase()}</h1>
                                         </div>
-                                        <div class="flex-shrink-0 flex items-center justify-center"><img id="csPreviewLogoRight-${i}" src="${rightLogo}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;" alt="Logo Kanan"></div>
+                                        <div class="flex-shrink-0 flex items-center justify-center"><img id="csPreviewLogoRight-${i}" src="${CONFIG.DEFAULT_LOGOS.SATPOL}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;" alt="Logo Satpol"></div>
                                     </div>
                                     <div class="preview-block pdf-box shadow-sm mb-4">
                                         <div class="grid grid-cols-2 gap-2 text-[11px]">
@@ -555,24 +554,12 @@ const ProfileManager = {
             const csHLeft = document.getElementById(`csHeaderLogoLeft-${i}`);
             if (csHLeft) csHLeft.src = logoLeft;
             const csHRight = document.getElementById(`csHeaderLogoRight-${i}`);
-            if (csHRight) {
-                if (i === 1) {
-                    handlePesutImg(csHRight);
-                } else {
-                    csHRight.src = logoRight;
-                }
-            }
+            if (csHRight) csHRight.src = logoRight;
 
             const csPLeft = document.getElementById(`csPreviewLogoLeft-${i}`);
             if (csPLeft) csPLeft.src = logoLeft;
             const csPRight = document.getElementById(`csPreviewLogoRight-${i}`);
-            if (csPRight) {
-                if (i === 1) {
-                    handlePesutImg(csPRight);
-                } else {
-                    csPRight.src = logoRight;
-                }
-            }
+            if (csPRight) csPRight.src = logoRight;
         }
 
         const sidebarPesut = document.getElementById('sidebarIcon-1');
