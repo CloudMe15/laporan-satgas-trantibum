@@ -153,11 +153,13 @@ const MediaHelper = {
     }
 };
 
-const PdfService = {
-    cooldownUntil: 0,
-    COOLDOWN_SECONDS: 5,
-
-    async uploadPdf(filename, base64Data, mimeType, folderId) {
+/**
+ * ArchiveService (Codebase Design: Deep Module for official report archival)
+ * Small Interface: submitReport({ filename, base64Data, mimeType, folderId })
+ * Deep Implementation: Manages serverless upload proxy, headers, security tokens, honeypot traps, and direct GAS fallback.
+ */
+const ArchiveService = {
+    async submitReport({ filename, base64Data, mimeType = 'application/pdf', folderId }) {
         const gasUrl = 'https://script.google.com/macros/s/AKfycbzpSCFC7HnISdchHP9lDJrQihSj01cyLW53yL1NsC918xkyRuP3eL1JjRhFy1c2WJKyqw/exec';
         const trapHp = document.getElementById('hpSecurityTrap')?.value || '';
 
@@ -180,12 +182,11 @@ const PdfService = {
             if (response.ok) {
                 const result = await response.json();
                 if (result.success) return result;
-                throw new Error(result.error || 'Server menolak file');
+                throw new Error(result.error || 'Penyimpanan menolak berkas.');
             } else {
                 const errData = await response.json().catch(() => ({}));
                 const errMsg = errData.error || `Server menolak upload (Status ${response.status})`;
-                // Tolakan keamanan (429, 401, 403, 400) langsung lempar agar tidak ditembus via fallback
-                if (response.status === 429 || response.status === 401 || response.status === 403 || response.status === 400) {
+                if ([400, 401, 403, 429].includes(response.status)) {
                     throw new Error(errMsg);
                 }
                 throw new Error(errMsg);
@@ -199,9 +200,10 @@ const PdfService = {
             ) {
                 throw apiErr;
             }
-            console.warn('Fallback direct to GAS:', apiErr);
+            console.warn('Fallback direct to Google Apps Script:', apiErr);
         }
 
+        // Direct fallback to Google Apps Script endpoint
         const formData = new URLSearchParams();
         formData.append('filename', filename);
         formData.append('fileBase64', base64Data);
@@ -218,10 +220,49 @@ const PdfService = {
         try {
             result = JSON.parse(textResult);
         } catch (e) {
-            throw new Error(`Invalid response: ${textResult}`);
+            throw new Error(`Respons arsip tidak valid: ${textResult}`);
         }
-        if (!result.success) throw new Error(result.error || 'Server rejected upload');
+        if (!result.success) throw new Error(result.error || 'Server menolak penyimpanan berkas.');
         return result;
+    }
+};
+
+/**
+ * DocumentService (Codebase Design: Deep Module for document generation & download)
+ * Small Interface: generatePdfDataUri(containerId, filename), triggerDownload(dataUri, filename)
+ */
+const DocumentService = {
+    async generatePdfDataUri(containerId, filename) {
+        const element = document.getElementById(containerId);
+        if (!element) throw new Error(`Elemen konten PDF tidak ditemukan (${containerId})`);
+
+        const opt = {
+            margin: [0, 0, 0, 0],
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: { scale: 1.6, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        return await html2pdf().set(opt).from(element).output('datauristring');
+    },
+
+    triggerDownload(dataUri, filename) {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = dataUri;
+        downloadLink.download = filename;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+};
+
+const PdfService = {
+    cooldownUntil: 0,
+    COOLDOWN_SECONDS: 5,
+
+    async uploadPdf(filename, base64Data, mimeType, folderId) {
+        return await ArchiveService.submitReport({ filename, base64Data, mimeType, folderId });
     },
 
     formatIndonesianDate(dateStr) {
@@ -253,7 +294,7 @@ const PdfService = {
         const btnProceed = document.getElementById('btnProceedConfirmUpload');
 
         if (!modal || !btnProceed) {
-            if (confirm(`Kirim Laporan Resmi ke Google Drive?\n\nModul: ${moduleTitle}\nTanggal: ${dateFormatted}\nPetugas: ${officerName}`)) {
+            if (confirm(`Kirim Laporan Resmi ke Arsip Dinas?\n\nModul: ${moduleTitle}\nTanggal: ${dateFormatted}\nPetugas: ${officerName}`)) {
                 onConfirm();
             }
             return;
@@ -281,44 +322,30 @@ const PdfService = {
 
     async processAndUpload({ buttonEl, containerId, filename, folderId, driveFolderUrl }) {
         const originalHtml = buttonEl.innerHTML;
-        buttonEl.innerHTML = '<span class="animate-pulse">Membuat PDF & Mengunggah...</span>';
+        buttonEl.innerHTML = '<span class="flex items-center justify-center gap-2"><svg class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg> Memproses Dokumen & Mengirim...</span>';
         buttonEl.disabled = true;
 
-        let pdfDataUri = null;
         try {
-            const element = document.getElementById(containerId);
-            if (!element) throw new Error(`Elemen konten PDF tidak ditemukan (${containerId})`);
+            // 1. Generate PDF Data URI
+            const pdfDataUri = await DocumentService.generatePdfDataUri(containerId, filename);
 
-            const opt = {
-                margin: [0, 0, 0, 0],
-                filename: filename,
-                image: { type: 'jpeg', quality: 0.95 },
-                html2canvas: { scale: 1.6, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+            // 2. Unduh salinan PDF ke perangkat lokal
+            DocumentService.triggerDownload(pdfDataUri, filename);
 
-            pdfDataUri = await html2pdf().set(opt).from(element).output('datauristring');
-
-            const downloadLink = document.createElement('a');
-            downloadLink.href = pdfDataUri;
-            downloadLink.download = filename;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-
+            // 3. Setorkan ke arsip resmi Google Drive
             let uploadSuccess = false;
             let uploadErrorMessage = '';
             try {
                 const pdfBase64 = pdfDataUri.split(',')[1];
-                await this.uploadPdf(filename, pdfBase64, 'application/pdf', folderId);
+                await ArchiveService.submitReport({ filename, base64Data: pdfBase64, folderId });
                 uploadSuccess = true;
-                // Aktifkan jeda waktu cooldown setelah pengiriman sukses
                 this.cooldownUntil = Date.now() + (this.COOLDOWN_SECONDS * 1000);
             } catch (uploadErr) {
-                console.warn('Google Drive upload notice:', uploadErr);
+                console.warn('Google Drive archival notice:', uploadErr);
                 uploadErrorMessage = uploadErr.message;
             }
 
+            // 4. Tampilkan dialog informasi hasil
             this.showDriveNoticeModal(filename, driveFolderUrl, uploadSuccess, uploadErrorMessage);
 
         } catch (err) {
@@ -333,23 +360,23 @@ const PdfService = {
     showDriveNoticeModal(filename, driveFolderUrl, uploadSuccess, uploadErrorMessage) {
         const driveNoticeModal = document.getElementById('driveNoticeModal');
         const filenameLabel = document.getElementById('driveFilenameLabel');
-        const noticeDesc = document.querySelector('#driveNoticeModal p.text-slate-500');
+        const noticeDesc = document.getElementById('driveNoticeDesc') || document.querySelector('#driveNoticeModal p.text-slate-500');
         const btnClose = document.getElementById('btnCloseDriveNotice');
 
         if (filenameLabel) filenameLabel.textContent = filename;
 
         if (noticeDesc) {
             if (uploadSuccess) {
-                noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> ke perangkat Anda dan <b>diunggah otomatis</b> ke Google Drive.<br><br>Klik tombol di bawah untuk membuka Folder Google Drive dan memeriksa file Anda.`;
+                noticeDesc.innerHTML = `Dokumen Laporan PDF telah berhasil <b>diunduh</b> ke perangkat Anda dan <b>disimpan di Arsip Resmi Satpol PP</b>.<br><br>Klik tombol di bawah untuk membuka Folder Arsip dan memeriksa dokumen Anda.`;
             } else {
-                noticeDesc.innerHTML = `File Laporan PDF telah berhasil <b>diunduh</b> ke komputer Anda.<br><span class="text-amber-600 text-[11px] block mt-1">Catatan: Pengunggahan otomatis ke Google Drive mengalami kendala (${uploadErrorMessage || 'offline/API limit'}). Anda dapat mengunggah file yang sudah diunduh secara manual.</span>`;
+                noticeDesc.innerHTML = `Dokumen Laporan PDF telah berhasil <b>diunduh</b> ke komputer Anda.<br><span class="text-amber-700 text-xs block mt-1.5 font-medium">Catatan: Pengunggahan otomatis ke Google Drive dinas terkendala (${uploadErrorMessage || 'koneksi/kuota'}). Berkas PDF yang tersimpan di perangkat Anda dapat disetor manual.</span>`;
             }
         }
 
         if (btnClose) {
-            btnClose.textContent = uploadSuccess ? "Buka Folder Google Drive" : "Tutup / Buka Folder Drive";
+            btnClose.textContent = uploadSuccess ? "Buka Folder Arsip Dinas" : "Tutup Notifikasi";
             btnClose.onclick = () => {
-                if (driveFolderUrl) window.open(driveFolderUrl, '_blank');
+                if (uploadSuccess && driveFolderUrl) window.open(driveFolderUrl, '_blank');
                 if (driveNoticeModal) driveNoticeModal.classList.add('hidden');
             };
         }
@@ -513,7 +540,10 @@ function generateComingSoonViews() {
                             <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (${info.title})
                         </span>
                         <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <button id="csBtnUploadDrive-1" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg transition active:scale-95">Download dan Upload</button>
+                            <button id="csBtnUploadDrive-1" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-md transition flex items-center justify-center gap-2">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                                <span>Kirim Laporan & Simpan PDF</span>
+                            </button>
                         </div>
                     </div>
                     <div class="overflow-x-auto pb-6">
