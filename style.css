@@ -1,137 +1,213 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+/* Hallmark · checked: 2026-11-09 · genre: modern-minimal · theme: cobalt · shape: app screen
+ * critique: Authoritative civil-defense operational reporting suite for Satpol PP Indragiri Hulu. Replaced messy glassmorphism and low-contrast overlays with high-contrast surfaces, structured OKLCH design tokens, crisp document typography, and dignified official aesthetics.
+ * built: Hallmark · redesign: full · v2.0.0 */
 
-body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #0f172a;
-    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.15), rgba(15, 23, 42, 0.3)),
-                       url('https://lh3.googleusercontent.com/d/1aG61Nm8bMLfZVZj3Kv94YyLKScMjBzhS');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    background-attachment: fixed;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+    /* Base Color Tokens */
+    --color-paper: #090e1a;
+    --color-paper-elevated: #0f172a;
+    --color-paper-card: #ffffff;
+    --color-paper-subtle: #f8fafc;
+    --color-paper-preview-bg: #1e293b;
+
+    --color-ink: #0f172a;
+    --color-ink-2: #334155;
+    --color-muted: #64748b;
+    --color-ink-inverse: #f8fafc;
+    --color-muted-inverse: #94a3b8;
+
+    --color-border: #e2e8f0;
+    --color-border-subtle: #f1f5f9;
+    --color-border-dark: #1e293b;
+    --color-border-dark-subtle: #334155;
+
+    /* Semantic Brand Accents (Official Satpol PP & Civil Defense) */
+    --color-accent-navy: #1e3a8a;
+    --color-accent-cobalt: #0284c7;
+    --color-accent-cobalt-hover: #0369a1;
+    --color-accent-gold: #d97706;
+    --color-accent-gold-hover: #b45309;
+    --color-accent-gold-light: #fef3c7;
+    --color-accent-emerald: #059669;
+    --color-accent-emerald-hover: #047857;
+    --color-focus: #2563eb;
+
+    /* Typography */
+    --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+    /* Radii & Elevation */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+    --radius-pill: 9999px;
+
+    --shadow-card: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+    --shadow-popover: 0 20px 25px -5px rgba(15, 23, 42, 0.25), 0 8px 10px -6px rgba(15, 23, 42, 0.15);
+    --shadow-a4: 0 25px 45px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-/* Navigation */
+/* Base resets & Hallmark Floor Rules */
+html, body {
+    overflow-x: clip;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    color: var(--color-ink);
+    background-color: var(--color-paper);
+    background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(2, 132, 199, 0.12), transparent 70%),
+        linear-gradient(to bottom, #090e1a 0%, #0c1427 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Focus Visible Disciplines */
+:focus-visible {
+    outline: 2px solid var(--color-focus) !important;
+    outline-offset: 2px !important;
+}
+
+button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+    outline: 2px solid var(--color-focus) !important;
+    outline-offset: 2px !important;
+}
+
+/* Top Navbar Navigation */
 .top-navbar {
-    background: rgba(15, 23, 42, 0.35) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background-color: rgba(9, 14, 26, 0.92) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border-dark) !important;
 }
 
 .top-navbar .max-w-7xl {
-    background: rgba(15, 23, 42, 0.25) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    background-color: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid var(--color-border-dark-subtle) !important;
+    padding: 4px;
 }
 
 .top-nav-btn {
-    background: rgba(255, 255, 255, 0.06);
-    color: #cbd5e1;
+    background: transparent;
+    color: var(--color-muted-inverse);
+    border: 1px solid transparent;
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .top-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
-    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.06);
+    color: var(--color-ink-inverse);
 }
 
 .top-nav-btn.active {
-    background-color: rgba(245, 158, 11, 0.9);
-    color: #0f172a;
-    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
-}
-
-.main-content-wrapper {
-    margin-left: 0 !important;
+    background-color: var(--color-accent-gold) !important;
+    color: #0b1329 !important;
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);
 }
 
 .sidebar-logo-clean {
     width: 100% !important;
     height: 100% !important;
     object-fit: contain !important;
-    background: transparent !important;
-    mix-blend-mode: luminosity;
-    transition: filter 0.3s ease;
-}
-
-.top-nav-btn:hover .sidebar-logo-clean,
-.top-nav-btn.active .sidebar-logo-clean {
-    mix-blend-mode: normal;
 }
 
 .custom-sidebar-logo {
     width: 100% !important;
     height: 100% !important;
     object-fit: contain !important;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
 }
 
-/* Glass Panels */
-.glass-panel {
-    background: rgba(255, 255, 255, 0.45) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.65);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-}
-
-/* Header */
+/* Application Header */
 .glass-header {
-    background: rgba(15, 23, 42, 0.4) !important;
+    background-color: rgba(15, 23, 42, 0.95) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-bottom: 1px solid var(--color-border-dark) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
 }
 
-#headerLogoLeft, #headerLogoRight {
-    background-color: rgba(255, 255, 255, 0.9) !important;
-    padding: 3px !important;
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 6px !important;
-    object-fit: contain !important;
-}
-
-@media (min-width: 640px) {
-    #headerLogoLeft, #headerLogoRight {
-        width: 36px !important;
-        height: 36px !important;
-    }
-}
-
-.a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
-.a4-page .flex.items-center.justify-between.border-b-4 > div:last-child {
-    width: 24mm !important;
-    height: 28mm !important;
-}
-
-#previewLogoLeft, #previewLogoRight {
-    width: 100% !important;
-    height: 100% !important;
+#headerLogoLeft, #headerLogoRight, #csHeaderLogoLeft-1, #csHeaderLogoRight-1 {
     background-color: #ffffff !important;
-    padding: 6px !important;
+    padding: 3px !important;
+    width: 36px !important;
+    height: 36px !important;
     border-radius: 8px !important;
     object-fit: contain !important;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
+/* Card & Panels - Crisp high-contrast surface */
+.glass-panel {
+    background-color: var(--color-paper-card) !important;
+    border: 1px solid var(--color-border) !important;
+    box-shadow: var(--shadow-card) !important;
+    border-radius: var(--radius-xl) !important;
+}
+
+/* Form Styles & Inputs */
+input[type="text"], input[type="date"], textarea {
+    color: var(--color-ink);
+    background-color: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
+    border-color: var(--color-focus);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Preview Section Container */
+#previewSection {
+    background-color: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-xl);
+    padding: 1rem;
+}
+
+#previewSection .glass-panel {
+    background-color: #ffffff !important;
+    border: 1px solid var(--color-border) !important;
+}
+
+/* Document & A4 Layout */
 @page {
     size: A4 portrait;
     margin: 20mm 16mm;
 }
 
-/* Print & Document Layout */
 .a4-page {
     width: 210mm;
     min-height: 297mm;
     height: auto;
     padding: 20mm 16mm !important;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.65) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.75);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 4px;
+    box-shadow: var(--shadow-a4) !important;
     box-sizing: border-box;
-    color: #0f172a;
+    color: #0f172a !important;
 }
 
 .preview-block {
@@ -141,11 +217,11 @@ body {
 }
 
 .pdf-box {
-    background-color: rgba(248, 250, 252, 0.5) !important;
-    border: 1px solid rgba(203, 213, 225, 0.6) !important;
-    border-radius: 0.5rem !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
     padding: 0.5rem 0.75rem !important;
-    color: #1e293b !important;
+    color: #0f172a !important;
     box-sizing: border-box !important;
     width: 100% !important;
     display: block !important;
@@ -162,7 +238,7 @@ body {
     gap: 0.5rem !important;
     margin-bottom: 0.35rem !important;
     font-size: 0.75rem !important;
-    line-height: 1.4 !important;
+    line-height: 1.45 !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
 }
@@ -187,13 +263,13 @@ body {
 
 .photo-wrapper {
     width: 100%;
-    height: 135px;
+    height: 140px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(248, 250, 252, 0.5) !important;
-    border: 1px solid rgba(203, 213, 225, 0.6) !important;
-    border-radius: 0.5rem;
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px;
     overflow: hidden;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -208,24 +284,60 @@ body {
     display: block;
 }
 
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.1);
-}
-::-webkit-scrollbar-thumb {
-    background: rgba(202, 138, 4, 0.5);
-    border-radius: 9999px;
+.a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
+.a4-page .flex.items-center.justify-between.border-b-4 > div:last-child {
+    width: 24mm !important;
+    height: 28mm !important;
 }
 
+#previewLogoLeft, #previewLogoRight, #csPreviewLogoLeft-1, #csPreviewLogoRight-1 {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #ffffff !important;
+    padding: 4px !important;
+    border-radius: 6px !important;
+    object-fit: contain !important;
+}
+
+/* Modals */
+.modal-backdrop {
+    background-color: rgba(9, 14, 26, 0.85) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.2);
+}
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Print Rules */
 @media print {
-    body { background: none !important; }
-    .no-print { display: none !important; }
-    .main-content-wrapper { margin-left: 0 !important; }
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+    .no-print {
+        display: none !important;
+    }
+    .main-content-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
     .a4-page {
         box-shadow: none !important;
+        border: none !important;
         margin: 0 !important;
         width: 100% !important;
         padding: 20mm 16mm !important;

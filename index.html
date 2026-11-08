@@ -3,152 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Satgas Patroli Trantibum - Satpol PP Kab. Indragiri Hulu</title>
+    <meta name="theme-color" content="#090e1a">
+    <meta name="description" content="Sistem Pelaporan Satgas Trantibum (SiLAHAPP) & PESUT - Satpol PP Kabupaten Indragiri Hulu">
+    <title>SiLAHAPP & PESUT — Satpol PP Kab. Indragiri Hulu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between relative selection:bg-amber-500 selection:text-slate-950">
-    <div class="fixed inset-0 bg-slate-950/30 pointer-events-none z-0"></div>
+<body class="antialiased min-h-screen flex flex-col justify-between relative">
 
     <div class="app-layout flex-1 flex flex-col relative z-10 w-full">
-        <nav class="top-navbar no-print bg-slate-900/85 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-3 py-2 shadow-lg">
-            <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 bg-slate-800/80 p-1.5 rounded-2xl border border-slate-700 w-full sm:w-auto overflow-x-auto">
-                <button class="top-nav-btn active flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-extrabold text-slate-200 transition text-center" data-target="silahapp">
-                    <div class="w-5 h-5 flex items-center justify-center overflow-hidden flex-shrink-0">
-                        <img id="sidebarIcon-silahapp" src="https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313" class="w-full h-full object-contain sidebar-logo-clean" alt="SiLAHAPP">
-                    </div>
-                    <span>SiLAHAPP</span>
-                </button>
-                <button class="top-nav-btn flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-extrabold text-slate-300 transition text-center" data-target="coming-soon-1">
-                    <div class="w-5 h-5 flex items-center justify-center overflow-hidden rounded bg-slate-800 p-0.5 flex-shrink-0">
-                        <img id="sidebarIcon-1" src="logo-pesut.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1n-4lVxoLXLyZwzbFX8QYatC7nx9eMoyN';" class="w-full h-full object-contain custom-sidebar-logo" alt="PESUT">
-                    </div>
-                    <span>PESUT</span>
-                </button>
-                <button class="top-nav-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-xl text-[10px] font-extrabold text-slate-300 transition text-center leading-tight" data-target="coming-soon-2">
-                    <div class="w-5 h-5 flex items-center justify-center overflow-hidden rounded bg-slate-800 p-0.5 flex-shrink-0">
-                        <img id="sidebarIcon-2" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="w-full h-full object-contain custom-sidebar-logo" alt="Coming Soon">
-                    </div>
-                    <span class="text-left">
-                        <span class="block">Coming</span>
-                        <span class="block">Soon</span>
-                    </span>
-                </button>
+        <!-- Top Institutional Navigation -->
+        <nav class="top-navbar no-print sticky top-0 z-40 px-3 py-2.5 shadow-md">
+            <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 rounded-2xl w-full">
+                <div class="flex items-center gap-2 overflow-x-auto py-0.5">
+                    <button class="top-nav-btn active flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-bold transition text-center" data-target="silahapp">
+                        <div class="w-5 h-5 flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <img id="sidebarIcon-silahapp" src="logo-inhu.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1OpcEZCqFtfhS13i9m5qdyBPhxuPqy313';" class="w-full h-full object-contain sidebar-logo-clean" alt="SiLAHAPP">
+                        </div>
+                        <span>SiLAHAPP (Patroli)</span>
+                    </button>
+                    <button class="top-nav-btn flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-bold transition text-center" data-target="coming-soon-1">
+                        <div class="w-5 h-5 flex items-center justify-center overflow-hidden rounded bg-slate-800 p-0.5 flex-shrink-0">
+                            <img id="sidebarIcon-1" src="logo-pesut.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1n-4lVxoLXLyZwzbFX8QYatC7nx9eMoyN';" class="w-full h-full object-contain custom-sidebar-logo" alt="PESUT">
+                        </div>
+                        <span>PESUT (Surat Tugas)</span>
+                    </button>
+                    <button class="top-nav-btn flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-bold transition text-center" data-target="coming-soon-2">
+                        <div class="w-5 h-5 flex items-center justify-center overflow-hidden rounded bg-slate-800 p-0.5 flex-shrink-0">
+                            <img id="sidebarIcon-2" src="logo-satpol.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';" class="w-full h-full object-contain custom-sidebar-logo" alt="Lanjutan">
+                        </div>
+                        <span>Modul Lanjutan</span>
+                    </button>
+                </div>
+                <div class="hidden sm:flex items-center text-[11px] text-slate-400 font-semibold px-2">
+                    <span>Satpol PP Kab. Indragiri Hulu</span>
+                </div>
             </div>
         </nav>
 
         <div class="main-content-wrapper flex-1 flex flex-col justify-between">
+            <!-- Main SiLAHAPP View -->
             <div id="view-silahapp" class="app-view active-view flex-1 flex flex-col">
-                <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
-                    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
+                <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-md no-print">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
                         <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
-                            <div class="flex items-center gap-2">
-                                <img id="headerLogoLeft" src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" alt="Indragiri Hulu" class="w-8 h-8 object-contain">
-                                <img id="headerLogoRight" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" alt="Satpol PP" class="w-8 h-8 object-contain">
+                            <div class="flex items-center gap-2.5">
+                                <img id="headerLogoLeft" src="logo-inhu.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';" alt="Kabupaten Indragiri Hulu" class="w-9 h-9 object-contain">
+                                <img id="headerLogoRight" src="logo-satpol.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';" alt="Satpol PP" class="w-9 h-9 object-contain">
                             </div>
                             <div>
-                                <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">SiLAHAPP</h1>
-                                <p class="text-[10px] sm:text-[11px] text-amber-400 font-semibold tracking-wider">Sistem Laporan Harian Piket dan Patroli</p>
+                                <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-tight text-white flex items-center gap-1.5">
+                                    SiLAHAPP
+                                    <span class="text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md">Trantibum</span>
+                                </h1>
+                                <p class="text-[11px] text-slate-300 font-medium">Sistem Laporan Harian Piket dan Patroli Satuan Polisi Pamong Praja</p>
                             </div>
                         </div>
-                        <div class="flex items-center justify-end w-full sm:w-auto">
-                            <button id="btnSettings" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
-                                <i data-lucide="settings" class="w-4 h-4"></i>
-                                <span>Pengaturan Profil</span>
+                        <div class="flex items-center justify-end w-full sm:w-auto gap-2">
+                            <button id="btnSettings" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm">
+                                <i data-lucide="user-check" class="w-4 h-4"></i>
+                                <span>Profil Aparatur</span>
                             </button>
                         </div>
                     </div>
                 </header>
 
                 <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1 rounded-xl backdrop-blur-md mb-2 no-print border border-slate-700/60 shadow-xl">
-                        <button id="tabFormBtn" class="flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow-md transition">Isi Laporan</button>
-                        <button id="tabPreviewBtn" class="flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300 transition">Pratinjau</button>
+                    <!-- Mobile Tab Switcher -->
+                    <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1 rounded-xl mb-2 no-print border border-slate-700 shadow-md">
+                        <button id="tabFormBtn" class="flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow transition">Isi Laporan</button>
+                        <button id="tabPreviewBtn" class="flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300 transition">Pratinjau Dokumen</button>
                     </div>
 
+                    <!-- Input Form Section -->
                     <section id="formSection" class="lg:col-span-5 space-y-6 no-print">
-                        <div class="glass-panel p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
+                        <div class="glass-panel p-5 sm:p-6 rounded-2xl shadow-md border border-slate-200">
                             <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
                                 <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                                    <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600"></i> Formulir Patroli Trantibum
+                                    <i data-lucide="clipboard-pen" class="w-5 h-5 text-indigo-600"></i> Formulir Patroli Trantibum
                                 </h2>
-                                <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">SiLAHAPP</span>
+                                <span class="text-[11px] font-bold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-md border border-slate-200">SiLAHAPP</span>
                             </div>
 
                             <form id="reportForm" class="space-y-4" onsubmit="event.preventDefault();">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">1. Tanggal Laporan</label>
-                                    <input type="date" id="inputTanggal" class="w-full px-3 py-2 bg-white/90 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-xs sm:text-sm font-semibold shadow-sm">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">1. Tanggal Pelaporan</label>
+                                    <input type="date" id="inputTanggal" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-xs sm:text-sm font-semibold">
                                 </div>
+
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Dasar Pelaksanaan & Lokasi</label>
-                                        <button type="button" id="btnAddLokasi" class="text-[11px] font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 px-2 py-1 rounded-lg transition border border-amber-300">+ Tambah Lokasi</button>
+                                        <label class="block text-xs font-bold text-slate-700">2. Dasar Pelaksanaan & Lokasi</label>
+                                        <button type="button" id="btnAddLokasi" class="text-[11px] font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 px-2.5 py-1 rounded-lg transition border border-amber-300 flex items-center gap-1">
+                                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Lokasi
+                                        </button>
                                     </div>
-                                    <div class="bg-amber-50/80 p-3 rounded-2xl border border-amber-200 shadow-inner space-y-3">
-                                        <textarea id="inputDasar" rows="2" placeholder="Dasar Pelaksanaan (Contoh: Surat Tugas Nomor: 094/123/ST-SATPOLPP/2026...)" class="w-full px-3 py-2 bg-white/90 border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
-                                        <div class="pt-1 border-t border-amber-200">
-                                            <label class="block text-[11px] font-bold text-amber-900 uppercase mb-1.5">Daftar Tempat / Lokasi Patroli:</label>
+                                    <div class="bg-amber-50/60 p-3.5 rounded-xl border border-amber-200/80 space-y-3">
+                                        <textarea id="inputDasar" rows="2" placeholder="Dasar Pelaksanaan (Contoh: Surat Tugas Nomor: 094/123/ST-SATPOLPP/2026...)" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none"></textarea>
+                                        <div class="pt-1 border-t border-amber-200/70">
+                                            <label class="block text-[11px] font-bold text-amber-950 mb-1.5">Daftar Tempat / Lokasi Patroli:</label>
                                             <div id="lokasiList" class="space-y-2"></div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. Uraian Kegiatan Patroli</label>
-                                        <button type="button" id="btnAddHasil" class="text-[11px] font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 px-2 py-1 rounded-lg transition border border-emerald-300">+ Tambah Poin</button>
+                                        <label class="block text-xs font-bold text-slate-700">3. Uraian Kegiatan Patroli</label>
+                                        <button type="button" id="btnAddHasil" class="text-[11px] font-bold text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition border border-emerald-300 flex items-center gap-1">
+                                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Poin
+                                        </button>
                                     </div>
-                                    <div class="bg-emerald-50/80 p-3 rounded-2xl border border-emerald-200 shadow-inner">
+                                    <div class="bg-emerald-50/60 p-3.5 rounded-xl border border-emerald-200/80">
                                         <div id="hasilList" class="space-y-2"></div>
                                     </div>
                                 </div>
+
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">4. Hasil Kegiatan Patroli</label>
-                                    <div class="bg-slate-100/80 p-3 rounded-2xl border border-slate-300 shadow-inner">
-                                        <textarea id="inputKegiatan" rows="3" placeholder="Deskripsikan rincian..." class="w-full px-3 py-2 bg-white/90 border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">4. Hasil Kegiatan Patroli</label>
+                                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                                        <textarea id="inputKegiatan" rows="3" placeholder="Deskripsikan rincian hasil kegiatan yang dilaksanakan secara terperinci..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none"></textarea>
                                     </div>
                                 </div>
+
                                 <div>
                                     <div class="flex items-center justify-between mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">5. Nama Anggota (Pilih Opsi)</label>
+                                        <label class="block text-xs font-bold text-slate-700">5. Nama Anggota Personil</label>
                                     </div>
-                                    <div class="flex bg-slate-200 p-1 rounded-xl mb-3">
-                                        <button type="button" id="anggotaModeFotoBtn" class="flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition">Foto Nama Anggota</button>
-                                        <button type="button" id="anggotaModeManualBtn" class="flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition">Tambah Manual</button>
+                                    <div class="flex bg-slate-100 p-1 rounded-xl mb-3 border border-slate-200">
+                                        <button type="button" id="anggotaModeFotoBtn" class="flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow-sm transition">Dokumentasi Nama (Foto)</button>
+                                        <button type="button" id="anggotaModeManualBtn" class="flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 hover:text-slate-900 transition">Input Manual</button>
                                     </div>
 
                                     <div id="anggotaFotoWrapper" class="space-y-2">
                                         <div class="flex justify-between items-center">
-                                            <span class="text-[11px] font-bold text-slate-600">Foto Nama Anggota</span>
-                                            <span id="anggotaPhotoCount" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 10 Foto</span>
+                                            <span class="text-[11px] font-bold text-slate-600">Foto Bukti Nama Personil</span>
+                                            <span id="anggotaPhotoCount" class="text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">0 / 10 Foto</span>
                                         </div>
-                                        <div class="border-2 border-dashed border-indigo-300 bg-white/90 rounded-2xl p-4 text-center relative cursor-pointer group">
+                                        <div class="border-2 border-dashed border-indigo-200 bg-indigo-50/30 hover:bg-indigo-50/60 transition rounded-xl p-4 text-center relative cursor-pointer group">
                                             <input type="file" id="inputAnggotaFoto" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                            <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Nama Anggota</p>
+                                            <i data-lucide="image-plus" class="w-6 h-6 text-indigo-500 mx-auto mb-1"></i>
+                                            <p class="text-xs font-bold text-slate-700">Klik / Tarik Foto Daftar Anggota</p>
+                                            <p class="text-[10px] text-slate-500 mt-0.5">Format JPG/PNG otomatis dikompresi</p>
                                         </div>
                                         <div id="anggotaPhotoPreview" class="grid grid-cols-4 gap-2 mt-2"></div>
                                     </div>
 
                                     <div id="anggotaManualWrapper" class="space-y-2 hidden">
                                         <div class="flex justify-between items-center">
-                                            <span class="text-[11px] font-bold text-slate-600">Daftar Nama Anggota</span>
-                                            <button type="button" id="btnAddAnggota" class="text-[11px] font-bold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Anggota</button>
+                                            <span class="text-[11px] font-bold text-slate-600">Daftar Nama Personil</span>
+                                            <button type="button" id="btnAddAnggota" class="text-[11px] font-bold text-indigo-800 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300 flex items-center gap-1">
+                                                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Anggota
+                                            </button>
                                         </div>
-                                        <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner">
+                                        <div class="bg-indigo-50/50 p-3 rounded-xl border border-indigo-200/80">
                                             <div id="anggotaList" class="space-y-2"></div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div>
                                     <div class="flex justify-between items-center mb-1.5">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">6. Foto Dokumentasi</label>
-                                        <span id="photoCount" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 10 Foto</span>
+                                        <label class="block text-xs font-bold text-slate-700">6. Dokumentasi Foto Lapangan</label>
+                                        <span id="photoCount" class="text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">0 / 10 Foto</span>
                                     </div>
-                                    <div class="border-2 border-dashed border-amber-300 bg-white/90 rounded-2xl p-4 text-center relative cursor-pointer group">
+                                    <div class="border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100/80 transition rounded-xl p-4 text-center relative cursor-pointer group">
                                         <input type="file" id="inputDokumentasi" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                        <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Dokumentasi</p>
+                                        <i data-lucide="camera" class="w-6 h-6 text-slate-500 mx-auto mb-1"></i>
+                                        <p class="text-xs font-bold text-slate-700">Pilih / Seret Foto Kegiatan</p>
+                                        <p class="text-[10px] text-slate-500 mt-0.5">Maksimal 10 foto dokumentasi resmi</p>
                                     </div>
                                     <div id="photoPreview" class="grid grid-cols-4 gap-2 mt-3"></div>
                                 </div>
@@ -156,28 +181,40 @@
                         </div>
                     </section>
 
+                    <!-- Real-Time Document Preview Section -->
                     <section id="previewSection" class="lg:col-span-7 hidden lg:block space-y-4">
-                        <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
-                            <span class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (SiLAHAPP)
+                        <div class="glass-panel p-3.5 sm:p-4 rounded-xl border border-slate-200 flex flex-wrap gap-3 justify-between items-center no-print">
+                            <span class="text-xs text-slate-800 font-bold flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span> Standar Tata Naskah Dinas A4 (SiLAHAPP)
                             </span>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
-                                <button id="btnUploadDrive" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-lg">Download dan Upload</button>
+                                <button id="btnUploadDrive" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-md transition flex items-center justify-center gap-2">
+                                    <i data-lucide="download-cloud" class="w-4 h-4"></i>
+                                    <span>Download & Upload ke Drive</span>
+                                </button>
                             </div>
                         </div>
+
                         <div class="overflow-x-auto pb-6">
                             <div id="pdfContent" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
                                 <div>
+                                    <!-- Official Letterhead (Kop Surat Dinas) -->
                                     <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
-                                        <div class="flex-shrink-0 flex items-center justify-center"><img id="previewLogoLeft" src="https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb" class="object-contain"></div>
+                                        <div class="flex-shrink-0 flex items-center justify-center">
+                                            <img id="previewLogoLeft" src="logo-inhu.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';" class="object-contain" alt="Kabupaten Indragiri Hulu">
+                                        </div>
                                         <div class="flex-1 text-center px-1">
                                             <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
                                             <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
                                             <div class="w-full h-0.5 bg-slate-900 my-1"></div>
                                             <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN SATGAS PATROLI TRANTIBUM</h1>
                                         </div>
-                                        <div class="flex-shrink-0 flex items-center justify-center"><img id="previewLogoRight" src="https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr" class="object-contain"></div>
+                                        <div class="flex-shrink-0 flex items-center justify-center">
+                                            <img id="previewLogoRight" src="logo-satpol.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';" class="object-contain" alt="Satpol PP">
+                                        </div>
                                     </div>
+
+                                    <!-- Officer Identity Block -->
                                     <div class="preview-block pdf-box shadow-sm mb-4">
                                         <div class="grid grid-cols-2 gap-2 text-[11px]">
                                             <div><span class="font-semibold text-slate-500 block text-[10px]">Nama Lengkap:</span><span id="viewNama" class="font-bold text-slate-900 text-xs">-</span></div>
@@ -185,9 +222,11 @@
                                             <div class="col-span-2 border-t border-slate-200 pt-1.5 mt-0.5"><span class="font-semibold text-slate-500 block text-[10px]">Jabatan / Unit Kerja:</span><span id="viewJabatan" class="font-semibold text-slate-800">-</span></div>
                                         </div>
                                     </div>
+
+                                    <!-- Report Content Blocks -->
                                     <div class="space-y-3">
                                         <div class="preview-block flex items-center gap-2 border-b border-slate-200 pb-2">
-                                            <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span><span class="text-slate-400">:</span><span id="viewTanggal" class="font-bold text-slate-950 text-xs"></span>
+                                            <span class="font-bold text-slate-900 w-32 flex-shrink-0 text-xs">Hari / Tanggal</span><span class="text-slate-400">:</span><span id="viewTanggal" class="font-bold text-slate-950 text-xs">-</span>
                                         </div>
                                         <div id="blockDasar" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">1. Dasar Pelaksanaan</label><div id="viewDasar" class="pdf-box min-h-[42px] whitespace-pre-line">-</div></div>
                                         <div id="blockLokasi" class="preview-block"><label class="font-bold text-slate-900 text-[11px] uppercase block mb-1">2. Tempat Pelaksanaan</label><div class="pdf-box min-h-[42px]"><div id="viewTempat" class="space-y-1"></div></div></div>
@@ -203,28 +242,33 @@
                 </main>
             </div>
 
+            <!-- Dynamic Views Container (PESUT & Lanjutan) -->
             <div id="comingSoonContainer"></div>
 
-            <footer class="relative z-10 w-full py-5 text-center text-xs text-slate-200 font-semibold no-print bg-slate-950/80 backdrop-blur-md border-t border-slate-800/80 mt-auto shadow-2xl">
-                <div class="max-w-7xl mx-auto px-4">
-                    <p class="text-slate-300">CloudMe - Bag. Program Satuan Polisi Pamong Praja - 2026</p>
+            <!-- Standard Institutional Footer -->
+            <footer class="relative z-10 w-full py-4 text-center text-xs font-medium no-print bg-slate-950/90 border-t border-slate-800 shadow-md">
+                <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+                    <p class="text-slate-400">© 2026 Bagian Program Satuan Polisi Pamong Praja Kabupaten Indragiri Hulu</p>
+                    <p class="text-slate-500 text-[11px]">SiLAHAPP & PESUT — Terintegrasi Cloud Storage Resmi</p>
                 </div>
             </footer>
         </div>
     </div>
 
-    <button id="btnOpenCsModal" class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full shadow-[0_4px_20px_rgb(5,150,105,0.6)] transition-all transform hover:-translate-y-1 hover:scale-105 group no-print cursor-pointer border-2 border-emerald-400/50">
-        <i data-lucide="headset" class="w-7 h-7"></i>
-        <span class="absolute right-full mr-4 px-3 py-1.5 bg-slate-800 text-white text-[11px] font-bold rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap shadow-lg transition-opacity duration-300">
+    <!-- Floating Help & Customer Service Action Button -->
+    <button id="btnOpenCsModal" class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-13 h-13 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full shadow-lg transition duration-200 group no-print cursor-pointer border border-emerald-400/40" title="Bantuan & CS Satpol PP">
+        <i data-lucide="headset" class="w-6 h-6"></i>
+        <span class="absolute right-full mr-3 px-3 py-1 bg-slate-900 text-white text-xs font-semibold rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap shadow-md transition-opacity">
             Bantuan & CS
         </span>
     </button>
 
-    <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
-                    <i data-lucide="sliders" class="w-5 h-5 text-amber-600"></i> Pengaturan Profil
+    <!-- Modal: Pengaturan Profil Aparatur -->
+    <div id="settingsModal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="user-cog" class="w-5 h-5 text-amber-600"></i> Pengaturan Profil Aparatur
                 </h3>
                 <button id="btnCloseSettings" class="text-slate-400 hover:text-slate-600 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
@@ -239,72 +283,77 @@
                         <span id="nipCounter" class="text-[10px] font-bold text-slate-500">0 / 18 Digit</span>
                     </div>
                     <input type="text" id="inputSettingNip" maxlength="18" placeholder="18 digit angka" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold outline-none tracking-wider focus:ring-2 focus:ring-amber-500">
-                    <p id="nipError" class="text-[10px] text-red-500 mt-1 hidden font-semibold">NIP harus 18 digit angka!</p>
+                    <p id="nipError" class="text-[10px] text-red-500 mt-1 hidden font-semibold">NIP harus terdiri dari 18 digit angka!</p>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Jabatan / Unit Kerja</label>
                     <input type="text" id="inputSettingJabatan" placeholder="Jabatan" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-amber-500">
                 </div>
-                <div class="flex justify-end gap-2 pt-3 border-t">
-                    <button type="button" id="btnCancelSettings" class="px-4 py-2 border rounded-xl text-xs font-bold text-slate-700">Batal</button>
-                    <button type="button" id="btnSaveSettings" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-xl text-xs shadow-md">Simpan</button>
+                <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                    <button type="button" id="btnCancelSettings" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 transition">Batal</button>
+                    <button type="button" id="btnSaveSettings" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs shadow-sm transition">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="csModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl max-w-sm w-full p-6 shadow-2xl border text-center space-y-4">
-            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto">
+    <!-- Modal: Bantuan & Customer Service -->
+    <div id="csModal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden no-print">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center space-y-4">
+            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mx-auto border border-emerald-100">
                 <i data-lucide="message-square" class="w-6 h-6"></i>
             </div>
-            <h3 class="text-base font-extrabold text-slate-900">Pilih Customer Service</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">Silahkan pilih nomor di bawah untuk terhubung langsung via WhatsApp:</p>
-            <div class="space-y-2.5 pt-1">
-                <a href="https://wa.me/6281374435636" target="_blank" class="flex items-center justify-center gap-2 w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md transition">
+            <h3 class="text-base font-bold text-slate-900">Pusat Layanan Bantuan Satpol PP</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Hubungi admin operasional Bagian Program via WhatsApp untuk kendala sistem:</p>
+            <div class="space-y-2 pt-1">
+                <a href="https://wa.me/6281374435636" target="_blank" class="flex items-center justify-center gap-2 w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition">
                     <i data-lucide="phone" class="w-4 h-4"></i> CS 1: +62 813-7443-5636
                 </a>
-                <a href="https://wa.me/6285272683165" target="_blank" class="flex items-center justify-center gap-2 w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md transition">
+                <a href="https://wa.me/6285272683165" target="_blank" class="flex items-center justify-center gap-2 w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition">
                     <i data-lucide="phone" class="w-4 h-4"></i> CS 2: +62 852-7268-3165
                 </a>
             </div>
             <div class="pt-2">
-                <button id="btnCloseCsModal" class="w-full py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl transition">Tutup</button>
+                <button id="btnCloseCsModal" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">Tutup</button>
             </div>
         </div>
     </div>
 
-    <div id="driveNoticeModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl max-w-md w-full p-6 shadow-2xl border text-center space-y-4">
-            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto"><i data-lucide="hard-drive" class="w-6 h-6"></i></div>
-            <h3 class="text-base font-extrabold text-slate-900">Proses Selesai</h3>
+    <!-- Modal: Informasi Selesai Upload Google Drive -->
+    <div id="driveNoticeModal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 text-center space-y-4">
+            <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mx-auto border border-indigo-100">
+                <i data-lucide="check-circle" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Laporan Berhasil Terkirim</h3>
             <p class="text-xs text-slate-500 leading-relaxed">
-                File Laporan PDF Anda telah berhasil diproses dengan nama:<br>
-                <strong id="driveFilenameLabel" class="text-indigo-700 font-bold block mt-1 bg-indigo-50 p-2 rounded-xl border border-indigo-100 break-all">-</strong>
+                File Laporan PDF telah berhasil diproses dan disimpan:<br>
+                <strong id="driveFilenameLabel" class="text-indigo-800 font-bold block mt-1.5 bg-indigo-50 p-2 rounded-lg border border-indigo-100 break-all text-xs">-</strong>
             </p>
             <div class="pt-2">
-                <button id="btnCloseDriveNotice" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-lg">Buka Folder Google Drive</button>
+                <button id="btnCloseDriveNotice" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition">Buka Folder Google Drive</button>
             </div>
         </div>
     </div>
 
-    <div id="confirmUploadModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-100 text-center space-y-4">
-            <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-                <i data-lucide="shield-check" class="w-6 h-6"></i>
+    <!-- Modal: Konfirmasi Pengiriman Laporan -->
+    <div id="confirmUploadModal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden no-print">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-200 text-center space-y-4">
+            <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center mx-auto border border-amber-100">
+                <i data-lucide="shield-alert" class="w-6 h-6"></i>
             </div>
-            <h3 class="text-base font-extrabold text-slate-900">Konfirmasi Kirim Laporan</h3>
+            <h3 class="text-base font-bold text-slate-900">Konfirmasi Kirim Laporan</h3>
             <p class="text-xs text-slate-600 leading-relaxed">
-                Pastikan seluruh data laporan kegiatan piket/patroli telah diisi dengan benar sebelum dikirim ke Google Drive resmi.
+                Pastikan data patroli telah diisi dengan benar sebelum dikompilasi dan dikirim ke penyimpanan resmi.
             </p>
-            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 text-left text-xs space-y-2">
-                <div class="flex justify-between items-center"><span class="text-slate-500 font-semibold">Modul:</span><span id="confirmModalModul" class="font-extrabold text-slate-800">-</span></div>
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-left text-xs space-y-2">
+                <div class="flex justify-between items-center"><span class="text-slate-500 font-semibold">Modul:</span><span id="confirmModalModul" class="font-bold text-slate-800">-</span></div>
                 <div class="flex justify-between items-center"><span class="text-slate-500 font-semibold">Tanggal:</span><span id="confirmModalTanggal" class="font-bold text-slate-800">-</span></div>
                 <div class="flex justify-between items-center"><span class="text-slate-500 font-semibold">Petugas:</span><span id="confirmModalPetugas" class="font-bold text-slate-800 truncate max-w-[180px]">-</span></div>
             </div>
             <div class="pt-2 flex gap-2.5">
-                <button type="button" id="btnCancelConfirmUpload" class="flex-1 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl transition">Batal</button>
-                <button type="button" id="btnProceedConfirmUpload" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">Kirim Sekarang</button>
+                <button type="button" id="btnCancelConfirmUpload" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">Batal</button>
+                <button type="button" id="btnProceedConfirmUpload" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition">Kirim Sekarang</button>
             </div>
         </div>
     </div>
