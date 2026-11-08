@@ -16,7 +16,7 @@
     <div class="app-layout flex-1 flex flex-col relative z-10 w-full">
         <!-- Top Institutional Navigation -->
         <nav class="top-navbar no-print sticky top-0 z-40 px-3 py-2.5 shadow-md">
-            <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 rounded-2xl w-full">
+            <div class="max-w-[1440px] mx-auto flex items-center justify-between gap-3 rounded-2xl w-full">
                 <div class="flex items-center gap-2 overflow-x-auto py-0.5">
                     <button class="top-nav-btn active flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-bold transition text-center" data-target="silahapp">
                         <div class="w-5 h-5 flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -37,8 +37,8 @@
                         <span>Modul Lanjutan</span>
                     </button>
                 </div>
-                <div class="hidden sm:flex items-center text-[11px] text-slate-400 font-semibold px-2">
-                    <span>Satpol PP Kab. Indragiri Hulu</span>
+                <div class="hidden sm:flex items-center text-[11px] text-slate-300 font-semibold px-2">
+                    <span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Satpol PP Kab. Indragiri Hulu</span>
                 </div>
             </div>
         </nav>
@@ -47,11 +47,11 @@
             <!-- Main SiLAHAPP View -->
             <div id="view-silahapp" class="app-view active-view flex-1 flex flex-col">
                 <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-md no-print">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
+                    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
                         <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
                             <div class="flex items-center gap-2.5">
-                                <img id="headerLogoLeft" src="logo-inhu.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';" alt="Kabupaten Indragiri Hulu" class="w-9 h-9 object-contain">
-                                <img id="headerLogoRight" src="logo-satpol.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';" alt="Satpol PP" class="w-9 h-9 object-contain">
+                                <img id="headerLogoLeft" src="logo-inhu.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';" alt="Kabupaten Indragiri Hulu" class="w-9 h-9 object-contain bg-white rounded-xl p-1 shadow-sm">
+                                <img id="headerLogoRight" src="logo-satpol.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';" alt="Satpol PP" class="w-9 h-9 object-contain bg-white rounded-xl p-1 shadow-sm">
                             </div>
                             <div>
                                 <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-tight text-white flex items-center gap-1.5">
@@ -62,7 +62,7 @@
                             </div>
                         </div>
                         <div class="flex items-center justify-end w-full sm:w-auto gap-2">
-                            <button id="btnSettings" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm">
+                            <button id="btnSettings" class="w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm active:scale-95">
                                 <i data-lucide="user-check" class="w-4 h-4"></i>
                                 <span>Profil Aparatur</span>
                             </button>
@@ -70,7 +70,7 @@
                     </div>
                 </header>
 
-                <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <main class="relative z-10 flex-1 max-w-[1440px] w-full mx-auto p-3 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <!-- Mobile Tab Switcher -->
                     <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1 rounded-xl mb-2 no-print border border-slate-700 shadow-md">
                         <button id="tabFormBtn" class="flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow transition">Isi Laporan</button>
@@ -200,17 +200,17 @@
                                 <div>
                                     <!-- Official Letterhead (Kop Surat Dinas) -->
                                     <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
-                                        <div class="flex-shrink-0 flex items-center justify-center">
-                                            <img id="previewLogoLeft" src="logo-inhu.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';" class="object-contain" alt="Kabupaten Indragiri Hulu">
+                                        <div class="kop-logo-container flex-shrink-0" style="width: 22mm; height: 26mm;">
+                                            <img id="previewLogoLeft" src="logo-inhu.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1U-Whswnt_2pOQipuTZ0hHag42p6EhZgb';" class="object-contain w-full h-full" alt="Kabupaten Indragiri Hulu">
                                         </div>
-                                        <div class="flex-1 text-center px-1">
+                                        <div class="flex-1 text-center px-2">
                                             <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
                                             <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
                                             <div class="w-full h-0.5 bg-slate-900 my-1"></div>
                                             <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN SATGAS PATROLI TRANTIBUM</h1>
                                         </div>
-                                        <div class="flex-shrink-0 flex items-center justify-center">
-                                            <img id="previewLogoRight" src="logo-satpol.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';" class="object-contain" alt="Satpol PP">
+                                        <div class="kop-logo-container flex-shrink-0" style="width: 22mm; height: 26mm;">
+                                            <img id="previewLogoRight" src="logo-satpol.png" onerror="this.onerror=null;this.src='https://lh3.googleusercontent.com/d/1sxdzLxjYv-T3N2D7EH1cIP1YvOKlMxdr';" class="object-contain w-full h-full" alt="Satpol PP">
                                         </div>
                                     </div>
 

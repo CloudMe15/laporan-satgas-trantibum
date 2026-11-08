@@ -1,16 +1,16 @@
 /* Hallmark · checked: 2026-11-09 · genre: modern-minimal · theme: cobalt · shape: app screen
- * critique: Authoritative civil-defense operational reporting suite for Satpol PP Indragiri Hulu. Replaced messy glassmorphism and low-contrast overlays with high-contrast surfaces, structured OKLCH design tokens, crisp document typography, and dignified official aesthetics.
+ * critique: Authoritative civil-defense operational reporting suite for Satpol PP Indragiri Hulu. Elegant Glassmorphism 2.0 with institutional photo backdrop, crisp high-contrast cards, strictly budgeted Kop Surat logo frames, and print-perfect A4 document layout.
  * built: Hallmark · redesign: full · v2.0.0 */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
-    /* Base Color Tokens */
-    --color-paper: #090e1a;
-    --color-paper-elevated: #0f172a;
-    --color-paper-card: #ffffff;
+    /* Brand & Canvas Colors */
+    --color-paper: #0b1329;
+    --color-paper-elevated: #111d3d;
+    --color-paper-card: rgba(255, 255, 255, 0.94);
     --color-paper-subtle: #f8fafc;
-    --color-paper-preview-bg: #1e293b;
+    --color-paper-preview-bg: rgba(15, 23, 42, 0.65);
 
     --color-ink: #0f172a;
     --color-ink-2: #334155;
@@ -18,40 +18,41 @@
     --color-ink-inverse: #f8fafc;
     --color-muted-inverse: #94a3b8;
 
-    --color-border: #e2e8f0;
-    --color-border-subtle: #f1f5f9;
+    --color-border: rgba(226, 232, 240, 0.9);
+    --color-border-subtle: rgba(241, 245, 249, 0.8);
+    --color-border-glass: rgba(255, 255, 255, 0.15);
     --color-border-dark: #1e293b;
-    --color-border-dark-subtle: #334155;
 
-    /* Semantic Brand Accents (Official Satpol PP & Civil Defense) */
+    /* Semantic Accents */
     --color-accent-navy: #1e3a8a;
     --color-accent-cobalt: #0284c7;
     --color-accent-cobalt-hover: #0369a1;
     --color-accent-gold: #d97706;
     --color-accent-gold-hover: #b45309;
-    --color-accent-gold-light: #fef3c7;
     --color-accent-emerald: #059669;
     --color-accent-emerald-hover: #047857;
     --color-focus: #2563eb;
 
-    /* Typography */
+    /* Fonts */
     --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-    /* Radii & Elevation */
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 18px;
+    /* Geometry & Shadow Tokens */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
     --radius-pill: 9999px;
 
-    --shadow-card: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
-    --shadow-popover: 0 20px 25px -5px rgba(15, 23, 42, 0.25), 0 8px 10px -6px rgba(15, 23, 42, 0.15);
-    --shadow-a4: 0 25px 45px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+    --shadow-header: 0 10px 30px -5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    --shadow-a4: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    --shadow-btn-gold: 0 4px 15px rgba(217, 119, 6, 0.35);
+    --shadow-btn-emerald: 0 4px 15px rgba(5, 150, 105, 0.35);
 }
 
-/* Base resets & Hallmark Floor Rules */
+/* Base Body with Heritage Background */
 html, body {
     overflow-x: clip;
     margin: 0;
@@ -60,15 +61,20 @@ html, body {
     color: var(--color-ink);
     background-color: var(--color-paper);
     background-image: 
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(2, 132, 199, 0.12), transparent 70%),
-        linear-gradient(to bottom, #090e1a 0%, #0c1427 100%);
+        radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.16), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(217, 119, 6, 0.14), transparent 40%),
+        linear-gradient(to bottom, rgba(11, 19, 41, 0.88), rgba(15, 23, 42, 0.94)),
+        url('https://lh3.googleusercontent.com/d/1aG61Nm8bMLfZVZj3Kv94YyLKScMjBzhS');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
     background-attachment: fixed;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Reduced motion support */
+/* Reduced Motion Safety */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -78,136 +84,160 @@ html, body {
     }
 }
 
-/* Focus Visible Disciplines */
+/* Accessibility Focus Rules */
 :focus-visible {
     outline: 2px solid var(--color-focus) !important;
     outline-offset: 2px !important;
 }
 
-button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
-    outline: 2px solid var(--color-focus) !important;
-    outline-offset: 2px !important;
-}
-
-/* Top Navbar Navigation */
+/* Top Institutional Capsule Navbar */
 .top-navbar {
-    background-color: rgba(9, 14, 26, 0.92) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--color-border-dark) !important;
+    background-color: rgba(11, 19, 41, 0.78) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--color-border-glass) !important;
 }
 
-.top-navbar .max-w-7xl {
-    background-color: rgba(15, 23, 42, 0.8) !important;
-    border: 1px solid var(--color-border-dark-subtle) !important;
-    padding: 4px;
+.top-navbar .max-w-\[1440px\] {
+    background-color: rgba(15, 23, 42, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 5px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .top-nav-btn {
     background: transparent;
     color: var(--color-muted-inverse);
     border: 1px solid transparent;
-    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+    border-radius: var(--radius-md);
+    transition: color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .top-nav-btn:hover {
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: rgba(255, 255, 255, 0.08);
     color: var(--color-ink-inverse);
 }
 
 .top-nav-btn.active {
-    background-color: var(--color-accent-gold) !important;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
     color: #0b1329 !important;
     font-weight: 800;
-    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);
+    box-shadow: var(--shadow-btn-gold) !important;
 }
 
-.sidebar-logo-clean {
+.sidebar-logo-clean, .custom-sidebar-logo {
     width: 100% !important;
     height: 100% !important;
     object-fit: contain !important;
 }
 
-.custom-sidebar-logo {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
-    border-radius: var(--radius-sm);
-}
-
-/* Application Header */
+/* Header Banner */
 .glass-header {
-    background-color: rgba(15, 23, 42, 0.95) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--color-border-dark) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    background-color: rgba(11, 19, 41, 0.82) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border-glass) !important;
+    box-shadow: var(--shadow-header) !important;
 }
 
 #headerLogoLeft, #headerLogoRight, #csHeaderLogoLeft-1, #csHeaderLogoRight-1 {
     background-color: #ffffff !important;
-    padding: 3px !important;
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 8px !important;
+    padding: 4px !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
     object-fit: contain !important;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Card & Panels - Crisp high-contrast surface */
+/* Glassmorphism 2.0 Form Cards */
 .glass-panel {
-    background-color: var(--color-paper-card) !important;
-    border: 1px solid var(--color-border) !important;
+    background: var(--color-paper-card) !important;
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
     box-shadow: var(--shadow-card) !important;
     border-radius: var(--radius-xl) !important;
 }
 
-/* Form Styles & Inputs */
+/* Form Inputs & Fields */
 input[type="text"], input[type="date"], textarea {
     color: var(--color-ink);
     background-color: #ffffff;
-    border: 1px solid var(--color-border);
+    border: 1px solid #cbd5e1;
     border-radius: var(--radius-md);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
     border-color: var(--color-focus);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
 }
 
 /* Preview Section Container */
-#previewSection {
-    background-color: rgba(15, 23, 42, 0.4);
-    border: 1px solid var(--color-border-dark);
+#previewSection, #csPreviewSection-1 {
+    background-color: var(--color-paper-preview-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border-glass);
     border-radius: var(--radius-xl);
-    padding: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.4);
 }
 
-#previewSection .glass-panel {
-    background-color: #ffffff !important;
-    border: 1px solid var(--color-border) !important;
+#previewSection .glass-panel, #csPreviewSection-1 .glass-panel {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    border-radius: var(--radius-lg) !important;
 }
 
 /* Document & A4 Layout */
 @page {
     size: A4 portrait;
-    margin: 20mm 16mm;
+    margin: 16mm 14mm;
 }
 
 .a4-page {
-    width: 210mm;
-    min-height: 297mm;
-    height: auto;
-    padding: 20mm 16mm !important;
-    margin: 0 auto;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    height: auto !important;
+    padding: 18mm 15mm !important;
+    margin: 0 auto !important;
     background-color: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
-    border-radius: 4px;
+    border-radius: 3px !important;
     box-shadow: var(--shadow-a4) !important;
-    box-sizing: border-box;
+    box-sizing: border-box !important;
     color: #0f172a !important;
+    flex-shrink: 0 !important;
+}
+
+/* Kop Surat Logo Container - Strict Geometry Constraints */
+.kop-logo-container {
+    width: 22mm !important;
+    height: 26mm !important;
+    max-width: 22mm !important;
+    max-height: 26mm !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    background-color: #ffffff !important;
+    padding: 2px !important;
+    border-radius: 4px !important;
+}
+
+.kop-logo-container img,
+#previewLogoLeft, #previewLogoRight,
+#csPreviewLogoLeft-1, #csPreviewLogoRight-1 {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
 }
 
 .preview-block {
@@ -284,35 +314,20 @@ input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
     display: block;
 }
 
-.a4-page .flex.items-center.justify-between.border-b-4 > div:first-child,
-.a4-page .flex.items-center.justify-between.border-b-4 > div:last-child {
-    width: 24mm !important;
-    height: 28mm !important;
-}
-
-#previewLogoLeft, #previewLogoRight, #csPreviewLogoLeft-1, #csPreviewLogoRight-1 {
-    width: 100% !important;
-    height: 100% !important;
-    background-color: #ffffff !important;
-    padding: 4px !important;
-    border-radius: 6px !important;
-    object-fit: contain !important;
-}
-
-/* Modals */
+/* Modals with Clean Backdrop Dimmer */
 .modal-backdrop {
-    background-color: rgba(9, 14, 26, 0.85) !important;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(9, 14, 26, 0.82) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
-/* Scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.2);
+    background: rgba(15, 23, 42, 0.3);
 }
 ::-webkit-scrollbar-thumb {
     background: #334155;
@@ -322,10 +337,11 @@ input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
     background: #475569;
 }
 
-/* Print Rules */
+/* Print Rules - 100% Clean White Page */
 @media print {
     body {
         background: #ffffff !important;
+        background-image: none !important;
         color: #000000 !important;
     }
     .no-print {
@@ -340,7 +356,7 @@ input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
         border: none !important;
         margin: 0 !important;
         width: 100% !important;
-        padding: 20mm 16mm !important;
+        padding: 18mm 15mm !important;
         background: #ffffff !important;
         backdrop-filter: none !important;
     }

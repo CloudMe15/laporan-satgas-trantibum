@@ -419,114 +419,119 @@ function generateComingSoonViews() {
     const info = CONFIG.FOLDERS[1];
     const htmlContent = `
         <div id="view-coming-soon-1" class="app-view hidden flex-1 flex-col">
-            <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-2xl border-b border-slate-700/60 no-print">
-                <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
+            <header class="glass-header text-white sticky top-[53px] sm:top-[57px] z-30 shadow-md no-print">
+                <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
                     <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
-                        <div class="flex items-center gap-2">
-                            <img id="csHeaderLogoLeft-1" src="${CONFIG.DEFAULT_LOGOS.INHU}" class="w-8 h-8 object-contain bg-white rounded p-0.5" alt="Logo Kiri">
-                            <img id="csHeaderLogoRight-1" src="${CONFIG.DEFAULT_LOGOS.SATPOL}" class="w-8 h-8 object-contain bg-white rounded p-0.5" alt="Logo Kanan">
+                        <div class="flex items-center gap-2.5">
+                            <img id="csHeaderLogoLeft-1" src="${CONFIG.DEFAULT_LOGOS.INHU}" class="w-9 h-9 object-contain bg-white rounded-xl p-1 shadow-sm" alt="Logo Kiri">
+                            <img id="csHeaderLogoRight-1" src="${CONFIG.DEFAULT_LOGOS.SATPOL}" class="w-9 h-9 object-contain bg-white rounded-xl p-1 shadow-sm" alt="Logo Kanan">
                         </div>
                         <div>
-                            <h1 class="font-extrabold text-base sm:text-lg tracking-wide leading-tight text-white flex items-center gap-1.5">${info.title}</h1>
-                            <p class="text-[10px] sm:text-[11px] text-indigo-400 font-semibold tracking-wider">${info.subtitle}</p>
+                            <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-tight text-white flex items-center gap-1.5">
+                                PESUT
+                                <span class="text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md">Surat Tugas</span>
+                            </h1>
+                            <p class="text-[11px] text-slate-300 font-medium">${info.subtitle}</p>
                         </div>
                     </div>
                     <div class="flex items-center justify-end w-full sm:w-auto">
-                        <button id="btnSettings-cs-1" class="btn-open-settings w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition shadow-lg shadow-amber-500/20 active:scale-95">
-                            <i data-lucide="settings" class="w-4 h-4"></i>
-                            <span>Pengaturan Profil</span>
+                        <button id="btnSettings-cs-1" class="btn-open-settings w-full sm:w-auto flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm active:scale-95">
+                            <i data-lucide="user-check" class="w-4 h-4"></i>
+                            <span>Profil Aparatur</span>
                         </button>
                     </div>
                 </div>
             </header>
 
-            <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1 rounded-xl backdrop-blur-md mb-2 no-print border border-slate-700/60 shadow-xl">
-                    <button id="csTabFormBtn-1" class="flex-1 py-2 text-center font-bold text-xs rounded-lg bg-indigo-500 text-white shadow-md transition">Isi Laporan</button>
-                    <button id="csTabPreviewBtn-1" class="flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300 transition">Pratinjau</button>
+            <main class="relative z-10 flex-1 max-w-[1440px] w-full mx-auto p-3 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:hidden col-span-1 flex bg-slate-900/90 p-1 rounded-xl mb-2 no-print border border-slate-700 shadow-md">
+                    <button id="csTabFormBtn-1" class="flex-1 py-2 text-center font-bold text-xs rounded-lg bg-amber-500 text-slate-950 shadow transition">Isi Laporan</button>
+                    <button id="csTabPreviewBtn-1" class="flex-1 py-2 text-center font-semibold text-xs rounded-lg text-slate-300 transition">Pratinjau Dokumen</button>
                 </div>
 
                 <section id="csFormSection-1" class="lg:col-span-5 space-y-6 no-print">
-                    <div class="glass-panel p-4 sm:p-6 rounded-3xl shadow-2xl border border-white/70">
+                    <div class="glass-panel p-5 sm:p-6 rounded-2xl shadow-md border border-slate-200">
                         <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
                             <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                                <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600"></i> Formulir ${info.title}
+                                <i data-lucide="clipboard-pen" class="w-5 h-5 text-indigo-600"></i> Formulir Pelaporan Surat Tugas (PESUT)
                             </h2>
-                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">${info.prefix}</span>
+                            <span class="text-[11px] font-bold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-md border border-slate-200">PESUT</span>
                         </div>
 
                         <form class="space-y-4" onsubmit="event.preventDefault();">
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">1. Tanggal Laporan</label>
-                                <input type="date" id="csInputTanggal-1" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm font-semibold shadow-sm">
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">1. Tanggal Pelaporan</label>
+                                <input type="date" id="csInputTanggal-1" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-xs sm:text-sm font-semibold">
                             </div>
                             <div>
                                 <div class="flex justify-between items-center mb-1.5">
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">2. Dasar Pelaksanaan & Lokasi</label>
-                                    <button type="button" id="csBtnAddLokasi-1" class="text-[11px] font-bold text-indigo-800 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Lokasi</button>
+                                    <label class="block text-xs font-bold text-slate-700">2. Dasar Pelaksanaan & Lokasi</label>
+                                    <button type="button" id="csBtnAddLokasi-1" class="text-[11px] font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 px-2.5 py-1 rounded-lg transition border border-amber-300 flex items-center gap-1">+ Tambah Lokasi</button>
                                 </div>
-                                <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner space-y-3">
-                                    <textarea id="csInputDasar-1" rows="2" placeholder="Dasar Pelaksanaan (Contoh: Surat Tugas Nomor: 094/123/ST-SATPOLPP/2026...)" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
-                                    <div class="pt-1 border-t border-indigo-200">
-                                        <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1.5">Daftar Tempat / Lokasi:</label>
+                                <div class="bg-amber-50/60 p-3.5 rounded-xl border border-amber-200/80 space-y-3">
+                                    <textarea id="csInputDasar-1" rows="2" placeholder="Dasar Pelaksanaan (Contoh: Surat Tugas Nomor: 094/123/ST-SATPOLPP/2026...)" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none"></textarea>
+                                    <div class="pt-1 border-t border-amber-200/70">
+                                        <label class="block text-[11px] font-bold text-amber-950 mb-1.5">Daftar Tempat / Lokasi:</label>
                                         <div id="csLokasiList-1" class="space-y-2"></div>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex justify-between items-center mb-1.5">
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">3. Uraian Kegiatan</label>
-                                    <button type="button" id="csBtnAddHasil-1" class="text-[11px] font-bold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Poin</button>
+                                    <label class="block text-xs font-bold text-slate-700">3. Uraian Kegiatan</label>
+                                    <button type="button" id="csBtnAddHasil-1" class="text-[11px] font-bold text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition border border-emerald-300 flex items-center gap-1">+ Tambah Poin</button>
                                 </div>
-                                <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner">
+                                <div class="bg-emerald-50/60 p-3.5 rounded-xl border border-emerald-200/80">
                                     <div id="csHasilList-1" class="space-y-2"></div>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">4. Hasil Kegiatan</label>
-                                <div class="bg-slate-100 p-3 rounded-2xl border border-slate-300 shadow-inner">
-                                    <textarea id="csInputKegiatan-1" rows="3" placeholder="Deskripsikan rincian hasil kegiatan..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none shadow-sm"></textarea>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">4. Hasil Kegiatan</label>
+                                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                                    <textarea id="csInputKegiatan-1" rows="3" placeholder="Deskripsikan rincian hasil kegiatan yang dilaksanakan..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm outline-none"></textarea>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-1.5">
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">5. Nama Anggota (Pilih Opsi)</label>
+                                    <label class="block text-xs font-bold text-slate-700">5. Nama Anggota Personil</label>
                                 </div>
-                                <div class="flex bg-slate-200 p-1 rounded-xl mb-3">
-                                    <button type="button" id="csAnggotaModeFotoBtn-1" class="flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow transition">Foto Nama Anggota</button>
-                                    <button type="button" id="csAnggotaModeManualBtn-1" class="flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 transition">Tambah Manual</button>
+                                <div class="flex bg-slate-100 p-1 rounded-xl mb-3 border border-slate-200">
+                                    <button type="button" id="csAnggotaModeFotoBtn-1" class="flex-1 py-1.5 text-center font-bold text-xs rounded-lg bg-indigo-600 text-white shadow-sm transition">Dokumentasi Nama (Foto)</button>
+                                    <button type="button" id="csAnggotaModeManualBtn-1" class="flex-1 py-1.5 text-center font-semibold text-xs rounded-lg text-slate-700 hover:text-slate-900 transition">Input Manual</button>
                                 </div>
 
                                 <div id="csAnggotaFotoWrapper-1" class="space-y-2">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-[11px] font-bold text-slate-600">Foto Nama Anggota</span>
-                                        <span id="csAnggotaPhotoCount-1" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 10 Foto</span>
+                                        <span class="text-[11px] font-bold text-slate-600">Foto Bukti Nama Personil</span>
+                                        <span id="csPhotoCount-1" class="text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">0 / 10 Foto</span>
                                     </div>
-                                    <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
+                                    <div class="border-2 border-dashed border-indigo-200 bg-indigo-50/30 hover:bg-indigo-50/60 transition rounded-xl p-4 text-center relative cursor-pointer group">
                                         <input type="file" id="csInputAnggotaFoto-1" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                        <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Nama Anggota</p>
+                                        <i data-lucide="image-plus" class="w-6 h-6 text-indigo-500 mx-auto mb-1"></i>
+                                        <p class="text-xs font-bold text-slate-700">Klik / Tarik Foto Daftar Anggota</p>
                                     </div>
                                     <div id="csAnggotaPhotoPreview-1" class="grid grid-cols-4 gap-2 mt-2"></div>
                                 </div>
 
                                 <div id="csAnggotaManualWrapper-1" class="space-y-2 hidden">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-[11px] font-bold text-slate-600">Daftar Nama Anggota</span>
-                                        <button type="button" id="csBtnAddManualAnggota-1" class="text-[11px] font-bold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded-lg transition border border-indigo-300">+ Tambah Nama</button>
+                                        <span class="text-[11px] font-bold text-slate-600">Daftar Nama Personil</span>
+                                        <button type="button" id="csBtnAddManualAnggota-1" class="text-[11px] font-bold text-indigo-800 bg-indigo-100 hover:bg-indigo-200 px-2.5 py-1 rounded-lg transition border border-indigo-300 flex items-center gap-1">+ Tambah Nama</button>
                                     </div>
-                                    <div class="bg-indigo-50/80 p-3 rounded-2xl border border-indigo-200 shadow-inner">
+                                    <div class="bg-indigo-50/50 p-3 rounded-xl border border-indigo-200/80">
                                         <div id="csManualAnggotaList-1" class="space-y-2"></div>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex justify-between items-center mb-1.5">
-                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">6. Foto Dokumentasi</label>
-                                    <span id="csPhotoCount-1" class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">0 / 10 Foto</span>
+                                    <label class="block text-xs font-bold text-slate-700">6. Dokumentasi Foto Lapangan</label>
+                                    <span id="csPhotoCount-1-dup" class="text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">0 / 10 Foto</span>
                                 </div>
-                                <div class="border-2 border-dashed border-indigo-300 bg-white rounded-2xl p-4 text-center relative cursor-pointer group">
+                                <div class="border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100/80 transition rounded-xl p-4 text-center relative cursor-pointer group">
                                     <input type="file" id="csInputDokumentasi-1" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                    <p class="text-xs font-bold text-slate-800">Klik / Tarik Foto Dokumentasi</p>
+                                    <i data-lucide="camera" class="w-6 h-6 text-slate-500 mx-auto mb-1"></i>
+                                    <p class="text-xs font-bold text-slate-700">Pilih / Seret Foto Kegiatan</p>
                                 </div>
                                 <div id="csPhotoPreview-1" class="grid grid-cols-4 gap-2 mt-3"></div>
                             </div>
@@ -535,12 +540,12 @@ function generateComingSoonViews() {
                 </section>
 
                 <section id="csPreviewSection-1" class="lg:col-span-7 hidden lg:block space-y-4">
-                    <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-white/70 flex flex-wrap gap-3 justify-between items-center no-print">
-                        <span class="text-xs text-slate-800 font-extrabold flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> Pratinjau Dokumen A4 (${info.title})
+                    <div class="glass-panel p-3.5 sm:p-4 rounded-xl border border-slate-200 flex flex-wrap gap-3 justify-between items-center no-print">
+                        <span class="text-xs text-slate-800 font-bold flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span> Pratinjau Dokumen Dinas A4 (${info.title})
                         </span>
                         <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <button id="csBtnUploadDrive-1" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-md transition flex items-center justify-center gap-2">
+                            <button id="csBtnUploadDrive-1" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-md transition flex items-center justify-center gap-2">
                                 <i data-lucide="send" class="w-4 h-4"></i>
                                 <span>Kirim Laporan & Simpan PDF</span>
                             </button>
@@ -550,14 +555,14 @@ function generateComingSoonViews() {
                         <div id="csPdfContent-1" class="a4-page text-slate-900 text-xs leading-relaxed flex flex-col justify-between">
                             <div>
                                 <div class="flex items-center justify-between border-b-4 border-double border-slate-900 pb-3 mb-4 gap-3">
-                                    <div class="flex-shrink-0 flex items-center justify-center"><img id="csPreviewLogoLeft-1" src="${CONFIG.DEFAULT_LOGOS.INHU}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;" alt="Logo Inhu"></div>
-                                    <div class="flex-1 text-center px-1">
+                                    <div class="kop-logo-container flex-shrink-0" style="width: 22mm; height: 26mm;"><img id="csPreviewLogoLeft-1" src="${CONFIG.DEFAULT_LOGOS.INHU}" class="object-contain w-full h-full" alt="Logo Inhu"></div>
+                                    <div class="flex-1 text-center px-2">
                                         <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-tight">PEMERINTAH KABUPATEN INDRAGIRI HULU</h3>
                                         <h2 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-950 my-0.5 leading-tight">SATUAN POLISI PAMONG PRAJA</h2>
                                         <div class="w-full h-0.5 bg-slate-900 my-1"></div>
-                                        <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN ${info.title.toUpperCase()}</h1>
+                                        <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-indigo-950 leading-tight">LAPORAN SURAT TUGAS (PESUT)</h1>
                                     </div>
-                                    <div class="flex-shrink-0 flex items-center justify-center"><img id="csPreviewLogoRight-1" src="${CONFIG.DEFAULT_LOGOS.SATPOL}" class="object-contain" style="width:100%; height:100%; background:#fff; padding:6px; border-radius:8px;" alt="Logo Satpol"></div>
+                                    <div class="kop-logo-container flex-shrink-0" style="width: 22mm; height: 26mm;"><img id="csPreviewLogoRight-1" src="${CONFIG.DEFAULT_LOGOS.SATPOL}" class="object-contain w-full h-full" alt="Logo Satpol"></div>
                                 </div>
                                 <div class="preview-block pdf-box shadow-sm mb-4">
                                     <div class="grid grid-cols-2 gap-2 text-[11px]">
